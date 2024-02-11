@@ -1,60 +1,94 @@
-import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Image from 'react-bootstrap/Image';
-import Form from 'react-bootstrap/Form';
-import './index.css';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+// import Image from "react-bootstrap/Image";
+import Form from "react-bootstrap/Form";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Register() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/register",
+        formData
+      );
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+      window.location = "/login"
+      console.log(response.data);
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+  };
+
   return (
-    <div className='Register-container'>
-      <div className='Register-social-container'>
-      <div className='Register-h1'>
-        <p style={{ marginLeft: '10px', color: 'red', transition: 'color 0.3s', cursor: 'pointer' }}
-         onMouseEnter={(e) => { e.target.style.color = 'red'; }}
-         onMouseLeave={(e) => { e.target.style.color = 'white'; }}>
-          Sign up to start <br /> listening
-         </p>
-        </div>
-
-        <Button className='Register-social-button' variant="primary">
-          <Image src="/images/google.png" roundedCircle className="Register-google" />
-          {' '} Login with Google
-        </Button>
-
-        <Button className='Register-social-button' variant="primary">
-          <Image src="/images/facebook.png" roundedCircle className="Register-facebook" />
-          {' '} Login with Facebook
-        </Button>
-
-        <Button className='Register-social-button' variant="primary">
-          <Image src="/images/apple.png" roundedCircle className="Register-apple" />
-          {' '} Continue with Apple
-        </Button>
-      </div>
-
-      <div className='Register-signup-form'>
-        <div className='Register-textbox'>
-          <Form>
+    <div className="Register-container">
+      <div className="Register-signup-form">
+        <div className="Register-textbox">
+          <Form onSubmit={handleSubmit}>
             <p>Sign up with</p>
-            <Form.Group className="Register-textbox" controlId="formGroupEmail">
+            <Form.Group controlId="formGroupName">
               <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter Username" />
+              <Form.Control
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Enter Username"
+              />
             </Form.Group>
-            <Form.Group className="Register-textbox" controlId="formGroupPassword">
+            <Form.Group controlId="formGroupEmail">
               <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Enter Email" />
+              <Form.Control
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Enter Email"
+              />
             </Form.Group>
-            <Form.Group className="Register-textbox" controlId="formGroupEmail">
+            <Form.Group controlId="formGroupPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Enter Password" />
+              <Form.Control
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter Password"
+              />
             </Form.Group>
-            <Form.Group className="Register-textbox" controlId="formGroupPassword">
+            <Form.Group controlId="formGroupConfirmPassword">
               <Form.Label>Confirm Password</Form.Label>
-              <Form.Control type="password" placeholder="Confirm Password" />
+              <Form.Control
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="Confirm Password"
+              />
             </Form.Group>
-
-            <Button className='Register-button' variant="primary">Register</Button>
+            <Button className="Register-button" variant="primary" type="submit">
+              Register
+            </Button>
           </Form>
+          <p>Have an account?</p>
+          <Link to="/login">Log in</Link>
         </div>
       </div>
     </div>

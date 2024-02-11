@@ -1,4 +1,3 @@
-
 // import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // import Navbar from "./Navbar";
@@ -19,8 +18,8 @@
 
 // export default App;
 
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./Navbar";
 import HomePage from "./HomePage";
 import Register from "./Register";
@@ -30,12 +29,11 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navbar />
+        {/* <Navbar /> */}
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<HomePage />} />
-          {/* Add other routes as needed */}
+          {/* <Route path="/" element={<HomePage />} /> */}
+          <Route path="/" element={<Register />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
     </Router>
