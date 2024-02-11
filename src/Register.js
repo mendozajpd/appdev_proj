@@ -38,7 +38,7 @@ const Register = () => {
               <button class="login-button">Login</button>
             </div>
             <div class="line"></div>
-            <p>Already have an account? Login as Clarissa</p>
+            <p>Don't have an account? Sign up for MediaHarbor</p>
           </div>
         </div>
       </div>
