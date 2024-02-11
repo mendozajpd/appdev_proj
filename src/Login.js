@@ -1,13 +1,19 @@
+// import Form from "react-bootstrap/Form";
+
 const Login = () => {
   return (
     <div>
+      <img
+        src={process.env.PUBLIC_URL + "/logo.png"}
+        alt="Logo"
+        width="130"
+        height="130"
+      />
+
       <div
         class="logo"
         // style="align-items: start; padding-top: 30px; margin-left: 20px;"
-      >
-        <img src="img/logo.png" alt="Logo" width="130" height="130" />
-      </div>
-
+      ></div>
       <div class="main-container">
         <div class="container">
           <div class="header">
@@ -19,19 +25,19 @@ const Login = () => {
 
             <div class="button-container">
               <button class="social-button">
-                <img src="img/google.png" alt="Google Logo" />
+                <img src={process.env.PUBLIC_URL + '/register/google.png'} alt="Google Logo" />
                 Login with Google
               </button>
             </div>
             <div class="button-container">
               <button class="social-button">
-                <img src="img/facebook.png" alt="Facebook Logo" />
+                <img src={process.env.PUBLIC_URL + '/register/facebook.png'} alt="Facebook Logo" />
                 Login with Facebook
               </button>
             </div>
             <div class="button-container">
               <button class="social-button">
-                <img src="img/apple.png" alt="Apple Logo" />
+                <img src={process.env.PUBLIC_URL + '/register/apple.png'} alt="Apple Logo" />
                 Continue with Apple
               </button>
             </div>
@@ -57,7 +63,7 @@ const Login = () => {
                 <button
                   type="forgotpassword"
                   class="btn forgotpassword"
-                //   style="text-decoration: underline;"
+                  //   style="text-decoration: underline;"
                 >
                   <em>Forgot password?</em>
                 </button>
