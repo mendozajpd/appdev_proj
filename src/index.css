@@ -1,6 +1,12 @@
+@import url('https://fonts.googleapis.com/css?family=Archivo');
+
+.App {
+  text-align: center;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Archivo',-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -10,4 +16,148 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+
+
+.register-body {
+  display: flex; /* flex to make code below work */
+  justify-content: center; /* Horizontally center  */
+  align-items: center; /* Vertically center */
+  height: 100vh;
+  background: linear-gradient(
+        to bottom,
+        rgba(105, 18, 18, 1) 0%,
+        rgba(0, 0, 0, 0.3) 70%
+      )
+      no-repeat center fixed,
+    linear-gradient(
+        to bottom,
+        rgba(105, 18, 18, 0.3) 0%,
+        rgba(0, 0, 0, 0.8) 70%
+      )
+      no-repeat center fixed,
+    url("../public/register/bg.jpeg") no-repeat center fixed;
+  background-size: cover, cover, cover;
+  margin: 0;
+  flex: 1;
+  min-width: 300px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+}
+
+.header {
+  text-align: center;
+  color: white;
+  margin-right: 200px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+.social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 20px;
+  padding: 3px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  max-width: 300px;
+  margin: 0 auto;
+  width: 300px;
+}
+
+.social-button img {
+  width: 30px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.main-content {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  color: white;
+}
+
+.textbox-container {
+  width: 100%;
+}
+
+.email {
+  text-align: left;
+}
+
+input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.login-button {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 30%;
+  max-width: 200px;
+  background-color: white;
+  color: black;
+  cursor: pointer;
+  font-size: 12px;
+}
+.line {
+  width: 100%;
+  height: 1px;
+  background-color: white;
+  margin: 20px 0;
+}
+
+p {
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 1220px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .container .header {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+
+  .container .buttons {
+    flex-grow: 1;
+  }
+
+  .header {
+    text-align: center;
+    color: white;
+    margin-right: 0px;
+  }
 }
