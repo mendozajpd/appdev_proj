@@ -3,7 +3,10 @@
 
 
 .App {
-  /* text-align: center; */
+  display: flex;
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+  height: 100vh; /* Set height to 100% of the viewport height */
 }
 
 code {
@@ -31,19 +34,6 @@ body {
   border: 1px solid rgba(105, 18, 18, 0.3);
   border-radius: 7px;
 }
-
-/* .text-center {
-  .h1 {
-    margin-top: 10px;
-    color: white;
-  }
-
-  .h1 span:hover {
-    color: black;
-    cursor: pointer;
-  } */
-/* } */
-
 
 .social-button:hover {
   background-color: red;
@@ -124,4 +114,113 @@ body {
 
 .text-center {
   color: rgb(218, 190, 190);
+}
+
+.Register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 50px; /* Adjust the margin as needed */
+  /* background-color: rgba(51, 10, 10, 0.3);
+  border: 1px solid rgba(105, 18, 18, 0.3); */
+  padding: 20px;
+  border-radius: 7px;
+  max-width: 800px; /* Set your desired max-width */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+
+.Register-social-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-width: 1px;
+  width: 350px;
+  margin-right: 50px; /* Adjust the margin as needed */
+  font-size: 10px;
+}
+
+.buttonContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+
+.Register-signup-form {
+  text-align: center;
+  align-items: center;
+  margin-left: 50px; /* Adjust the margin as needed */
+}
+
+.Register-container h1 {
+  font-size: 40px;
+  color: #ffffff;
+}
+
+.Register-container .label {
+  color: #ffffff;
+  text-align: left;
+}
+
+.Register-container p {
+  font-size: 40px;
+  color: #ffffff;
+}
+
+.Register-h2 {
+  font-size: 60px;
+  color: #ffffff;
+
+}
+
+.Register-social-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-radius: 20px;
+  margin-top: 15px;
+  flex-direction: row; /* Set flex direction to row */
+}
+
+.Register-social-button p {
+  color: black;
+  margin: 0;
+  font-size: 10px;
+  text-align: left;
+}
+
+.Register-google,
+.Register-facebook,
+.Register-apple {
+  width: 30px;
+  height: 30px;
+}
+
+.Register-textbox {
+  display: flex;
+  flex-direction: column;
+  border-radius: 3px;
+  width: 400px;
+  padding: 10px;
+}
+
+.Register-button {
+  border-radius: 20px;
+  border-width: 1px;
+  width: 250px;
+  height: 40px;
+  margin-top: 50px;
+}
+
+.Register-container .Register-button p {
+  font-weight: 600;
+  font-size: 18px;
+  color: #000000;
+}
+
+.Register-signup-text {
+  font-size: 40px; 
 }

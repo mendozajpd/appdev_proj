@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-// import Image from "react-bootstrap/Image";
+import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -30,7 +31,7 @@ function Register() {
         password: "",
         confirmPassword: "",
       });
-      window.location = "/login"
+      window.location = "/login";
       console.log(response.data);
     } catch (error) {
       console.error("Registration failed:", error);
@@ -39,57 +40,107 @@ function Register() {
 
   return (
     <div className="Register-container">
+      <div className="Register-social-container">
+        <div>
+          <h1>Sign up to start listening</h1>
+        </div>
+
+        <Button className="Register-social-button rounded-pill" variant="light">
+          <div className="buttonContent">
+            <Image
+              src="/register/google.png"
+              roundedCircle
+              className="Register-google"
+            />{" "}
+            <p style={{ fontSize: "15px", fontWeight: "500" }}>Login with Google</p>
+          </div>
+        </Button>
+
+        <Button className="Register-social-button rounded-pill" variant="light">
+          <div className="buttonContent">
+            <Image
+              src="/register/facebook.png"
+              roundedCircle
+              className="Register-facebook"
+            />{" "}
+            <p style={{ fontSize: "15px", fontWeight: "500"}}>Login with Facebook</p>
+          </div>
+        </Button>
+
+        <Button className="Register-social-button rounded-pill" variant="light">
+          <div className="buttonContent">
+            <Image
+              src="/register/apple.png"
+              roundedCircle
+              className="Register-apple"
+            />{" "}
+            <p style={{ fontSize: "15px", fontWeight: "500" }}>Continue with Apple</p>
+          </div>
+        </Button>
+      </div>
+
       <div className="Register-signup-form">
         <div className="Register-textbox">
           <Form onSubmit={handleSubmit}>
             <p>Sign up with</p>
-            <Form.Group controlId="formGroupName">
-              <Form.Label>Username</Form.Label>
+            <Form.Group
+              className="Register-textbox"
+              controlId="formGroupUsername"
+            >
+              <Form.Label className="label">Username</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
-                value={formData.name}
                 onChange={handleChange}
+                value={formData.name}
                 placeholder="Enter Username"
+                style={{ height: "30px" }}
               />
             </Form.Group>
-            <Form.Group controlId="formGroupEmail">
-              <Form.Label>Email</Form.Label>
+            <Form.Group className="Register-textbox" controlId="formGroupEmail">
+              <Form.Label className="label">Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
-                value={formData.email}
                 onChange={handleChange}
+                value={formData.email}
                 placeholder="Enter Email"
+                style={{ height: "30px" }}
               />
             </Form.Group>
-            <Form.Group controlId="formGroupPassword">
-              <Form.Label>Password</Form.Label>
+            <Form.Group className="Register-textbox" controlId="formGroupPass">
+              <Form.Label className="label">Password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
-                value={formData.password}
                 onChange={handleChange}
+                value={formData.password}
                 placeholder="Enter Password"
+                style={{ height: "30px" }}
               />
             </Form.Group>
-            <Form.Group controlId="formGroupConfirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
+            <Form.Group
+              className="Register-textbox"
+              controlId="formGroupConPass"
+            >
+              <Form.Label className="label">Confirm Password</Form.Label>
               <Form.Control
                 type="password"
                 name="confirmPassword"
-                value={formData.confirmPassword}
                 onChange={handleChange}
+                value={formData.confirmPassword}
                 placeholder="Confirm Password"
+                style={{ height: "30px" }}
               />
             </Form.Group>
-            <Button className="Register-button" variant="primary" type="submit">
-              Register
+
+            <Button className="Register-button" variant="light" type="submit">
+              <p>Sign up</p>
             </Button>
           </Form>
-          <p>Have an account?</p>
-          <Link to="/login">Log in</Link>
         </div>
+        <p>Have an account?</p>
+        <Link to={"/login"}>Log in here</Link>
       </div>
     </div>
   );

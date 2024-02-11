@@ -267,7 +267,7 @@ function Login() {
             <hr className="my-4 bg-white" />
             <div className="text-center">
               <p>
-                Didn't have an account?{" "}
+                Don't have an account?{" "}
                 <Link to="/" className="signup">
                   Sign up here
                 </Link>
