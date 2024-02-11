@@ -1,16 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Archivo');
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 .App {
-  text-align: center;
-}
-
-body {
-  margin: 0;
-  font-family: 'Archivo',-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* text-align: center; */
 }
 
 code {
@@ -18,146 +11,117 @@ code {
     monospace;
 }
 
-
-
-.register-body {
-  display: flex; /* flex to make code below work */
-  justify-content: center; /* Horizontally center  */
-  align-items: center; /* Vertically center */
-  height: 100vh;
-  background: linear-gradient(
-        to bottom,
-        rgba(105, 18, 18, 1) 0%,
-        rgba(0, 0, 0, 0.3) 70%
-      )
-      no-repeat center fixed,
-    linear-gradient(
-        to bottom,
-        rgba(105, 18, 18, 0.3) 0%,
-        rgba(0, 0, 0, 0.8) 70%
-      )
-      no-repeat center fixed,
+body {
+  margin: 0;
+  font-family: 'Archievo', sans-serif;
+  background: linear-gradient(to bottom, rgba(105, 18, 18, 1) 0%, rgba(0, 0, 0, 0.3) 70%) no-repeat center fixed,
+    linear-gradient(to bottom, rgba(105, 18, 18, 0.3) 0%, rgba(0, 0, 0, 0.8) 70%) no-repeat center fixed,
     url("../public/register/bg.jpeg") no-repeat center fixed;
   background-size: cover, cover, cover;
   margin: 0;
-  flex: 1;
-  min-width: 300px;
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  display: flex;
-}
-
-.header {
+.main-container {
+  background-color: rgba(51, 10, 10, 0.3);
+  padding: 5px 5px 5px 5px;
+  margin-top: 60px;
   text-align: center;
-  color: white;
-  margin-right: 200px;
-}
-
-.header h1 {
-  margin: 0;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-}
-
-.button-container {
-  margin-top: 20px;
-}
-
-.social-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 20px;
-  padding: 3px;
-  background-color: white;
-  color: black;
-  cursor: pointer;
-  max-width: 300px;
-  margin: 0 auto;
-  width: 300px;
-}
-
-.social-button img {
-  width: 30px;
+  width: 100%;
   height: auto;
-  margin-right: 10px;
+  border: 1px solid rgba(105, 18, 18, 0.3);
+  border-radius: 7px;
 }
 
-.main-content {
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
+/* .text-center {
+  .h1 {
+    margin-top: 10px;
+    color: white;
+  }
+
+  .h1 span:hover {
+    color: black;
+    cursor: pointer;
+  } */
+/* } */
+
+
+.social-button:hover {
+  background-color: red;
   color: white;
+  border-color: red;
 }
 
-.textbox-container {
-  width: 100%;
-}
-
-.email {
-  text-align: left;
-}
-
-input {
-  width: calc(100% - 20px);
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  margin-bottom: 10px;
-}
-
-.login-button {
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  width: 30%;
-  max-width: 200px;
-  background-color: white;
-  color: black;
-  cursor: pointer;
-  font-size: 12px;
-}
 .line {
   width: 100%;
   height: 1px;
-  background-color: white;
-  margin: 20px 0;
+  background-color: rgb(80, 46, 46);
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
-p {
-  margin-top: 20px;
+
+/* remember me and forgotpassword */
+.remember-me {
+  color: #d2abab;
+  cursor: pointer;
 }
 
-@media screen and (max-width: 1220px) {
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    justify-items: center;
-  }
+.remember-me .form-check-input[type="checkbox"] {
+  border-color: #d2abab;
+  background-color: transparent;
+  color: #d2abab;
+}
 
-  .container .header {
-    align-items: center;
-    justify-content: center;
-    display: flex;
-  }
+.remember-me .form-check-input[type="checkbox"]:checked {
+  background-color: red;
+  border-color: #d2abab;
+}
 
-  .container .buttons {
-    flex-grow: 1;
-  }
 
-  .header {
-    text-align: center;
-    color: white;
-    margin-right: 0px;
-  }
+/* .login-button btn-block {
+  width: 100%;
+  height: 38px;
+  margin-bottom: 10px;
+  background-color: transparent;
+  color: #ff3535;
+  transition: background-color 0.3s, color 0.3s;
+} */
+
+/* .login-button btn-block {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  max-width: 300px;
+  background-color: transparent;
+  border: 1px solid rgb(141, 75, 75);
+  color: #a9a9a9;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  width: 100%;
+  transition: background-color 0.3s, color 0.3s;
+} */
+
+
+.login-button btn-block:hover {
+  background-color: red;
+  color: white;
+  border-color: #8d4b4b;
+}
+
+.label {
+  color: rgb(218, 190, 190);
+}
+
+.signup {
+  color: rgb(218, 190, 190);
+}
+
+.signup:hover {
+  color: red;
+}
+
+.text-center {
+  color: rgb(218, 190, 190);
 }
