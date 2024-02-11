@@ -35,7 +35,7 @@ const Register = () => {
             </div>
             <div class="textbox-container">
               <input type="text"/>
-              <button class="login-button">Login</button>
+              <button class="login-button">Register</button>
             </div>
             <div class="line"></div>
             <p>Don't have an account? Sign up for MediaHarbor</p>
