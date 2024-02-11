@@ -1,11 +1,13 @@
 import Navbar from "./Navbar";
 import HomePage from "./HomePage";
 import Register from "./Register";
+import Login from "./Login";
 
 function App() {
   return (
     <div className="App">
-      <Register />
+      <Login />
+      {/* <Register /> */}
       {/* <Navbar />
       <HomePage /> */}
     </div>
