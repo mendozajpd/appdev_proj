@@ -27,6 +27,8 @@ body {
   margin: 0;
 }
 
+
+/* Login Page and body */
 .main-container {
   background-color: rgba(51, 10, 10, 0.3);
   padding: 5px 5px 5px 5px;
@@ -92,21 +94,23 @@ body {
   color: rgb(218, 190, 190);
 }
 
+
+
+/* Register page */
 .Register-container {
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   margin-top: 50px;
-  /* Adjust the margin as needed */
-  /* background-color: rgba(51, 10, 10, 0.3);
-  border: 1px solid rgba(105, 18, 18, 0.3); */
+  margin-bottom: 50px;
+  background-color: rgba(51, 10, 10, 0.3);
+  border: 1px solid rgba(105, 18, 18, 0.3);
+  border: 1px solid rgba(185, 128, 128, 0.3);
   padding: 20px;
   border-radius: 7px;
-  max-width: 800px;
-  /* Set your desired max-width */
+  max-width: 1000px;
   margin: 0 auto;
-  /* Center the container horizontally */
 }
 
 
@@ -117,41 +121,49 @@ body {
   border-width: 1px;
   width: 350px;
   margin-right: 50px;
-  /* Adjust the margin as needed */
-  font-size: 10px;
+  font-size: 150%;
+  margin-bottom: 150px;
+  background-color: transparent;
 }
 
 .buttonContent {
+  background-color: transparent;
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
 }
 
+.buttonContent:hover p {
+  color: red;
+}
 
 .Register-signup-form {
+  background-color: transparent;
+  color: white;
   text-align: center;
   align-items: center;
   margin-left: 50px;
-  /* Adjust the margin as needed */
 }
 
 .Register-container h1 {
-  font-size: 40px;
+  font-size: 50px;
   color: #ffffff;
 }
 
 .Register-container .label {
-  color: #ffffff;
+  color: rgb(218, 190, 190);
   text-align: left;
   font-weight: 500;
 }
 
 .Register-container .label p {
-  font-size: 20px;
+  font-size: 50px;
 }
 
 .Register-container p {
-  font-size: 40px;
+  font-weight: 500;
+  font-size: 50px;
   color: #ffffff;
 }
 
@@ -162,6 +174,7 @@ body {
 }
 
 .Register-social-button {
+  background-color: transparent;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -169,11 +182,21 @@ body {
   border-radius: 20px;
   margin-top: 15px;
   flex-direction: row;
-  /* Set flex direction to row */
 }
 
+/* .Register-social-button rounded-pill .buttonContent {
+  background-color: transparent;
+  color: #d2abab;
+}
+
+.Register-social-button rounded-pill .buttonContent :hover {
+  background-color: red;
+  color: white;
+} */
+
+
 .Register-social-button p {
-  color: black;
+  color: white;
   margin: 0;
   font-size: 10px;
   text-align: left;
@@ -194,19 +217,17 @@ body {
   padding: 5px;
 }
 
-.Register-button {
-  border-radius: 20px;
-  border-width: 1px;
-  width: 250px;
-  height: 40px;
-  margin-top: 50px;
+
+.Register-button:hover {
+  background-color: red;
+  color: white;
+  border-color: #8d4b4b;
 }
 
-.Register-container .Register-button p {
-  font-weight: 600;
-  font-size: 18px;
-  color: #000000;
-}
+
+/* .Register-button span {
+  color: red;
+} */
 
 .Register-signup-text {
   font-size: 40px;
@@ -222,9 +243,18 @@ body {
 
 .Register-container .loginNavigate p,
 .Register-container .loginNavigate a {
-  font-size: 20px;
+  /* font-family: 'Archievo', sans-serif; */
+  font-size: 15px;
   margin: 0;
-  padding: 5px;
-  color: #e4e4e4;
+  padding: 2px;
+  color: #d2abab;
   font-weight: 200;
+}
+
+
+
+
+/* login link below */
+.loginNavigate a:hover {
+  color: red;
 }

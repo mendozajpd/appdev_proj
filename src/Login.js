@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import Home from "./HomePage"
+import Home from "./HomePage";
 
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,15 +20,17 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/login",
+        "http://127.0.0.1:8000/api/auth/login",
         formData
       );
+      const accessToken = response.data.accessToken;
       setFormData({
         email: "",
         password: "",
       });
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      navigate('/home');
       console.log(response.data);
-      window.Location = "/home";
     } catch (error) {
       console.error("Login failed:", error);
     }

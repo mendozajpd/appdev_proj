@@ -27,17 +27,17 @@ import Login from "./Login";
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <div className="App">
         {/* <Navbar /> */}
         <Routes>
           {/* <Route path="/" element={<HomePage />} /> */}
-          <Route path="home" element={<HomePage />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/" element={<Register />} />
-          <Route path="login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 
