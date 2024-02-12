@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link, redirect } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
-import "./index.css"; // Import your CSS file
 import axios from "axios";
+import Home from "./HomePage"
+import HomePage from "./HomePage";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -26,10 +27,13 @@ function Login() {
         password: "",
       });
       console.log(response.data);
+      // return redirect("/home")
+      window.Location = "/home"
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
+
 
   return (
     <Container className="main-container">
@@ -37,13 +41,13 @@ function Login() {
         <Col xs={10} md={6}>
           <div className="text-center text-white">
             <h1 style={{ marginTop: "30px" }}>
-              Login to
+              Log in to
               <span
                 style={{
                   marginLeft: "10px",
                   color: "red",
                   transition: "color 0.3s",
-                  cursor: "pointer",
+                  cursor: "text"
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.color = "red";
@@ -181,7 +185,7 @@ function Login() {
           </div>
           <Form className="main-content" onSubmit={handleSubmit}>
             <Form.Group className="d-flex flex-column align-items-start">
-              <Form.Label className="label">Email or username</Form.Label>
+              <Form.Label className="label">Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"

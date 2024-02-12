@@ -4,9 +4,12 @@
 
 .App {
   display: flex;
-  align-items: center; /* Center items vertically */
-  justify-content: center; /* Center items horizontally */
-  height: 100vh; /* Set height to 100% of the viewport height */
+  align-items: center;
+  /* Center items vertically */
+  justify-content: center;
+  /* Center items horizontally */
+  height: 100vh;
+  /* Set height to 100% of the viewport height */
 }
 
 code {
@@ -67,33 +70,6 @@ body {
   border-color: #d2abab;
 }
 
-
-/* .login-button btn-block {
-  width: 100%;
-  height: 38px;
-  margin-bottom: 10px;
-  background-color: transparent;
-  color: #ff3535;
-  transition: background-color 0.3s, color 0.3s;
-} */
-
-/* .login-button btn-block {
-  border: none;
-  border-radius: 20px;
-  padding: 10px 20px;
-  max-width: 300px;
-  background-color: transparent;
-  border: 1px solid rgb(141, 75, 75);
-  color: #a9a9a9;
-  cursor: pointer;
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 10px;
-  width: 100%;
-  transition: background-color 0.3s, color 0.3s;
-} */
-
-
 .login-button btn-block:hover {
   background-color: red;
   color: white;
@@ -121,13 +97,16 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: 50px; /* Adjust the margin as needed */
+  margin-top: 50px;
+  /* Adjust the margin as needed */
   /* background-color: rgba(51, 10, 10, 0.3);
   border: 1px solid rgba(105, 18, 18, 0.3); */
   padding: 20px;
   border-radius: 7px;
-  max-width: 800px; /* Set your desired max-width */
-  margin: 0 auto; /* Center the container horizontally */
+  max-width: 800px;
+  /* Set your desired max-width */
+  margin: 0 auto;
+  /* Center the container horizontally */
 }
 
 
@@ -137,7 +116,8 @@ body {
   align-items: center;
   border-width: 1px;
   width: 350px;
-  margin-right: 50px; /* Adjust the margin as needed */
+  margin-right: 50px;
+  /* Adjust the margin as needed */
   font-size: 10px;
 }
 
@@ -151,7 +131,8 @@ body {
 .Register-signup-form {
   text-align: center;
   align-items: center;
-  margin-left: 50px; /* Adjust the margin as needed */
+  margin-left: 50px;
+  /* Adjust the margin as needed */
 }
 
 .Register-container h1 {
@@ -162,6 +143,11 @@ body {
 .Register-container .label {
   color: #ffffff;
   text-align: left;
+  font-weight: 500;
+}
+
+.Register-container .label p {
+  font-size: 20px;
 }
 
 .Register-container p {
@@ -182,7 +168,8 @@ body {
   width: 100%;
   border-radius: 20px;
   margin-top: 15px;
-  flex-direction: row; /* Set flex direction to row */
+  flex-direction: row;
+  /* Set flex direction to row */
 }
 
 .Register-social-button p {
@@ -204,7 +191,7 @@ body {
   flex-direction: column;
   border-radius: 3px;
   width: 400px;
-  padding: 10px;
+  padding: 5px;
 }
 
 .Register-button {
@@ -222,5 +209,22 @@ body {
 }
 
 .Register-signup-text {
-  font-size: 40px; 
+  font-size: 40px;
+}
+
+.Register-container .loginNavigate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+}
+
+.Register-container .loginNavigate p,
+.Register-container .loginNavigate a {
+  font-size: 20px;
+  margin: 0;
+  padding: 5px;
+  color: #e4e4e4;
+  font-weight: 200;
 }
