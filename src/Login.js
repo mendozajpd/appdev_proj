@@ -3,7 +3,6 @@ import { Link, redirect } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Home from "./HomePage"
-import HomePage from "./HomePage";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -27,8 +26,7 @@ function Login() {
         password: "",
       });
       console.log(response.data);
-      // return redirect("/home")
-      window.Location = "/home"
+      window.Location = "/home";
     } catch (error) {
       console.error("Login failed:", error);
     }

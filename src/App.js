@@ -19,7 +19,7 @@
 // export default App;
 
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, BrowserRouter } from "react-router-dom";
 import Navbar from "./Navbar";
 import HomePage from "./HomePage";
 import Register from "./Register";
@@ -27,17 +27,17 @@ import Login from "./Login";
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <div className="App">
         {/* <Navbar /> */}
         <Routes>
           {/* <Route path="/" element={<HomePage />} /> */}
-          <Route path="/home" element={<HomePage />} />
+          <Route path="home" element={<HomePage />} />
           <Route path="/" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="login" element={<Login />} />
         </Routes>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 
