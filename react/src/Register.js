@@ -21,11 +21,9 @@ function Register() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/register",
-        formData
+        "http://127.0.0.1:8000/api/auth/register", // add to config
+        formData,
       );
-      const token = response.data.access_token;
-      localStorage.setItem("token", token); // change this in the future
 
       setFormData({
         name: "",
@@ -33,15 +31,31 @@ function Register() {
         password: "",
         confirmPassword: "",
       });
-      window.location = "/login";
+      axios.response();
       console.log(response.data);
     } catch (error) {
       console.error("Registration failed:", error);
     }
   };
 
+  const handleSocialButtonMouseEnter = (e) => {
+    e.target.style.backgroundColor = "red"; 
+    e.target.style.color = "white"; 
+    e.target.style.borderColor = "rgba(185, 128, 128, 0.3)"; 
+    e.target.style.transform = "scale(1.05)"; 
+    e.stopPropagation();
+  };
+
+  const handleSocialButtonMouseLeave = (e) => {
+    e.target.style.backgroundColor = "transparent"; 
+    e.target.style.color = "white"; 
+    e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
+    e.target.style.transform = "scale(1)"; 
+    e.stopPropagation();
+  };
+
   return (
-        <div className="Register-container">
+    <div className="Register-container">
       <div className="Register-social-container">
         <div>
           <h1
@@ -83,20 +97,17 @@ function Register() {
             position: "relative",
             overflow: "hidden",
           }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "#ff3535";
-            e.target.style.color = "white";
-            e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
-            e.target.style.transform = "scale(1.1)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";
-            e.target.style.color = "white";
-            e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
-            e.target.style.transform = "scale(1)";
-          }}
+          onMouseEnter={handleSocialButtonMouseEnter}
+          onMouseLeave={handleSocialButtonMouseLeave}
         >
-          <div className="buttonContent">
+          <div className="buttonContent"
+            onMouseEnter={(e) => {
+              e.stopPropagation();
+            }}
+            onMouseLeave={(e) => {
+              e.stopPropagation();
+            }}
+          >
             <Image
               src="/register/google.png"
               roundedCircle
@@ -106,8 +117,24 @@ function Register() {
                 width: "30px",
                 margin: "flex",
               }}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+              }}
             />
-            <p style={{ fontSize: "20px", fontWeight: "500" }}>Login with Google</p>
+            <p
+              style={{ fontSize: "20px", fontWeight: "500" }}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              Login with Google
+            </p>
           </div>
         </Button>
 
@@ -127,20 +154,16 @@ function Register() {
             position: "relative",
             overflow: "hidden",
           }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "red"; // Facebook blue color
-            e.target.style.color = "white";
-            e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
-            e.target.style.transform = "scale(1.1)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";
-            e.target.style.color = "white";
-            e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
-            e.target.style.transform = "scale(1)";
-          }}
+          onMouseEnter={handleSocialButtonMouseEnter}
+          onMouseLeave={handleSocialButtonMouseLeave}
         >
-          <div className="buttonContent">
+          <div className="buttonContent"
+            onMouseEnter={(e) => {
+              e.stopPropagation();
+            }}
+            onMouseLeave={(e) => {
+              e.stopPropagation();
+            }}>
             <Image
               src="/register/facebook.png"
               roundedCircle
@@ -150,8 +173,22 @@ function Register() {
                 width: "30px",
                 margin: "flex",
               }}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+              }}
             />
-            <p style={{ fontSize: "20px", fontWeight: "500" }}>Login with Facebook</p>
+            <p style={{ fontSize: "20px", fontWeight: "500" }}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+              }}>
+              Login with Facebook
+            </p>
           </div>
         </Button>
 
@@ -172,20 +209,16 @@ function Register() {
             position: "relative",
             overflow: "hidden",
           }}
-          onMouseEnter={(e) => {
-            e.target.style.backgroundColor = "red"; // red color
-            e.target.style.color = "white";
-            e.target.style.borderColor = "rgba(185, 128, 128, 0.3)"; // Darker gray border
-            e.target.style.transform = "scale(1.1)";
-          }}
-          onMouseLeave={(e) => {
-            e.target.style.backgroundColor = "transparent";
-            e.target.style.color = "white";
-            e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
-            e.target.style.transform = "scale(1)";
-          }}
+          onMouseEnter={handleSocialButtonMouseEnter}
+          onMouseLeave={handleSocialButtonMouseLeave}
         >
-          <div className="buttonContent">
+          <div className="buttonContent"
+            onMouseEnter={(e) => {
+              e.stopPropagation();
+            }}
+            onMouseLeave={(e) => {
+              e.stopPropagation();
+            }}>
             <Image
               src="/register/apple.png"
               roundedCircle
@@ -195,12 +228,24 @@ function Register() {
                 width: "30px",
                 margin: "flex",
               }}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+              }}
             />
-            <p style={{ fontSize: "20px", fontWeight: "500" }}>Continue with Apple</p>
+            <p style={{ fontSize: "20px", fontWeight: "500" }}
+              onMouseEnter={(e) => {
+                e.stopPropagation();
+              }}
+              onMouseLeave={(e) => {
+                e.stopPropagation();
+              }}>
+              Continue with Apple
+            </p>
           </div>
         </Button>
-
-
       </div>
 
       <div className="Register-signup-form">
@@ -208,7 +253,7 @@ function Register() {
           <Form onSubmit={handleSubmit}>
             <p>Sign up</p>
 
-            <div class="line"></div>
+            <div className="line"></div>
 
             <Form.Group
               className="Register-textbox"
@@ -250,7 +295,6 @@ function Register() {
                   borderRadius: "20px",
                   border: "1px solid #8d4b4b",
                   backgroundColor: "transparent",
-                  // style={{ height: "30px" }}
                 }}
               />
             </Form.Group>
@@ -307,7 +351,7 @@ function Register() {
                 backgroundColor: "transparent",
                 borderColor: "rgba(185, 128, 128, 0.3)",
                 color: "#ff3535",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", // Add transition for smooth effect
+                transition: "background-color 0.3s, color 0.3s, transform 0.3", 
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "red";
@@ -329,7 +373,7 @@ function Register() {
             </Button>
           </Form>
         </div>
-        <div class="line"></div>
+        <div className="line"></div>
         <div className="loginNavigate">
           <p>Have an account? </p>
           <Link to={"/login"} style={{ textDecoration: 'none' }}></Link>

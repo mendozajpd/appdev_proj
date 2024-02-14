@@ -134,9 +134,9 @@ body {
   justify-content: space-evenly;
 }
 
-.buttonContent:hover p {
+/* .buttonContent:hover p {
   color: red;
-}
+} */
 
 .Register-signup-form {
   background-color: transparent;

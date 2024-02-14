@@ -13,8 +13,15 @@ const HomePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("jwt_token");
       const response = await axios.post(
         "http://127.0.0.1:8000/api/auth/logout",
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log(response.data);
       navigate('/login');
@@ -57,13 +64,13 @@ const HomePage = () => {
                 marginTop: "30px",
                 fontSize: "150%",
                 borderRadius: "20px",
-                width: "100%", // Set width to match input fields
-                height: "50px", // Set height to match input fields
+                width: "100%",
+                height: "50px",
                 marginBottom: "10px",
-                backgroundColor: "transparent", // Set default background color
-                borderColor: "#8d4b4b", // Set default border color
-                color: "#ff3535", // Set default text color
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", // Add transition for smooth effect
+                backgroundColor: "transparent",
+                borderColor: "#8d4b4b",
+                color: "#ff3535",
+                transition: "background-color 0.3s, color 0.3s, transform 0.3",
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "red";
@@ -80,7 +87,7 @@ const HomePage = () => {
               Log out
             </Button>
 
-            <div class="line"></div>
+            <div className="line"></div>
 
             <hr className="my-4 bg-white" />
           </Form>

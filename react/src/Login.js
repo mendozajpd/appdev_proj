@@ -21,14 +21,15 @@ function Login() {
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/auth/login",
-        formData
+        formData,
       );
-      const accessToken = response.data.accessToken;
       setFormData({
         email: "",
         password: "",
       });
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      const token = response.data.access_token;
+      localStorage.setItem("jwt_token", token); // change this in the future
+
       navigate('/home');
       console.log(response.data);
     } catch (error) {
@@ -70,26 +71,26 @@ function Login() {
               style={{
                 fontSize: "150%",
                 borderRadius: "20px",
-                width: "100%", // Set width to match input fields
-                height: "50px", // Set height to match input fields
+                width: "100%", 
+                height: "50px", 
                 marginTop: "30px",
                 marginBottom: "10px",
-                backgroundColor: "transparent", // Set default background color
-                borderColor: "#8d4b4b", // Set default border color
-                color: "#ff3535", // Set default text color
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", // Add transition for smooth effect
+                backgroundColor: "transparent", 
+                borderColor: "#8d4b4b", 
+                color: "#ffffff", 
+                transition: "0.3", 
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "red";
                 e.target.style.color = "white";
                 e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1.1)"; // Enlarge the button
+                e.target.style.transform = "scale(1.1)"; 
               }}
               onMouseLeave={(e) => {
                 e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ff3535";
+                e.target.style.color = "#ffffff";
                 e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1)"; // Restore original size
+                e.target.style.transform = "scale(1)"; 
               }}
             >
               <img
@@ -110,25 +111,25 @@ function Login() {
               style={{
                 fontSize: "150%",
                 borderRadius: "20px",
-                width: "100%", // Set width to match input fields
-                height: "50px", // Set height to match input fields
+                width: "100%",
+                height: "50px",
                 marginBottom: "10px",
-                backgroundColor: "transparent", // Set default background color
-                borderColor: "#8d4b4b", // Set default border color
-                color: "#ff3535", // Set default text color
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", // Add transition for smooth effect
+                backgroundColor: "transparent",
+                borderColor: "#8d4b4b",
+                color: "#ffffff",
+                transition: "background-color 0.3s, color 0.3s, transform 0.3",
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "red";
                 e.target.style.color = "white";
                 e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1.1)"; // Enlarge the button
+                e.target.style.transform = "scale(1.1)";
               }}
               onMouseLeave={(e) => {
                 e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ff3535";
+                e.target.style.color = "#ffffff";
                 e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1)"; // Restore original size
+                e.target.style.transform = "scale(1)";
               }}
             >
               <img
@@ -150,25 +151,24 @@ function Login() {
               style={{
                 fontSize: "150%",
                 borderRadius: "20px",
-                width: "100%", // Set width to match input fields
-                height: "50px", // Set height to match input fields
+                width: "100%",
+                height: "50px",
                 marginBottom: "10px",
-                backgroundColor: "transparent", // Set default background color
-                borderColor: "#8d4b4b", // Set default border color
-                color: "#ff3535", // Set default text color
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", // Add transition for smooth effect
+                backgroundColor: "transparent",
+                borderColor: "#8d4b4b",
+                color: "#ffffff",
+                transition: "background-color 0.3s, color 0.3s, transform 0.3",
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "red";
                 e.target.style.color = "white";
                 e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1.1)"; // Enlarge the button
+                e.target.style.transform = "scale(1.1)";
               }}
               onMouseLeave={(e) => {
                 e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ff3535";
                 e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1)"; // Restore original size
+                e.target.style.transform = "scale(1)";
               }}
             >
               <img
@@ -183,7 +183,7 @@ function Login() {
               />
               Continue with Apple
             </Button>
-            <div class="line"></div>
+            <div className="line"></div>
           </div>
           <Form className="main-content" onSubmit={handleSubmit}>
             <Form.Group className="d-flex flex-column align-items-start">
@@ -221,7 +221,7 @@ function Login() {
                   padding: "12px",
                   borderRadius: "20px",
                   border: "1px solid #8d4b4b",
-                  backgroundColor: "transparent", // Set background color to transparent
+                  backgroundColor: "transparent", 
                 }}
               />
             </Form.Group>
@@ -245,13 +245,13 @@ function Login() {
                 marginTop: "30px",
                 fontSize: "150%",
                 borderRadius: "20px",
-                width: "100%", // Set width to match input fields
-                height: "50px", // Set height to match input fields
+                width: "100%", 
+                height: "50px", 
                 marginBottom: "10px",
-                backgroundColor: "transparent", // Set default background color
-                borderColor: "#8d4b4b", // Set default border color
-                color: "#ff3535", // Set default text color
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", // Add transition for smooth effect
+                backgroundColor: "transparent", 
+                borderColor: "#8d4b4b", 
+                color: "#ffffff", 
+                transition: "background-color 0.3s, color 0.3s, transform 0.3", 
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "red";
@@ -260,7 +260,7 @@ function Login() {
               }}
               onMouseLeave={(e) => {
                 e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ff3535";
+                e.target.style.color = "#ffffff";
                 e.target.style.borderColor = "#8d4b4b";
               }}
               type="submit"
@@ -268,7 +268,7 @@ function Login() {
               Login
             </Button>
 
-            <div class="line"></div>
+            <div className="line"></div>
 
             <hr className="my-4 bg-white" />
             <div className="text-center">
