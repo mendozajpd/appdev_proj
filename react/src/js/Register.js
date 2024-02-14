@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
@@ -17,24 +17,27 @@ function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/register", // add to config
+        "http://127.0.0.1:8000/api/register", // add to config
         formData,
       );
-
       setFormData({
         name: "",
         email: "",
         password: "",
         confirmPassword: "",
       });
-      axios.response();
-      console.log(response.data);
+      
+      // console.log(response.data);
+      navigate('/login');
     } catch (error) {
-      console.error("Registration failed:", error);
+      // console.error("Registration failed:", error);
+      alert(error.response.data.message);
     }
   };
 

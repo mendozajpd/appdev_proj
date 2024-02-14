@@ -7,19 +7,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
 
     /**
      * Get a JWT via given credentials.
@@ -40,13 +31,22 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|min:4|unique:users,name',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+            'password' => [
+                'required',
+                // 'string',
+                Password::min(8)
+                    ->mixedCase() // allows both uppercase and lowercase
+                    ->letters() //accepts letter
+                    ->numbers() //accepts numbers
+                    ->symbols() //accepts special character
+                    ->uncompromised(), //check to be sure that there is no data leak
+            ],
         ]);
 
         $user = new User();
-        $user->name = $request->name; 
+        $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();

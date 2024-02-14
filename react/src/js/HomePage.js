@@ -23,7 +23,8 @@ const HomePage = () => {
           },
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
+      localStorage.removeItem('jwt_token');
       navigate('/login');
     } catch (error) {
       console.error("Login failed:", error);

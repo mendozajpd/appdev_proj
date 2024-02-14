@@ -20,20 +20,22 @@ function Login() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/login",
+        "http://127.0.0.1:8000/api/login",
         formData,
       );
       setFormData({
         email: "",
         password: "",
       });
+
       const token = response.data.access_token;
       localStorage.setItem("jwt_token", token); // change this in the future
 
       navigate('/home');
-      console.log(response.data);
+      // console.log(response.data);
     } catch (error) {
-      console.error("Login failed:", error);
+      // console.error("Login failed:", error);
+      alert("Email or password is incorrect. Try again.");
     }
   };
 
