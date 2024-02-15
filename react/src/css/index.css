@@ -42,7 +42,7 @@ body {
 .main-container {
   background-color: rgba(51, 10, 10, 0.3);
   padding: 5px 5px 5px 5px;
-  margin-top: 60px;
+  margin-top: 15px;
   text-align: center;
   width: 100%;
   height: auto;
@@ -50,11 +50,7 @@ body {
   border-radius: 7px;
 }
 
-/* .social-button:hover {
-  background-color: red;
-  color: white;
-  border-color: red;
-} */
+
 
 .line {
   width: 100%;
@@ -66,26 +62,23 @@ body {
 
 
 .remember-me {
+  /* margin-bottom: 10px; */
   color: #d2abab;
   cursor: pointer;
 }
 
 .remember-me .form-check-input[type="checkbox"] {
+  /* margin-bottom: 10px; */
   border-color: #d2abab;
   background-color: transparent;
   color: #d2abab;
 }
 
 .remember-me .form-check-input[type="checkbox"]:checked {
+  /* margin-bottom: 0px; */
   background-color: red;
   border-color: #d2abab;
 }
-
-/* .login-button btn-block:hover {
-  background-color: red;
-  color: white;
-  border-color: #8d4b4b;
-} */
 
 .label {
   color: rgb(218, 190, 190);
@@ -124,9 +117,6 @@ h1 span:hover {
   color: white;
 }
 
-/* <Button
-variant="outline-primary"
-className="social-button mr-2 btn-sm" */
 .d-flex {
   display: flex;
 }
@@ -139,24 +129,38 @@ className="social-button mr-2 btn-sm" */
   align-items: center;
 }
 
-.social-button {
-  font-size: 150%;
+.main-container .btn {
+  font-size: 20px;
   border-radius: 20px;
   width: 100%;
   height: 50px;
-  margin-top: 30px;
+  margin-top: 5px;
   margin-bottom: 10px;
   background-color: transparent;
   border-color: #8d4b4b;
-  color: #ffffff;
   transition: all 0.3s;
-  /* Include transition property */
+}
+
+.main-container .btn-outline-danger {
+  color: #ffffff;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.main-container .btn-outline-danger:hover {
+  background-color: red;
+  border-color: red;
+}
+
+.social-button img {
+  margin-right: 20px;
+  width: 30px;
+  margin: flex;
 }
 
 .social-button:hover {
   background-color: red;
   border-color: #8d4b4b;
-  color: white;
+  color: red;
   transform: scale(1.1);
 }
 
@@ -168,82 +172,15 @@ className="social-button mr-2 btn-sm" */
   transform: scale(0.95);
 }
 
-
-/* <Button
-              variant="outline-primary"
-              className="social-button mr-2 btn-sm" */
-
-.social-button {
-  font-size: 150%;
-  border-radius: 20px;
-  width: 100%;
-  height: 50px;
-  margin-bottom: 10px;
-  background-color: transparent;
-  border-color: #8d4b4b;
-  color: #ffffff;
-  transition: background-color 0.3s, color 0.3s, transform 0.3s;
-}
-
-.social-button:hover {
-  background-color: red;
-  color: white;
-  border-color: #8d4b4b;
-  transform: scale(1.1);
-}
-
-.social-button img {
-  margin-right: 20px;
-  width: 30px;
-}
-
-.social-button:hover img {
-  filter: brightness(0) invert(1);
-}
-
-.social-button:focus {
-  outline: none !important;
-}
-
-/* Continue with Apple */
-.social-button {
-  font-size: 150%;
-  border-radius: 20px;
-  width: 100%;
-  height: 50px;
-  margin-bottom: 10px;
-  background-color: transparent;
-  border-color: #8d4b4b;
-  color: #ffffff;
-  transition: background-color 0.3s, color 0.3s, transform 0.3s;
-}
-
-.social-button:hover {
-  background-color: red;
-  color: white;
-  border-color: #8d4b4b;
-  transform: scale(1.1);
-}
-
-.social-button img {
-  margin-right: 20px;
-  width: 30px;
-}
-
-.social-button:hover img {
-  filter: brightness(0) invert(1);
-}
-
-.social-button:focus {
-  outline: none !important;
+/* TEXT INPUT CONTAINER */
+.main-container .text-input.container {
+  padding-top: 10px;
 }
 
 /* Email */
 .email-input {
-  color: whitesmoke;
   width: 100%;
-  margin-top: 30px;
-  /* corrected marginTop to marginTop: 30px */
+  margin-top: 10px;
   padding: 12px;
   border-radius: 20px;
   border: 1px solid #8d4b4b;
@@ -256,11 +193,10 @@ className="social-button mr-2 btn-sm" */
 }
 
 /* Password */
-.form-control {
-  color: whitesmoke;
+.main-container .main-content .form-control {
+  color: white;
   width: 100%;
   margin-top: 0;
-  /* corrected marginTop to marginTop: 0 */
   padding: 12px;
   border-radius: 20px;
   border: 1px solid #8d4b4b;
@@ -272,47 +208,33 @@ className="social-button mr-2 btn-sm" */
   border-color: #8d4b4b;
 }
 
+.main-container .form-text {
+  color: #9e8585;
+  margin-bottom: 20px;
+}
+
 /* forgotpassword */
 .forgotpassword {
   color: #d2abab;
 }
 
-/* Loginbutton */
 .login-button {
   margin-top: 30px;
-  font-size: 150%;
   border-radius: 20px;
   width: 100%;
   height: 50px;
   margin-bottom: 10px;
   background-color: transparent;
   border-color: #8d4b4b;
-  color: #ffffff;
-  transition: background-color 0.3s, color 0.3s, transform 0.3s;
 }
 
-.login-button:hover {
-  background-color: red;
-  color: white;
-  border-color: #8d4b4b;
+.login-options a {
+  color: #d2abab;
+  text-decoration: none;
 }
 
-.login-button:focus {
-  outline: none;
-}
-
-.login-button:active {
-  transform: scale(0.95);
-}
-
-.btn-block {
-  display: block;
-  width: 100%;
-}
-
-.login-button,
-.login-button:focus {
-  outline: none !important;
+.main-container p {
+  color: #d2abab;
 }
 
 
@@ -353,10 +275,6 @@ className="social-button mr-2 btn-sm" */
   align-items: center;
   justify-content: space-evenly;
 }
-
-/* .buttonContent:hover p {
-  color: red;
-} */
 
 .Register-signup-form {
   background-color: transparent;
@@ -404,17 +322,6 @@ className="social-button mr-2 btn-sm" */
   flex-direction: row;
 }
 
-/* .Register-social-button rounded-pill .buttonContent {
-  background-color: transparent;
-  color: #d2abab;
-}
-
-.Register-social-button rounded-pill .buttonContent :hover {
-  background-color: red;
-  color: white;
-} */
-
-
 .Register-social-button p {
   color: white;
   margin: 0;
@@ -445,10 +352,6 @@ className="social-button mr-2 btn-sm" */
 }
 
 
-/* .Register-button span {
-  color: red;
-} */
-
 .Register-signup-text {
   font-size: 40px;
 }
@@ -463,15 +366,13 @@ className="social-button mr-2 btn-sm" */
 
 .Register-container .loginNavigate p,
 .Register-container .loginNavigate a {
-  /* font-family: 'Archievo', sans-serif; */
+
   font-size: 15px;
   margin: 0;
   padding: 2px;
   color: #d2abab;
   font-weight: 200;
 }
-
-
 
 
 /* login link below */

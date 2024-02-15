@@ -46,24 +46,9 @@ function Login() {
       <Row className="justify-content-md-center">
         <Col xs={10} md={6}>
           <div className="text-center text-white">
-            <h1
-            // style={{ marginTop: "30px" }}
-            >
+            <h1>
               Log in to
-              <span
-              // style={{
-              //   marginLeft: "10px",
-              //   color: "red",
-              //   transition: "color 0.3s",
-              //   cursor: "text"
-              // }}
-              // onMouseEnter={(e) => {
-              //   e.target.style.color = "red";
-              // }}
-              // onMouseLeave={(e) => {
-              //   e.target.style.color = "white";
-              // }}
-              >
+              <span>
                 MEDIAHARBOR
               </span>
             </h1>
@@ -71,146 +56,56 @@ function Login() {
 
           <div className="d-flex flex-column align-items-center">
             <Button
-              variant="outline-primary"
-              className="social-button mr-2 btn-sm"
-            // style={{
-            //   fontSize: "150%",
-            //   borderRadius: "20px",
-            //   width: "100%", 
-            //   height: "50px", 
-            //   marginTop: "30px",
-            //   marginBottom: "10px",
-            //   backgroundColor: "transparent", 
-            //   borderColor: "#8d4b4b", 
-            //   color: "#ffffff", 
-            //   transition: "0.3", 
-            // }}
-            // onMouseEnter={(e) => {
-            //   e.target.style.backgroundColor = "red";
-            //   e.target.style.color = "white";
-            //   e.target.style.borderColor = "#8d4b4b";
-            //   e.target.style.transform = "scale(1.1)"; 
-            // }}
-            // onMouseLeave={(e) => {
-            //   e.target.style.backgroundColor = "transparent";
-            //   e.target.style.color = "#ffffff";
-            //   e.target.style.borderColor = "#8d4b4b";
-            //   e.target.style.transform = "scale(1)"; 
-            // }}
+              variant="outline-danger"
+              className="social-button mr-2 btn-sm rounded-pill"
             >
               <img
                 src={process.env.PUBLIC_URL + "/register/google.png"}
                 alt="Google Logo"
                 className="mr-2"
-              // style={{
-              //   marginRight: "20px",
-              //   width: "30px",
-              //   margin: "flex",
-              // }}
               />
               Login with Google
             </Button>
 
             <Button
-              variant="outline-primary"
-              className="social-button mr-2 btn-sm"
-            // style={{
-            //   fontSize: "150%",
-            //   borderRadius: "20px",
-            //   width: "100%",
-            //   height: "50px",
-            //   marginBottom: "10px",
-            //   backgroundColor: "transparent",
-            //   borderColor: "#8d4b4b",
-            //   color: "#ffffff",
-            //   transition: "background-color 0.3s, color 0.3s, transform 0.3",
-            // }}
-            // onMouseEnter={(e) => {
-            //   e.target.style.backgroundColor = "red";
-            //   e.target.style.color = "white";
-            //   e.target.style.borderColor = "#8d4b4b";
-            //   e.target.style.transform = "scale(1.1)";
-            // }}
-            // onMouseLeave={(e) => {
-            //   e.target.style.backgroundColor = "transparent";
-            //   e.target.style.color = "#ffffff";
-            //   e.target.style.borderColor = "#8d4b4b";
-            //   e.target.style.transform = "scale(1)";
-            // }}
+              variant="outline-danger"
+              className="social-button mr-2 btn-sm rounded-pill login-facebook"
             >
               <img
                 src={process.env.PUBLIC_URL + "/register/facebook.png"}
                 alt="Facebook Logo"
                 className="mr-2"
-              // style={{
-              //   marginRight: "20px",
-              //   width: "30px",
-              //   margin: "flex",
-              // }}
+                style={{
+                  marginRight: "20px",
+                  width: "30px",
+                  margin: "flex",
+                }}
               />
               Login with Facebook
             </Button>
 
             <Button
-              variant="outline-primary"
-              className="social-button mr-2 btn-sm"
-            // style={{
-            //   fontSize: "150%",
-            //   borderRadius: "20px",
-            //   width: "100%",
-            //   height: "50px",
-            //   marginBottom: "10px",
-            //   backgroundColor: "transparent",
-            //   borderColor: "#8d4b4b",
-            //   color: "#ffffff",
-            //   transition: "background-color 0.3s, color 0.3s, transform 0.3",
-            // }}
-            // onMouseEnter={(e) => {
-            //   e.target.style.backgroundColor = "red";
-            //   e.target.style.color = "white";
-            //   e.target.style.borderColor = "#8d4b4b";
-            //   e.target.style.transform = "scale(1.1)";
-            // }}
-            // onMouseLeave={(e) => {
-            //   e.target.style.backgroundColor = "transparent";
-            //   e.target.style.borderColor = "#8d4b4b";
-            //   e.target.style.transform = "scale(1)";
-            // }}
+              variant="outline-danger"
+              className="social-button mr-2 btn-sm rounded-pill button"
             >
               <img
                 src={process.env.PUBLIC_URL + "/register/apple.png"}
                 alt="Apple Logo"
                 className="mr-2"
-              // style={{
-              //   marginRight: "20px",
-              //   width: "30px",
-              //   margin: "flex",
-              // }}
               />
               Continue with Apple
-
-
             </Button>
             <div className="line"></div>
           </div>
           <Form className="main-content" onSubmit={handleSubmit}>
-            <Form.Group className="d-flex flex-column align-items-start">
+            <Form.Group className="d-flex flex-column align-items-start text-input-container">
               <Form.Label className="label">Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="form-control email-input"
-              // style={{
-              //   color: "whitesmoke",
-              //   width: "100%",
-              //   marginTop: "30",
-              //   padding: "12px",
-              //   borderRadius: "20px",
-              //   border: "1px solid #8d4b4b",
-              //   backgroundColor: "transparent",
-              // }}
+                className="form-control"
               />
             </Form.Group>
 
@@ -218,67 +113,37 @@ function Login() {
               <Form.Label className="label">Password</Form.Label>
               <Form.Control
                 type="password"
+                id="inputPassword"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 className="form-control"
-              // style={{
-              //   color: "whitesmoke",
-              //   width: "100%",
-              //   marginTop: "0",
-              //   padding: "12px",
-              //   borderRadius: "20px",
-              //   border: "1px solid #8d4b4b",
-              //   backgroundColor: "transparent", 
-              // }}
+                aria-describedby="passwordHelpBlock"
               />
+              <div id="passwordHelpBlock" className="form-text">
+                Your password must be 8-20 characters long, contain uppercase, lowercase, and numbers.
+              </div>
             </Form.Group>
-            <div className="d-flex flex-row justify-content-between align-items-center">
+
+            <div className="d-flex flex-row justify-content-between align-items-center login-options">
               <div className="remember-me">
                 <Form.Check type="checkbox" label="Remember me" />
               </div>
-              <Button
-                variant="link"
-                className="forgotpassword"
-              // style={{ color: "#d2abab" }}
-              >
+              <a href="
+              ">
                 <em>Forgot password?</em>
-              </Button>
+              </a>
             </div>
 
             <Button
-              variant="primary"
-              className="login-button btn-block"
-              // style={{
-              //   marginTop: "30px",
-              //   fontSize: "150%",
-              //   borderRadius: "20px",
-              //   width: "100%", 
-              //   height: "50px", 
-              //   marginBottom: "10px",
-              //   backgroundColor: "transparent", 
-              //   borderColor: "#8d4b4b", 
-              //   color: "#ffffff", 
-              //   transition: "background-color 0.3s, color 0.3s, transform 0.3", 
-              // }}
-              // onMouseEnter={(e) => {
-              //   e.target.style.backgroundColor = "red";
-              //   e.target.style.color = "white";
-              //   e.target.style.borderColor = "#8d4b4b";
-              // }}
-              // onMouseLeave={(e) => {
-              //   e.target.style.backgroundColor = "transparent";
-              //   e.target.style.color = "#ffffff";
-              //   e.target.style.borderColor = "#8d4b4b";
-              // }}
+              variant="outline-danger"
+              className="btn btn-outline-danger login-button btn-block rounded-pill"
               type="submit"
             >
               Login
             </Button>
 
-            <div className="line"></div>
-
-            <hr className="my-4 bg-white" />
+            <hr className="my-4 bg-dark text-white" />
             <div className="text-center">
               <p>
                 Don't have an account?{" "}
