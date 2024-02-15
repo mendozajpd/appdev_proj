@@ -35,12 +35,11 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => [
                 'required',
-                // 'string',
                 Password::min(8)
                     ->mixedCase() // allows both uppercase and lowercase
                     ->letters() //accepts letter
                     ->numbers() //accepts numbers
-                    ->symbols() //accepts special character
+                    // ->symbols() //accepts special character
                     ->uncompromised(), //check to be sure that there is no data leak
             ],
         ]);

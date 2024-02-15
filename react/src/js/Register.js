@@ -13,18 +13,61 @@ function Register() {
     confirmPassword: "",
   });
 
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+  const [registerButtonClicked, setRegisterButtonClicked] = useState(false);
+
+  const [myInteger, setMyInteger] = useState(0);
+
+  const [clickedFields, setClickedFields] = useState({
+    name: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setShowPasswordRequirements(false); // Hide password requirements pop-up on input change
+  };
+
+  const handleFieldClick = (field) => {
+    setClickedFields({ ...clickedFields, [field]: true });
   };
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if any of the required fields are empty
+    const requiredFields = ["name", "email", "password", "confirmPassword"];
+    const emptyFields = requiredFields.filter((field) => !formData[field]);
+
+    if (emptyFields.length > 0) {
+      // Set error messages for the empty fields
+      const emptyFieldsErrors = {};
+      emptyFields.forEach((field) => {
+        emptyFieldsErrors[field] = "This field is required";
+      });
+      setClickedFields({ ...clickedFields, ...emptyFieldsErrors });
+      return;
+    }
+
+    // Set register button clicked state
+    setRegisterButtonClicked(true);
+
     try {
+      setMyInteger(myInteger + 1);
+      // Validate the password before submitting
+      if (!isValidPassword(formData.password)) {
+        setShowPasswordRequirements(true); // Show password requirements pop-up
+        return;
+      }
+
       const response = await axios.post(
         "http://127.0.0.1:8000/api/register", // add to config
-        formData,
+        formData
       );
       setFormData({
         name: "",
@@ -32,7 +75,7 @@ function Register() {
         password: "",
         confirmPassword: "",
       });
-      
+
       // console.log(response.data);
       navigate('/login');
     } catch (error) {
@@ -42,19 +85,120 @@ function Register() {
   };
 
   const handleSocialButtonMouseEnter = (e) => {
-    e.target.style.backgroundColor = "red"; 
-    e.target.style.color = "white"; 
-    e.target.style.borderColor = "rgba(185, 128, 128, 0.3)"; 
-    e.target.style.transform = "scale(1.05)"; 
+    e.target.style.backgroundColor = "red";
+    e.target.style.color = "white";
+    e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
+    e.target.style.transform = "scale(1.05)";
     e.stopPropagation();
   };
 
   const handleSocialButtonMouseLeave = (e) => {
-    e.target.style.backgroundColor = "transparent"; 
-    e.target.style.color = "white"; 
+    e.target.style.backgroundColor = "transparent";
+    e.target.style.color = "white";
     e.target.style.borderColor = "rgba(185, 128, 128, 0.3)";
-    e.target.style.transform = "scale(1)"; 
+    e.target.style.transform = "scale(1)";
     e.stopPropagation();
+  };
+
+  const isValidUsername = (username) => {
+    // Username must be more than 4 characters
+    return username.length > 4;
+  };
+
+  const isValidEmail = (email) => {
+    // Simple email validation (you may want to use a more robust validation)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPassword = (password) => {
+    // Password must be at least 8 characters long,
+    // contain at least one uppercase letter, one lowercase letter, and one number
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const getInputStyle = (field, data, clickedFields, num, formData) => {
+    if (num > 0 && field === "username") {
+      return {
+        color: "whitesmoke",
+        width: "100%",
+        marginTop: "10px",
+        padding: "12px",
+        borderRadius: "20px",
+        border: `1px solid ${isValidUsername(data) && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        backgroundColor: "transparent",
+      };
+    }
+
+    if (num > 0 && field === "email") {
+      return {
+        color: "whitesmoke",
+        width: "100%",
+        marginTop: "10px",
+        padding: "12px",
+        borderRadius: "20px",
+        border: `1px solid ${!isValidEmail(data) && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        backgroundColor: "transparent",
+      };
+    }
+
+    if (num > 0 && field === "password") {
+      return {
+        color: "whitesmoke",
+        width: "100%",
+        marginTop: "10px",
+        padding: "12px",
+        borderRadius: "20px",
+        border: `1px solid ${!isValidPassword(data) && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        backgroundColor: "transparent",
+      };
+    }
+
+    if (num > 0 && field === "confirmPassword") {
+      return {
+        color: "whitesmoke",
+        width: "100%",
+        marginTop: "10px",
+        padding: "12px",
+        borderRadius: "20px",
+        border: `1px solid ${data != formData.password && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        backgroundColor: "transparent",
+      };
+    }
+
+    else {
+      return {
+        color: "whitesmoke",
+        width: "100%",
+        marginTop: "10px",
+        padding: "12px",
+        borderRadius: "20px",
+        border: `1px solid ${clickedFields[field] && !formData[field] ? "red" : "#8d4b4b"}`,
+        backgroundColor: "transparent",
+      };
+    }
+  };
+
+  const submitButtonStyle = {
+    marginTop: "10px",
+    fontSize: "150%",
+    borderRadius: "20px",
+    width: "100%",
+    height: "50px",
+    marginBottom: "10px",
+    backgroundColor: "transparent",
+    borderColor: "rgba(185, 128, 128, 0.3)",
+    color: "#ff3535",
+    transition: "background-color 0.3s, color 0.3s, transform 0.3s",
+  };
+
+  const submitButtonTextStyle = {
+    fontSize: '20px',
+    color: 'white',
+    margin: 0,
+    padding: 0,
+    transition: "color 0.3s",
   };
 
   return (
@@ -255,124 +399,73 @@ function Register() {
         <div className="Register-textbox">
           <Form onSubmit={handleSubmit}>
             <p>Sign up</p>
-
             <div className="line"></div>
 
-            <Form.Group
-              className="Register-textbox"
-              controlId="formGroupUsername"
-            >
-              <Form.Label className="label">
-                Username
-              </Form.Label>
+            <Form.Group className="Register-textbox" controlId="formGroupUsername">
+              <Form.Label className="label">Username</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
                 onChange={handleChange}
+                onClick={() => handleFieldClick("name")}
                 value={formData.name}
-                // placeholder="Enter Username"
-                style={{
-                  color: "whitesmoke",
-                  width: "100%",
-                  marginTop: "10",
-                  padding: "12px",
-                  borderRadius: "20px",
-                  border: "1px solid #8d4b4b",
-                  backgroundColor: "transparent",
-                }}
+                style={getInputStyle("name", formData.name, clickedFields, myInteger, formData)}
               />
+              {clickedFields.name && !formData.name && myInteger > 0 && (
+                <div className="error-message">Enter your username</div>
+              )}
             </Form.Group>
+
             <Form.Group className="Register-textbox" controlId="formGroupEmail">
               <Form.Label className="label">Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
                 onChange={handleChange}
+                onClick={() => handleFieldClick("email")}
                 value={formData.email}
-                // placeholder="Enter Email"
-                style={{
-                  color: "whitesmoke",
-                  width: "100%",
-                  marginTop: "30",
-                  padding: "12px",
-                  borderRadius: "20px",
-                  border: "1px solid #8d4b4b",
-                  backgroundColor: "transparent",
-                }}
+                style={getInputStyle("email", formData.email, clickedFields, myInteger, formData)}
               />
+              {clickedFields.email && !isValidEmail(formData.email) && myInteger > 0 && (
+                <div className="error-message">Enter a valid email</div>
+              )}
             </Form.Group>
+
             <Form.Group className="Register-textbox" controlId="formGroupPass">
               <Form.Label className="label">Password</Form.Label>
               <Form.Control
                 type="password"
                 name="password"
                 onChange={handleChange}
+                onClick={() => handleFieldClick("password")}
                 value={formData.password}
-                // placeholder="Enter Password"
-                style={{
-                  color: "whitesmoke",
-                  width: "100%",
-                  marginTop: "30",
-                  padding: "12px",
-                  borderRadius: "20px",
-                  border: "1px solid #8d4b4b",
-                  backgroundColor: "transparent",
-                }}
+                style={getInputStyle("password", formData.password, clickedFields, myInteger, formData)}
               />
+              {clickedFields.password && !isValidPassword(formData.password) && myInteger > 0 && (
+                <div className="error-message">
+                  Password must be 8 characters long, contain uppercase, lowercase, and numbers
+                </div>
+              )}
+              {/* {displayPasswordRequirements()} */}
             </Form.Group>
-            <Form.Group
-              className="Register-textbox"
-              controlId="formGroupConPass"
-            >
+
+            <Form.Group className="Register-textbox" controlId="formGroupConPass">
               <Form.Label className="label">Confirm Password</Form.Label>
               <Form.Control
                 type="password"
                 name="confirmPassword"
                 onChange={handleChange}
+                onClick={() => handleFieldClick("confirmPassword")}
                 value={formData.confirmPassword}
-                // placeholder="Confirm Password"
-                style={{
-                  color: "whitesmoke",
-                  width: "100%",
-                  marginTop: "30",
-                  padding: "12px",
-                  borderRadius: "20px",
-                  border: "1px solid #8d4b4b",
-                  backgroundColor: "transparent",
-                }}
+                style={getInputStyle("confirmPassword", formData.confirmPassword, clickedFields, myInteger, formData)}
               />
+              {clickedFields.confirmPassword && formData.password !== formData.confirmPassword && (
+                <div className="error-message">Passwords do not match</div>
+              )}
             </Form.Group>
 
-            <Button className="Register-button" variant="light" type="submit"
-              style={{
-                marginTop: "10px",
-                fontSize: "150%",
-                borderRadius: "20px",
-                width: "100%",
-                height: "50px",
-                marginBottom: "10px",
-                backgroundColor: "transparent",
-                borderColor: "rgba(185, 128, 128, 0.3)",
-                color: "#ff3535",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", 
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "red";
-                e.target.style.color = "white";
-                e.target.style.borderColor = "#8d4b4b";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ff3535";
-                e.target.style.borderColor = "#8d4b4b";
-              }}>
-              <span style={{
-                fontSize: '20px',
-                color: 'white',
-                margin: 0,
-                padding: 0,
-                transition: "color 0.3s",
-              }}>Register</span>
+            <Button className="Register-button" variant="light" type="submit" style={submitButtonStyle}>
+              <span style={submitButtonTextStyle}>Register</span>
             </Button>
           </Form>
         </div>
