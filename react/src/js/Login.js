@@ -16,6 +16,7 @@ function Login() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -45,21 +46,23 @@ function Login() {
       <Row className="justify-content-md-center">
         <Col xs={10} md={6}>
           <div className="text-center text-white">
-            <h1 style={{ marginTop: "30px" }}>
+            <h1
+            // style={{ marginTop: "30px" }}
+            >
               Log in to
               <span
-                style={{
-                  marginLeft: "10px",
-                  color: "red",
-                  transition: "color 0.3s",
-                  cursor: "text"
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.color = "red";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.color = "white";
-                }}
+              // style={{
+              //   marginLeft: "10px",
+              //   color: "red",
+              //   transition: "color 0.3s",
+              //   cursor: "text"
+              // }}
+              // onMouseEnter={(e) => {
+              //   e.target.style.color = "red";
+              // }}
+              // onMouseLeave={(e) => {
+              //   e.target.style.color = "white";
+              // }}
               >
                 MEDIAHARBOR
               </span>
@@ -70,79 +73,80 @@ function Login() {
             <Button
               variant="outline-primary"
               className="social-button mr-2 btn-sm"
-              style={{
-                fontSize: "150%",
-                borderRadius: "20px",
-                width: "100%", 
-                height: "50px", 
-                marginTop: "30px",
-                marginBottom: "10px",
-                backgroundColor: "transparent", 
-                borderColor: "#8d4b4b", 
-                color: "#ffffff", 
-                transition: "0.3", 
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "red";
-                e.target.style.color = "white";
-                e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1.1)"; 
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ffffff";
-                e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1)"; 
-              }}
+            // style={{
+            //   fontSize: "150%",
+            //   borderRadius: "20px",
+            //   width: "100%", 
+            //   height: "50px", 
+            //   marginTop: "30px",
+            //   marginBottom: "10px",
+            //   backgroundColor: "transparent", 
+            //   borderColor: "#8d4b4b", 
+            //   color: "#ffffff", 
+            //   transition: "0.3", 
+            // }}
+            // onMouseEnter={(e) => {
+            //   e.target.style.backgroundColor = "red";
+            //   e.target.style.color = "white";
+            //   e.target.style.borderColor = "#8d4b4b";
+            //   e.target.style.transform = "scale(1.1)"; 
+            // }}
+            // onMouseLeave={(e) => {
+            //   e.target.style.backgroundColor = "transparent";
+            //   e.target.style.color = "#ffffff";
+            //   e.target.style.borderColor = "#8d4b4b";
+            //   e.target.style.transform = "scale(1)"; 
+            // }}
             >
               <img
                 src={process.env.PUBLIC_URL + "/register/google.png"}
                 alt="Google Logo"
                 className="mr-2"
-                style={{
-                  marginRight: "20px",
-                  width: "30px",
-                  margin: "flex",
-                }}
+              // style={{
+              //   marginRight: "20px",
+              //   width: "30px",
+              //   margin: "flex",
+              // }}
               />
               Login with Google
             </Button>
+
             <Button
               variant="outline-primary"
               className="social-button mr-2 btn-sm"
-              style={{
-                fontSize: "150%",
-                borderRadius: "20px",
-                width: "100%",
-                height: "50px",
-                marginBottom: "10px",
-                backgroundColor: "transparent",
-                borderColor: "#8d4b4b",
-                color: "#ffffff",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "red";
-                e.target.style.color = "white";
-                e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ffffff";
-                e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1)";
-              }}
+            // style={{
+            //   fontSize: "150%",
+            //   borderRadius: "20px",
+            //   width: "100%",
+            //   height: "50px",
+            //   marginBottom: "10px",
+            //   backgroundColor: "transparent",
+            //   borderColor: "#8d4b4b",
+            //   color: "#ffffff",
+            //   transition: "background-color 0.3s, color 0.3s, transform 0.3",
+            // }}
+            // onMouseEnter={(e) => {
+            //   e.target.style.backgroundColor = "red";
+            //   e.target.style.color = "white";
+            //   e.target.style.borderColor = "#8d4b4b";
+            //   e.target.style.transform = "scale(1.1)";
+            // }}
+            // onMouseLeave={(e) => {
+            //   e.target.style.backgroundColor = "transparent";
+            //   e.target.style.color = "#ffffff";
+            //   e.target.style.borderColor = "#8d4b4b";
+            //   e.target.style.transform = "scale(1)";
+            // }}
             >
               <img
                 src={process.env.PUBLIC_URL + "/register/facebook.png"}
                 alt="Facebook Logo"
                 className="mr-2"
-                style={{
-                  marginRight: "20px",
-                  width: "30px",
-                  margin: "flex",
-                }}
+              // style={{
+              //   marginRight: "20px",
+              //   width: "30px",
+              //   margin: "flex",
+              // }}
               />
               Login with Facebook
             </Button>
@@ -150,40 +154,42 @@ function Login() {
             <Button
               variant="outline-primary"
               className="social-button mr-2 btn-sm"
-              style={{
-                fontSize: "150%",
-                borderRadius: "20px",
-                width: "100%",
-                height: "50px",
-                marginBottom: "10px",
-                backgroundColor: "transparent",
-                borderColor: "#8d4b4b",
-                color: "#ffffff",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "red";
-                e.target.style.color = "white";
-                e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-                e.target.style.borderColor = "#8d4b4b";
-                e.target.style.transform = "scale(1)";
-              }}
+            // style={{
+            //   fontSize: "150%",
+            //   borderRadius: "20px",
+            //   width: "100%",
+            //   height: "50px",
+            //   marginBottom: "10px",
+            //   backgroundColor: "transparent",
+            //   borderColor: "#8d4b4b",
+            //   color: "#ffffff",
+            //   transition: "background-color 0.3s, color 0.3s, transform 0.3",
+            // }}
+            // onMouseEnter={(e) => {
+            //   e.target.style.backgroundColor = "red";
+            //   e.target.style.color = "white";
+            //   e.target.style.borderColor = "#8d4b4b";
+            //   e.target.style.transform = "scale(1.1)";
+            // }}
+            // onMouseLeave={(e) => {
+            //   e.target.style.backgroundColor = "transparent";
+            //   e.target.style.borderColor = "#8d4b4b";
+            //   e.target.style.transform = "scale(1)";
+            // }}
             >
               <img
                 src={process.env.PUBLIC_URL + "/register/apple.png"}
                 alt="Apple Logo"
                 className="mr-2"
-                style={{
-                  marginRight: "20px",
-                  width: "30px",
-                  margin: "flex",
-                }}
+              // style={{
+              //   marginRight: "20px",
+              //   width: "30px",
+              //   margin: "flex",
+              // }}
               />
               Continue with Apple
+
+
             </Button>
             <div className="line"></div>
           </div>
@@ -196,15 +202,15 @@ function Login() {
                 value={formData.email}
                 onChange={handleChange}
                 className="form-control email-input"
-                style={{
-                  color: "whitesmoke",
-                  width: "100%",
-                  marginTop: "30",
-                  padding: "12px",
-                  borderRadius: "20px",
-                  border: "1px solid #8d4b4b",
-                  backgroundColor: "transparent",
-                }}
+              // style={{
+              //   color: "whitesmoke",
+              //   width: "100%",
+              //   marginTop: "30",
+              //   padding: "12px",
+              //   borderRadius: "20px",
+              //   border: "1px solid #8d4b4b",
+              //   backgroundColor: "transparent",
+              // }}
               />
             </Form.Group>
 
@@ -216,15 +222,15 @@ function Login() {
                 value={formData.password}
                 onChange={handleChange}
                 className="form-control"
-                style={{
-                  color: "whitesmoke",
-                  width: "100%",
-                  marginTop: "0",
-                  padding: "12px",
-                  borderRadius: "20px",
-                  border: "1px solid #8d4b4b",
-                  backgroundColor: "transparent", 
-                }}
+              // style={{
+              //   color: "whitesmoke",
+              //   width: "100%",
+              //   marginTop: "0",
+              //   padding: "12px",
+              //   borderRadius: "20px",
+              //   border: "1px solid #8d4b4b",
+              //   backgroundColor: "transparent", 
+              // }}
               />
             </Form.Group>
             <div className="d-flex flex-row justify-content-between align-items-center">
@@ -234,7 +240,7 @@ function Login() {
               <Button
                 variant="link"
                 className="forgotpassword"
-                style={{ color: "#d2abab" }}
+              // style={{ color: "#d2abab" }}
               >
                 <em>Forgot password?</em>
               </Button>
@@ -243,28 +249,28 @@ function Login() {
             <Button
               variant="primary"
               className="login-button btn-block"
-              style={{
-                marginTop: "30px",
-                fontSize: "150%",
-                borderRadius: "20px",
-                width: "100%", 
-                height: "50px", 
-                marginBottom: "10px",
-                backgroundColor: "transparent", 
-                borderColor: "#8d4b4b", 
-                color: "#ffffff", 
-                transition: "background-color 0.3s, color 0.3s, transform 0.3", 
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "red";
-                e.target.style.color = "white";
-                e.target.style.borderColor = "#8d4b4b";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "transparent";
-                e.target.style.color = "#ffffff";
-                e.target.style.borderColor = "#8d4b4b";
-              }}
+              // style={{
+              //   marginTop: "30px",
+              //   fontSize: "150%",
+              //   borderRadius: "20px",
+              //   width: "100%", 
+              //   height: "50px", 
+              //   marginBottom: "10px",
+              //   backgroundColor: "transparent", 
+              //   borderColor: "#8d4b4b", 
+              //   color: "#ffffff", 
+              //   transition: "background-color 0.3s, color 0.3s, transform 0.3", 
+              // }}
+              // onMouseEnter={(e) => {
+              //   e.target.style.backgroundColor = "red";
+              //   e.target.style.color = "white";
+              //   e.target.style.borderColor = "#8d4b4b";
+              // }}
+              // onMouseLeave={(e) => {
+              //   e.target.style.backgroundColor = "transparent";
+              //   e.target.style.color = "#ffffff";
+              //   e.target.style.borderColor = "#8d4b4b";
+              // }}
               type="submit"
             >
               Login
