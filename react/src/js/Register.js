@@ -4,6 +4,8 @@ import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -14,7 +16,8 @@ function Register() {
   });
 
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
+  const [showPasswordRequirements, setShowPasswordRequirements] =
+    useState(false);
   const [registerButtonClicked, setRegisterButtonClicked] = useState(false);
 
   const [myInteger, setMyInteger] = useState(0);
@@ -25,6 +28,54 @@ function Register() {
     password: false,
     confirmPassword: false,
   });
+
+  const empty_field_notif = () =>
+    toast.error("Please fill in all the required fields.", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      draggable: true,
+      theme: "dark",
+      transition: Bounce,
+    });
+
+  const valid_input_notifs = () =>
+    toast.error("Please provide valid input for all fields.", {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      // draggable: true,
+      theme: "dark",
+      transition: Bounce,
+    });
+
+  const register_fail = () =>
+    toast.success("User registration failed.", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Flip,
+    });
+
+  const register_success = () =>
+    toast.success("User registered successfully.", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Flip,
+    });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -51,6 +102,7 @@ function Register() {
         emptyFieldsErrors[field] = "This field is required";
       });
       setClickedFields({ ...clickedFields, ...emptyFieldsErrors });
+      empty_field_notif();
       return;
     }
 
@@ -77,10 +129,13 @@ function Register() {
       });
 
       // console.log(response.data);
-      navigate('/login');
+      
+      register_success();
+      navigate("/login");
     } catch (error) {
+      register_fail();
       // console.error("Registration failed:", error);
-      alert(error.response.data.message);
+      // alert(error.response.data.message);
     }
   };
 
@@ -126,7 +181,9 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${isValidUsername(data) && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        border: `1px solid ${
+          isValidUsername(data) && clickedFields[field] ? "red" : "#8d4b4b"
+        }`,
         backgroundColor: "transparent",
       };
     }
@@ -138,7 +195,9 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${!isValidEmail(data) && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        border: `1px solid ${
+          !isValidEmail(data) && clickedFields[field] ? "red" : "#8d4b4b"
+        }`,
         backgroundColor: "transparent",
       };
     }
@@ -150,7 +209,9 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${!isValidPassword(data) && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        border: `1px solid ${
+          !isValidPassword(data) && clickedFields[field] ? "red" : "#8d4b4b"
+        }`,
         backgroundColor: "transparent",
       };
     }
@@ -162,19 +223,19 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${data != formData.password && clickedFields[field] ? "red" : "#8d4b4b"}`,
+        border: `1px solid ${
+          data != formData.password && clickedFields[field] ? "red" : "#8d4b4b"
+        }`,
         backgroundColor: "transparent",
       };
-    }
-
-    else {
+    } else {
       return {
         color: "whitesmoke",
         width: "100%",
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${clickedFields[field] && !formData[field] ? "red" : "#8d4b4b"}`,
+        border: `1px solid #8d4b4b`,
         backgroundColor: "transparent",
       };
     }
@@ -187,15 +248,14 @@ function Register() {
     width: "100%",
     height: "50px",
     marginBottom: "10px",
-    backgroundColor: "transparent",
     borderColor: "rgba(185, 128, 128, 0.3)",
     color: "#ff3535",
     transition: "background-color 0.3s, color 0.3s, transform 0.3s",
   };
 
   const submitButtonTextStyle = {
-    fontSize: '20px',
-    color: 'white',
+    fontSize: "20px",
+    color: "white",
     margin: 0,
     padding: 0,
     transition: "color 0.3s",
@@ -205,15 +265,14 @@ function Register() {
     <div className="Register-container">
       <div className="Register-social-container">
         <div>
-          <h1
-            style={{ marginTop: "30px" }}>
+          <h1 style={{ marginTop: "30px" }}>
             Sign up to start
             <span
               style={{
                 marginLeft: "10px",
                 color: "red",
                 transition: "color 0.3s",
-                cursor: "text"
+                cursor: "text",
               }}
               onMouseEnter={(e) => {
                 e.target.style.color = "red";
@@ -247,7 +306,8 @@ function Register() {
           onMouseEnter={handleSocialButtonMouseEnter}
           onMouseLeave={handleSocialButtonMouseLeave}
         >
-          <div className="buttonContent"
+          <div
+            className="buttonContent"
             onMouseEnter={(e) => {
               e.stopPropagation();
             }}
@@ -304,13 +364,15 @@ function Register() {
           onMouseEnter={handleSocialButtonMouseEnter}
           onMouseLeave={handleSocialButtonMouseLeave}
         >
-          <div className="buttonContent"
+          <div
+            className="buttonContent"
             onMouseEnter={(e) => {
               e.stopPropagation();
             }}
             onMouseLeave={(e) => {
               e.stopPropagation();
-            }}>
+            }}
+          >
             <Image
               src="/register/facebook.png"
               roundedCircle
@@ -327,13 +389,15 @@ function Register() {
                 e.stopPropagation();
               }}
             />
-            <p style={{ fontSize: "20px", fontWeight: "500" }}
+            <p
+              style={{ fontSize: "20px", fontWeight: "500" }}
               onMouseEnter={(e) => {
                 e.stopPropagation();
               }}
               onMouseLeave={(e) => {
                 e.stopPropagation();
-              }}>
+              }}
+            >
               Login with Facebook
             </p>
           </div>
@@ -359,13 +423,15 @@ function Register() {
           onMouseEnter={handleSocialButtonMouseEnter}
           onMouseLeave={handleSocialButtonMouseLeave}
         >
-          <div className="buttonContent"
+          <div
+            className="buttonContent"
             onMouseEnter={(e) => {
               e.stopPropagation();
             }}
             onMouseLeave={(e) => {
               e.stopPropagation();
-            }}>
+            }}
+          >
             <Image
               src="/register/apple.png"
               roundedCircle
@@ -382,13 +448,15 @@ function Register() {
                 e.stopPropagation();
               }}
             />
-            <p style={{ fontSize: "20px", fontWeight: "500" }}
+            <p
+              style={{ fontSize: "20px", fontWeight: "500" }}
               onMouseEnter={(e) => {
                 e.stopPropagation();
               }}
               onMouseLeave={(e) => {
                 e.stopPropagation();
-              }}>
+              }}
+            >
               Continue with Apple
             </p>
           </div>
@@ -401,7 +469,10 @@ function Register() {
             <p>Sign up</p>
             <div className="line"></div>
 
-            <Form.Group className="Register-textbox" controlId="formGroupUsername">
+            <Form.Group
+              className="Register-textbox"
+              controlId="formGroupUsername"
+            >
               <Form.Label className="label">Username</Form.Label>
               <Form.Control
                 type="text"
@@ -409,7 +480,13 @@ function Register() {
                 onChange={handleChange}
                 onClick={() => handleFieldClick("name")}
                 value={formData.name}
-                style={getInputStyle("name", formData.name, clickedFields, myInteger, formData)}
+                style={getInputStyle(
+                  "name",
+                  formData.name,
+                  clickedFields,
+                  myInteger,
+                  formData
+                )}
               />
               {clickedFields.name && !formData.name && myInteger > 0 && (
                 <div className="error-message">Enter your username</div>
@@ -424,11 +501,19 @@ function Register() {
                 onChange={handleChange}
                 onClick={() => handleFieldClick("email")}
                 value={formData.email}
-                style={getInputStyle("email", formData.email, clickedFields, myInteger, formData)}
+                style={getInputStyle(
+                  "email",
+                  formData.email,
+                  clickedFields,
+                  myInteger,
+                  formData
+                )}
               />
-              {clickedFields.email && !isValidEmail(formData.email) && myInteger > 0 && (
-                <div className="error-message">Enter a valid email</div>
-              )}
+              {clickedFields.email &&
+                !isValidEmail(formData.email) &&
+                myInteger > 0 && (
+                  <div className="error-message">Enter a valid email</div>
+                )}
             </Form.Group>
 
             <Form.Group className="Register-textbox" controlId="formGroupPass">
@@ -439,17 +524,29 @@ function Register() {
                 onChange={handleChange}
                 onClick={() => handleFieldClick("password")}
                 value={formData.password}
-                style={getInputStyle("password", formData.password, clickedFields, myInteger, formData)}
+                style={getInputStyle(
+                  "password",
+                  formData.password,
+                  clickedFields,
+                  myInteger,
+                  formData
+                )}
               />
-              {clickedFields.password && !isValidPassword(formData.password) && myInteger > 0 && (
-                <div className="error-message">
-                  Password must be 8 characters long, contain uppercase, lowercase, and numbers
-                </div>
-              )}
+              {clickedFields.password &&
+                !isValidPassword(formData.password) &&
+                myInteger > 0 && (
+                  <div className="error-message">
+                    Password must be 8 characters long, contain uppercase,
+                    lowercase, and numbers
+                  </div>
+                )}
               {/* {displayPasswordRequirements()} */}
             </Form.Group>
 
-            <Form.Group className="Register-textbox" controlId="formGroupConPass">
+            <Form.Group
+              className="Register-textbox"
+              controlId="formGroupConPass"
+            >
               <Form.Label className="label">Confirm Password</Form.Label>
               <Form.Control
                 type="password"
@@ -457,14 +554,26 @@ function Register() {
                 onChange={handleChange}
                 onClick={() => handleFieldClick("confirmPassword")}
                 value={formData.confirmPassword}
-                style={getInputStyle("confirmPassword", formData.confirmPassword, clickedFields, myInteger, formData)}
+                style={getInputStyle(
+                  "confirmPassword",
+                  formData.confirmPassword,
+                  clickedFields,
+                  myInteger,
+                  formData
+                )}
               />
-              {clickedFields.confirmPassword && formData.password !== formData.confirmPassword && (
-                <div className="error-message">Passwords do not match</div>
-              )}
+              {clickedFields.confirmPassword &&
+                formData.password !== formData.confirmPassword && (
+                  <div className="error-message">Passwords do not match</div>
+                )}
             </Form.Group>
 
-            <Button className="Register-button" variant="light" type="submit" style={submitButtonStyle}>
+            <Button
+              className="Register-button"
+              variant="outline-danger"
+              type="submit"
+              style={submitButtonStyle}
+            >
               <span style={submitButtonTextStyle}>Register</span>
             </Button>
           </Form>
@@ -472,11 +581,12 @@ function Register() {
         <div className="line"></div>
         <div className="loginNavigate">
           <p>Have an account? </p>
-          <Link to={"/login"} style={{ textDecoration: 'none' }}></Link>
+          <Link to={"/login"} style={{ textDecoration: "none" }}></Link>
           <Link to={"/login"}> Log in here</Link>
         </div>
       </div>
-    </div >
+      <ToastContainer />
+    </div>
   );
 }
 
