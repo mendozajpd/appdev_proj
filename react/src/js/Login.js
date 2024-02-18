@@ -74,7 +74,7 @@ function Login() {
       // login_success();
       navigate("/home");
     } catch (error) {
-      // console.error("Login failed:", error);
+      console.error("Login failed:", error);
       // alert("Email or password is incorrect. Try again.");
       login_fail();
     }

@@ -130,7 +130,7 @@ function Register() {
       // navigate("/login");
     } catch (error) {
       register_fail();
-      // console.error("Registration failed:", error);
+      console.error("Registration failed:", error);
       // alert(error.response.data.message);
     }
   };

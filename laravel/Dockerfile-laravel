@@ -1,0 +1,25 @@
+FROM php:8.2-apache
+
+# Install dependencies
+RUN apt-get update && apt-get install -y zip libzip-dev
+
+ENV APACHE_LOG_DIR=/var/log/apache2
+
+EXPOSE 80
+
+# Dockerfile-laravel
+FROM composer:2 as composer
+
+WORKDIR /app
+
+COPY . .
+
+RUN composer update
+
+FROM php:8.2-fpm
+
+WORKDIR /var/www
+
+COPY --from=composer /app /var/www
+
+RUN docker-php-ext-install pdo_mysql
