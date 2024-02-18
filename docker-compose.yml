@@ -1,0 +1,64 @@
+version: '3.7'
+services:
+
+  react:
+    build:
+      context: ./react
+      dockerfile: Dockerfile-react
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./react:/app
+      - /app/node_modules
+    networks:
+      - app-network
+
+  laravel:
+    build:
+      context: ./laravel
+      dockerfile: Dockerfile-laravel
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: your_database
+      DB_USERNAME: your_username
+      DB_PASSWORD: your_password
+    volumes:
+      - ./laravel:/var/www
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
+      - db
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: your_database
+      MYSQL_USER: your_username
+      MYSQL_PASSWORD: your_password
+      MYSQL_ROOT_PASSWORD: your_password
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - db
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: your_password
+    ports:
+      - "8080:80"
+    networks:
+      - db
+    depends_on:
+      - mysql
+
+networks:
+  app-network:
+    driver: bridge
+  db:

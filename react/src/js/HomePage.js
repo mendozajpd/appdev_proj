@@ -15,7 +15,7 @@ const HomePage = () => {
     try {
       const token = localStorage.getItem("jwt_token");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/logout",
+        "http://127.0.0.1:8080/api/auth/logout",
         null,
         {
           headers: {
