@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
@@ -6,8 +6,18 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Spinner } from "react-bootstrap";
 
 function Register() {
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      navigate('/home');
+    }
+  }, []);
+
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,7 +25,7 @@ function Register() {
     confirmPassword: "",
   });
 
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  // const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [showPasswordRequirements, setShowPasswordRequirements] =
     useState(false);
   const [registerButtonClicked, setRegisterButtonClicked] = useState(false);
@@ -32,50 +42,41 @@ function Register() {
   const empty_field_notif = () =>
     toast.error("Please fill in all the required fields.", {
       position: "top-center",
-      autoClose: 1000,
+      autoClose: 3000,
       hideProgressBar: true,
       closeOnClick: true,
       draggable: true,
-      theme: "dark",
-      transition: Bounce,
-    });
-
-  const valid_input_notifs = () =>
-    toast.error("Please provide valid input for all fields.", {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      // draggable: true,
       theme: "dark",
       transition: Bounce,
     });
 
   const register_fail = () =>
-    toast.success("User registration failed.", {
+    toast.error("User registration failed.", {
       position: "top-center",
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: undefined,
+      progress: Spinner,
       theme: "dark",
       transition: Flip,
     });
 
-  const register_success = () =>
+  const register_success = () => {
     toast.success("User registered successfully.", {
       position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
+      autoClose: 200,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
       progress: undefined,
       theme: "dark",
-      transition: Flip,
+      transition: Bounce,
+      onClose: () => navigate("/home"),
     });
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -86,7 +87,6 @@ function Register() {
     setClickedFields({ ...clickedFields, [field]: true });
   };
 
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,13 +110,11 @@ function Register() {
     setRegisterButtonClicked(true);
 
     try {
-      setMyInteger(myInteger + 1);
       // Validate the password before submitting
       if (!isValidPassword(formData.password)) {
         setShowPasswordRequirements(true); // Show password requirements pop-up
         return;
       }
-
       const response = await axios.post(
         "http://127.0.0.1:8000/api/register", // add to config
         formData
@@ -127,11 +125,9 @@ function Register() {
         password: "",
         confirmPassword: "",
       });
-
-      // console.log(response.data);
-      
+      setMyInteger(myInteger + 1);
       register_success();
-      navigate("/login");
+      // navigate("/login");
     } catch (error) {
       register_fail();
       // console.error("Registration failed:", error);
@@ -181,9 +177,8 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${
-          isValidUsername(data) && clickedFields[field] ? "red" : "#8d4b4b"
-        }`,
+        border: `1px solid ${isValidUsername(data) && clickedFields[field] ? "red" : "#8d4b4b"
+          }`,
         backgroundColor: "transparent",
       };
     }
@@ -195,9 +190,8 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${
-          !isValidEmail(data) && clickedFields[field] ? "red" : "#8d4b4b"
-        }`,
+        border: `1px solid ${!isValidEmail(data) && clickedFields[field] ? "red" : "#8d4b4b"
+          }`,
         backgroundColor: "transparent",
       };
     }
@@ -209,9 +203,8 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${
-          !isValidPassword(data) && clickedFields[field] ? "red" : "#8d4b4b"
-        }`,
+        border: `1px solid ${!isValidPassword(data) && clickedFields[field] && myInteger < 1 ? "red" : "#8d4b4b"
+          }`,
         backgroundColor: "transparent",
       };
     }
@@ -223,9 +216,8 @@ function Register() {
         marginTop: "10px",
         padding: "12px",
         borderRadius: "20px",
-        border: `1px solid ${
-          data != formData.password && clickedFields[field] ? "red" : "#8d4b4b"
-        }`,
+        border: `1px solid ${data !== formData.password && clickedFields[field] ? "red" : "#8d4b4b"
+          } `,
         backgroundColor: "transparent",
       };
     } else {
@@ -488,7 +480,7 @@ function Register() {
                   formData
                 )}
               />
-              {clickedFields.name && !formData.name && myInteger > 0 && (
+              {clickedFields.name && !formData.name && myInteger < 1 && (
                 <div className="error-message">Enter your username</div>
               )}
             </Form.Group>
@@ -510,8 +502,8 @@ function Register() {
                 )}
               />
               {clickedFields.email &&
-                !isValidEmail(formData.email) &&
-                myInteger > 0 && (
+                !isValidEmail(formData.email) && myInteger < 1 &&
+                (
                   <div className="error-message">Enter a valid email</div>
                 )}
             </Form.Group>
@@ -523,6 +515,7 @@ function Register() {
                 name="password"
                 onChange={handleChange}
                 onClick={() => handleFieldClick("password")}
+                onFocus={() => handleFieldClick("password")}
                 value={formData.password}
                 style={getInputStyle(
                   "password",
@@ -533,10 +526,10 @@ function Register() {
                 )}
               />
               {clickedFields.password &&
-                !isValidPassword(formData.password) &&
-                myInteger > 0 && (
+                !isValidPassword(formData.password) && myInteger < 1 &&
+                (
                   <div className="error-message">
-                    Password must be 8 characters long, contain uppercase,
+                    Password must be atleast 8 characters long, contain uppercase,
                     lowercase, and numbers
                   </div>
                 )}
@@ -563,7 +556,7 @@ function Register() {
                 )}
               />
               {clickedFields.confirmPassword &&
-                formData.password !== formData.confirmPassword && (
+                formData.password !== formData.confirmPassword && myInteger < 1 && (
                   <div className="error-message">Passwords do not match</div>
                 )}
             </Form.Group>
@@ -573,6 +566,7 @@ function Register() {
               variant="outline-danger"
               type="submit"
               style={submitButtonStyle}
+            // disabled="true"
             >
               <span style={submitButtonTextStyle}>Register</span>
             </Button>
@@ -586,7 +580,7 @@ function Register() {
         </div>
       </div>
       <ToastContainer />
-    </div>
+    </div >
   );
 }
 

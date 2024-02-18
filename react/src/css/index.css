@@ -382,7 +382,9 @@ h1 span:hover {
 .loginNavigate a:hover {
   color: red;
 }
+
 .Register-signup-form .Register-textbox .error-message {
   color: #ff3f3f;
-  font-size: 15px;
+  font-size: 12px;
+  text-align: left;
 }

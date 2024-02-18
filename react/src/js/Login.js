@@ -1,16 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Home from "./HomePage";
+import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import mediaharbor_api from "../config";
 
 function Login() {
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      navigate('/home');
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
   const navigate = useNavigate();
+
+  const login_success = () =>
+    toast.success("User login successfully", {
+      position: "top-center",
+      autoClose: 200,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Flip,
+      onClose: () => navigate("/home"),
+    });
+
+  const login_fail = () => {
+    toast.error("User failed to login.", {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -32,11 +71,12 @@ function Login() {
       const token = response.data.access_token;
       localStorage.setItem("jwt_token", token); // change this in the future
 
-      navigate('/home');
-      // console.log(response.data);
+      // login_success();
+      navigate("/home");
     } catch (error) {
       // console.error("Login failed:", error);
-      alert("Email or password is incorrect. Try again.");
+      // alert("Email or password is incorrect. Try again.");
+      login_fail();
     }
   };
 
@@ -121,7 +161,7 @@ function Login() {
                 aria-describedby="passwordHelpBlock"
               />
               <div id="passwordHelpBlock" className="form-text">
-                Your password must be 8-20 characters long, contain uppercase, lowercase, and numbers.
+                {/* Your password must be 8-20 characters long, contain uppercase, lowercase, and numbers. */}
               </div>
             </Form.Group>
 
@@ -155,6 +195,7 @@ function Login() {
           </Form>
         </Col>
       </Row>
+      <ToastContainer />
     </Container>
   );
 }

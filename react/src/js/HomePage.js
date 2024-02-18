@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 const HomePage = () => {
-  const [formData] = useState({
 
-  });
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (!token) {
+      navigate('/login');
+    }
+  }, []);
 
   const navigate = useNavigate();
 
@@ -32,7 +36,7 @@ const HomePage = () => {
   };
 
   return (
-    <Container className="main-container">
+    < Container className="main-container" >
       <Row className="justify-content-md-center">
         <Col xs={10} md={6}>
           <div className="text-center text-white">
@@ -94,7 +98,7 @@ const HomePage = () => {
           </Form>
         </Col>
       </Row>
-    </Container>
+    </Container >
   );
 };
 
