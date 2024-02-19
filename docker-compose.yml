@@ -1,6 +1,5 @@
-version: '3.7'
+version: "3.7"
 services:
-
   react:
     build:
       context: ./react
@@ -23,7 +22,7 @@ services:
       DB_PORT: 3306
       DB_DATABASE: appdev_proj
       DB_USERNAME: root
-      DB_PASSWORD: _MiniSQL_512
+      DB_PASSWORD: root
     volumes:
       - ./laravel:/var/www
     ports:
@@ -35,9 +34,7 @@ services:
     image: mysql:5.7
     environment:
       MYSQL_DATABASE: appdev_proj
-      MYSQL_USER: root
-      MYSQL_PASSWORD: _MiniSQL_512
-      MYSQL_ROOT_PASSWORD: _MiniSQL_512
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./mysql-data:/var/lib/mysql
     ports:
@@ -49,13 +46,23 @@ services:
     image: phpmyadmin/phpmyadmin
     environment:
       PMA_HOST: mysql
-      MYSQL_ROOT_PASSWORD: _MiniSQL_512
+      MYSQL_ROOT_PASSWORD: root
     ports:
       - "8080:80"
     networks:
       - app-network
     depends_on:
       - mysql
+
+  apache:
+    build:
+      dockerfile: Dockerfile-apache
+    ports:
+      - "80:80"
+    volumes:
+      - ./apache:/var/www/html
+    networks:
+      - app-network
 
 networks:
   app-network:
