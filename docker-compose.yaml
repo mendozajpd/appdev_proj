@@ -1,0 +1,85 @@
+version: "3.7" 
+services: 
+  react: 
+    build: 
+      context: ./react 
+      dockerfile: Dockerfile-react 
+    ports: 
+    - "3000:3000" 
+    volumes: 
+    - ./react:/app 
+    - /app/node_modules 
+    networks: 
+    - app-network
+
+  nginx: 
+    build: 
+      context: ./nginx 
+    ports: 
+    - "8000:80" 
+    networks: 
+    - app-network 
+    volumes: 
+    - ./laravel/:/var/www/laravel/ 
+    - ./logs/nginx:/var/log/nginx/ 
+    container_name: nginx
+
+  laravel: 
+    build: 
+      context: ./laravel 
+      dockerfile: Dockerfile-laravel 
+    volumes: 
+      - ./laravel:/var/www/laravel/ 
+      - ./logs/php.log:/var/log/fpm-php.www.log 
+    environment: 
+      DB_CONNECTION: mysql 
+      DB_HOST: mysql 
+      DB_PORT: 4306 
+      DB_DATABASE: appdev_proj 
+      DB_USERNAME: root 
+      DB_PASSWORD: root 
+    ports: 
+    - "9000" 
+    networks: 
+    - app-network 
+    expose: 
+    - "9000"
+
+  mysql: 
+    image: mysql:5.7 
+    container_name: mysql 
+    environment: 
+      MYSQL_DATABASE: appdev_proj 
+      MYSQL_ROOT_PASSWORD: root 
+    volumes: 
+      - ./mysql-data:/var/lib/mysql 
+    ports: 
+      - "4306:4306" 
+    networks: 
+    - app-network
+
+  phpmyadmin: 
+    image: phpmyadmin/phpmyadmin 
+    environment: 
+      PMA_HOST: mysql 
+      MYSQL_ROOT_PASSWORD: root 
+    ports: 
+    - "8080:80" 
+    networks: 
+    - app-network 
+    depends_on: 
+    - mysql
+
+  apache: 
+    build: 
+      dockerfile: Dockerfile-apache 
+    ports: 
+    - "80:80" 
+    volumes: 
+    - ./apache:/var/www/laravel 
+    networks: 
+    - app-network
+
+networks: 
+  app-network: 
+    driver: bridge
