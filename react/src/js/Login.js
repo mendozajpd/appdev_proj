@@ -2,19 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import Home from "./HomePage";
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import mediaharbor_api from "../config";
 
 function Login() {
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    if (token) {
-      navigate('/home');
-    }
-  }, []);
+
 
   const [formData, setFormData] = useState({
     email: "",
@@ -23,19 +18,22 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const login_success = () =>
-    toast.success("User login successfully", {
+  const register_success = () => {
+    toast.success("User registered successfully.", {
       position: "top-center",
-      autoClose: 200,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
       progress: undefined,
       theme: "dark",
-      transition: Flip,
-      onClose: () => navigate("/home"),
+      transition: Bounce,
+      onClose: () => {
+        localStorage.setItem('justRegistered', 'false');
+      }
     });
+  }
 
   const login_fail = () => {
     toast.error("User failed to login.", {
@@ -51,6 +49,18 @@ function Login() {
     });
   }
 
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      navigate('/home');
+    }
+
+    if (localStorage.getItem('justRegistered') === 'true') {
+      register_success();
+      // localStorage.setItem('justRegistered', 'false');
+    }
+  }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -58,6 +68,8 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setButtonDisabled(true);
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/login",
@@ -75,6 +87,7 @@ function Login() {
       navigate("/home");
     } catch (error) {
       console.error("Login failed:", error);
+      setButtonDisabled(false);
       // alert("Email or password is incorrect. Try again.");
       login_fail();
     }
@@ -179,6 +192,7 @@ function Login() {
               variant="outline-danger"
               className="btn btn-outline-danger login-button btn-block rounded-pill"
               type="submit"
+              disabled={buttonDisabled}
             >
               Login
             </Button>

@@ -30,18 +30,6 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        if (! auth()->user()->hasVerifiedEmail()) {
-            $user = auth()->user();
-            
-            $verificationUrl = URL::temporarySignedRoute(
-                'verification.verify', now()->addMinutes(60), ['id' => $user->id]
-            );
-
-            Mail::to($user->email)->send(new VerificationEmail($verificationUrl));
-
-            return $this->respondWithToken($token);
-        }
-
         return $this->respondWithToken($token);
     }
 
@@ -71,11 +59,13 @@ class AuthController extends Controller
     }
     
     public function sendVerificationEmail(Request $request) {
-        $name = $request->name;
-        $email = $request->email;
-        $message = $request->message;
+        $user = auth()->user();
+            
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify', now()->addMinutes(60), ['id' => $user->id]
+        );
 
-        Mail::to($email)->send(new ContactFormMail($name, $email, $message));
+        Mail::to($user->email)->send(new VerificationEmail($verificationUrl,$user->name));
 
         return response()->json(['message' => 'Email sent successfully'], 201);
     }

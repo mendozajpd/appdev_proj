@@ -8,14 +8,14 @@ import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Modal from 'react-bootstrap/Modal';
 import { Spinner } from "react-bootstrap";
-
+import mediaharbor_api from "../config";
 
 function Register() {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
     if (token) {
-      navigate('/home');
+      navigate('/login');
     }
   }, []);
 
@@ -27,9 +27,8 @@ function Register() {
     confirmPassword: "",
   });
 
-  // const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [showPasswordRequirements, setShowPasswordRequirements] =
-    useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [showPasswordRequirements, setShowPasswordRequirements] = useState(false);
   const [registerButtonClicked, setRegisterButtonClicked] = useState(false);
 
   const [myInteger, setMyInteger] = useState(0);
@@ -76,7 +75,6 @@ function Register() {
       progress: undefined,
       theme: "dark",
       transition: Bounce,
-      onClose: () => navigate("/home"),
     });
   }
 
@@ -92,6 +90,7 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setButtonDisabled(true);
 
     // Check if any of the required fields are empty
     const requiredFields = ["name", "email", "password", "confirmPassword"];
@@ -105,6 +104,7 @@ function Register() {
       });
       setClickedFields({ ...clickedFields, ...emptyFieldsErrors });
       empty_field_notif();
+      setButtonDisabled(false);
       return;
     }
 
@@ -115,9 +115,11 @@ function Register() {
       // Validate the password before submitting
       if (!isValidPassword(formData.password)) {
         setShowPasswordRequirements(true); // Show password requirements pop-up
+        setButtonDisabled(false);
         return;
       }
-      const response = await axios.post(
+
+      await axios.post(
         "http://127.0.0.1:8000/api/register", // add to config
         formData
       );
@@ -128,11 +130,13 @@ function Register() {
         confirmPassword: "",
       });
       setMyInteger(myInteger + 1);
-      register_success();
-      // navigate("/login");
+      localStorage.setItem('justRegistered', 'true');
+      navigate("/login")
     } catch (error) {
+      setMyInteger(0);
       register_fail();
       console.error("Registration failed:", error);
+      setButtonDisabled(false);
       // alert(error.response.data.message);
     }
   };
@@ -627,7 +631,7 @@ function Register() {
                 variant="outline-danger"
                 type="submit"
                 style={submitButtonStyle}
-                disabled={!termsChecked && myInteger < 1}
+                disabled={!termsChecked || buttonDisabled}
               >
                 <span style={submitButtonTextStyle}>Register</span>
               </Button>

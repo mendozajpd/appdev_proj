@@ -17,15 +17,18 @@ class VerificationEmail extends Mailable
      * Create a new message instance.
      */
     public $verificationUrl;
+    public $username;
 
-    public function __construct($verificationUrl)
+    public function __construct($verificationUrl,$username)
     {
         $this->verificationUrl = $verificationUrl;
+        $this->username = $username;
+
     }
 
     public function build()
     {
-        return $this->view('emails.verify',['verificationUrl' => $this->verificationUrl]);
+        return $this->view('emails.verify',['verificationUrl' => $this->verificationUrl,'username' => $this->username]);
     }
 
     /**
