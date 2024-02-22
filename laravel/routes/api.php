@@ -21,6 +21,7 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
+Route::post('sendVerificationEmail', [AuthController::class, 'sendVerificationEmail']);
 
 Route::group([
 
@@ -30,6 +31,16 @@ Route::group([
 ], function ($router) {
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
-    Route::post('me', [AuthController::class, 'me']);
+    Route::get('me', [AuthController::class, 'me']);
+    Route::get('email/verify/{id}', function (Request $request, $id) {
+        $user = App\Models\User::find($id);
 
+        if (!$user) {
+            abort(404);
+        }
+
+        $user->markEmailAsVerified();
+
+        return redirect('http://localhost:3000/home');
+    })->name('verification.verify');
 });

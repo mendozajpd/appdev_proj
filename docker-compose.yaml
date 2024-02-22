@@ -39,8 +39,6 @@ services:
       DB_DATABASE: appdev_proj
       DB_USERNAME: root
       DB_PASSWORD: root
-    # ports:
-    #   - "9000:9000"
     networks:
       - app-network
     expose:
@@ -73,13 +71,12 @@ services:
     depends_on:
       - mysql
 
-  apache:
-    build:
-      dockerfile: Dockerfile-apache
+  mailhog:
+    image: mailhog/mailhog
+    container_name: 'mailhog'
     ports:
-      - "80:80"
-    volumes:
-      - ./apache:/var/www/laravel
+      - "1025:1025"
+      - "8025:8025"
     networks:
       - app-network
 

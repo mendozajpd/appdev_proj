@@ -4,14 +4,11 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 const HomePage = () => {
-  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
     if (!token) {
       navigate('/login');
-    } else {
-      fetchUserDetails();
     }
   }, []);
 
@@ -71,7 +68,7 @@ const HomePage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setIsVerified(response.data.email_verified_at !== null);
+      console.log(response.data); // log the user's details to the console
     } catch (error) {
       console.error("Failed to fetch user:", error);
     }
@@ -132,42 +129,16 @@ const HomePage = () => {
             </h1>
           </div>
 
-          {/* IF NOT VERIFIED */}
-          {!isVerified ? (
-            <Button
-              variant="primary"
-              className="login-button btn-block"
-              style={buttonStyle}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-              onClick={handleSendVerify}
-            >
-              Send Verification Email
-            </Button>
-          ) : (
-            <div className="text-center text-white">
-              <h1 style={{ marginTop: "30px" }}>
-                <span
-                  style={{
-                    marginLeft: "10px",
-                    color: "red",
-                    transition: "color 0.3s",
-                    cursor: "text"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.color = "red";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.color = "white";
-                  }}
-                >
-                  YOU'RE VERIFIED!
-                </span>
-              </h1>
-            </div>
-          )}
-
-
+          <Button
+            variant="primary"
+            className="login-button btn-block"
+            style={buttonStyle}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={handleSendVerify}
+          >
+            Send Verification Email
+          </Button>
 
           <Form className="main-content" onSubmit={handleSubmit}>
             <Button

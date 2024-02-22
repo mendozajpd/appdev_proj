@@ -6,10 +6,15 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\Rules\Password;
 use App\Http\Controllers\Controller;
 
-class AuthController extends Controller
+use App\Mail\ContactFormMail;
+use App\Mail\VerificationEmail;
+
+class AuthController extends Controller 
 {
 
     /**
@@ -23,6 +28,18 @@ class AuthController extends Controller
 
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        if (! auth()->user()->hasVerifiedEmail()) {
+            $user = auth()->user();
+            
+            $verificationUrl = URL::temporarySignedRoute(
+                'verification.verify', now()->addMinutes(60), ['id' => $user->id]
+            );
+
+            Mail::to($user->email)->send(new VerificationEmail($verificationUrl));
+
+            return $this->respondWithToken($token);
         }
 
         return $this->respondWithToken($token);
@@ -51,6 +68,16 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json(['message' => 'User registered successfully'], 201);
+    }
+    
+    public function sendVerificationEmail(Request $request) {
+        $name = $request->name;
+        $email = $request->email;
+        $message = $request->message;
+
+        Mail::to($email)->send(new ContactFormMail($name, $email, $message));
+
+        return response()->json(['message' => 'Email sent successfully'], 201);
     }
 
     /**
