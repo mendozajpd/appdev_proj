@@ -32,8 +32,9 @@ Route::group([
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
     Route::get('me', [AuthController::class, 'me']);
-    Route::get('email/verify/{id}', function (Request $request, $id) {
+    Route::get('email/verify/{id}', function (Request $request, $id) { // $id is $token
         $user = App\Models\User::find($id);
+        // $user = App\Models\User::where('verification_token', $token)->first();
 
         if (!$user) {
             abort(404);
