@@ -21,7 +21,7 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
-Route::post('sendVerificationEmail', [AuthController::class, 'sendVerificationEmail']);
+Route::post('resend-verification-email', [AuthController::class, 'sendVerificationEmail']);
 
 Route::group([
 

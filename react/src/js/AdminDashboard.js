@@ -16,20 +16,20 @@ const HomePage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    if (!token) {
-      navigate('/login');
-    } else {
-      fetchUserDetails();
-    }
+  // useEffect(() => {
+  //   const token = localStorage.getItem("jwt_token");
+  //   if (!token) {
+  //     navigate('/login');
+  //   } else {
+  //     fetchUserDetails();
+  //   }
 
-    if (isVerified) {
-      handleClose();
-    } else {
-      handleShow();
-    }
-  }, [isVerified]);
+  //   if (isVerified) {
+  //     handleClose();
+  //   } else {
+  //     handleShow();
+  //   }
+  // }, [isVerified]);
 
   const navigate = useNavigate();
 
@@ -138,31 +138,12 @@ const HomePage = () => {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Email Verification Required</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            We noticed that your email address has not been verified yet.
-            To ensure the security of your account and to gain full access
-            to all features of our application, it's important to verify your
-            email address. We kindly request you to check your email for the verification link.
-          </p></Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Ok
-          </Button>
-        </Modal.Footer>
-      </Modal>
       <Container className="main-container" >
         <Row className="justify-content-md-center">
           <Col xs={10} md={6}>
             <div className="text-center text-white">
               <h1 style={{ marginTop: "30px" }}>
-                Welcome to
+                ADMIN
                 <span
                   style={{
                     marginLeft: "10px",
@@ -181,60 +162,7 @@ const HomePage = () => {
                 </span>
               </h1>
             </div>
-
-            {/* IF NOT VERIFIED */}
-            {!isVerified ? (
-              <>
-                <Button
-                  variant="primary"
-                  className="login-button btn-block"
-                  style={buttonStyle}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                  onClick={handleSendVerify}
-                  disabled={isButtonDisabled}
-                >
-                  Send Verification Email
-                </Button>
-                {isButtonDisabled && <p>Next email can be sent in {remainingTime} seconds</p>}
-              </>
-            ) : (
-              <div className="text-center text-white">
-                <h1 style={{ marginTop: "30px" }}>
-                  <span
-                    style={{
-                      marginLeft: "10px",
-                      color: "red",
-                      transition: "color 0.3s",
-                      cursor: "text"
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.color = "red";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.color = "white";
-                    }}
-                  >
-                    YOU'RE VERIFIED!
-                  </span>
-                </h1>
-              </div>
-            )}
-
-
-
             <Form className="main-content" onSubmit={handleSubmit}>
-              <Button
-                variant="primary"
-                className="login-button btn-block"
-                style={buttonStyle}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                disabled={logoutDisabled}
-                type="submit"
-              >
-                Log out
-              </Button>
 
 
               <div className="line"></div>

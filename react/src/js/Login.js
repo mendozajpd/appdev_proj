@@ -4,12 +4,10 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import mediaharbor_api from "../config";
+// import mediaharbor_api from "../config";
 
 function Login() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
-
-
 
   const [formData, setFormData] = useState({
     email: "",
@@ -57,7 +55,6 @@ function Login() {
 
     if (localStorage.getItem('justRegistered') === 'true') {
       register_success();
-      // localStorage.setItem('justRegistered', 'false');
     }
   }, []);
 
@@ -82,13 +79,11 @@ function Login() {
 
       const token = response.data.access_token;
       localStorage.setItem("jwt_token", token); // change this in the future
-
-      // login_success();
       navigate("/home");
+
     } catch (error) {
       console.error("Login failed:", error);
       setButtonDisabled(false);
-      // alert("Email or password is incorrect. Try again.");
       login_fail();
     }
   };
@@ -173,9 +168,6 @@ function Login() {
                 className="form-control"
                 aria-describedby="passwordHelpBlock"
               />
-              <div id="passwordHelpBlock" className="form-text">
-                {/* Your password must be 8-20 characters long, contain uppercase, lowercase, and numbers. */}
-              </div>
             </Form.Group>
 
             <div className="d-flex flex-row justify-content-between align-items-center login-options">

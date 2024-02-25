@@ -8,6 +8,7 @@ import {
 import HomePage from "./js/HomePage";
 import Register from "./js/Register";
 import Login from "./js/Login";
+import AdminDashbooard from "./js/AdminDashboard";
 import EmptyPage from "./js/EmptyPage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,6 +22,7 @@ function App() {
           {/* <Route path="/" element={<HomePage />} /> */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/" element={<Register />} />
+          <Route path="/admin" element={<AdminDashbooard />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<EmptyPage />} />
         </Routes>
