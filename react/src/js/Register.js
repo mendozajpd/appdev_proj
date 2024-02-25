@@ -12,6 +12,12 @@ import mediaharbor_api from "../config";
 
 function Register() {
 
+  const [registerAs, setRegisterAs] = useState('listener');
+
+  const handleRegisterAs = (type) => {
+    setRegisterAs(type);
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
     if (token) {
@@ -51,32 +57,18 @@ function Register() {
       transition: Bounce,
     });
 
-  const register_fail = () =>
-    toast.error("User registration failed.", {
+  const register_fail = (message) =>
+    toast.error(message, {
       position: "top-center",
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
+      pauseOnHover: false,
+      draggable: false,
       progress: Spinner,
       theme: "dark",
       transition: Flip,
     });
-
-  const register_success = () => {
-    toast.success("User registered successfully.", {
-      position: "top-center",
-      autoClose: 200,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    });
-  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -120,9 +112,10 @@ function Register() {
       }
 
       await axios.post(
-        "http://127.0.0.1:8000/api/register", // add to config
+        `http://127.0.0.1:8000/api/register-${registerAs === 'artist' ? 'artist' : 'listener'}`,
         formData
       );
+
       setFormData({
         name: "",
         email: "",
@@ -134,10 +127,9 @@ function Register() {
       navigate("/login")
     } catch (error) {
       setMyInteger(0);
-      register_fail();
+      register_fail(error.response.data.message);
       console.error("Registration failed:", error);
       setButtonDisabled(false);
-      // alert(error.response.data.message);
     }
   };
 
@@ -308,18 +300,25 @@ function Register() {
               <span
                 style={{
                   marginLeft: "10px",
-                  color: "red",
                   transition: "color 0.3s",
                   cursor: "text",
                 }}
                 onMouseEnter={(e) => {
-                  e.target.style.color = "red";
-                }}
-                onMouseLeave={(e) => {
                   e.target.style.color = "white";
                 }}
+                onMouseLeave={(e) => {
+                  e.target.style.color = "red";
+                }}
               >
-                LISTENING
+                {registerAs === 'listener' ? (
+                  <h1 style={{ color: 'red' }}>
+                    LISTENING
+                  </h1>
+                ) : (
+                  <h1 style={{ color: 'red' }}>
+                    CREATING
+                  </h1>
+                )}
               </span>
             </h1>
           </div>
@@ -499,12 +498,25 @@ function Register() {
               </p>
             </div>
           </Button>
+
+          <div>
+            {registerAs === 'listener' ? (
+              <a href="#" className="myLink" onClick={() => handleRegisterAs('artist')}>Switch to Artist Registration</a>
+            ) : (
+              <a href="#" onClick={() => handleRegisterAs('listener')}>Switch to Listener Registration</a>
+            )}
+          </div>
+
         </div>
 
         <div className="Register-signup-form">
           <div className="Register-textbox">
             <Form onSubmit={handleSubmit}>
-              <p>Sign up</p>
+              {/* {registerAs === 'listener' ? (
+                <p>Sign up</p>
+              ) : (
+                <p>Sign up</p>
+              )} */}
               <div className="line"></div>
 
               <Form.Group
@@ -592,6 +604,7 @@ function Register() {
                   name="confirmPassword"
                   onChange={handleChange}
                   onClick={() => handleFieldClick("confirmPassword")}
+                  onFocus={() => handleFieldClick("confirmPassword")}
                   value={formData.confirmPassword}
                   style={getInputStyle(
                     "confirmPassword",

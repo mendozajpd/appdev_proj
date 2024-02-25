@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Navbar, Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import Modal from 'react-bootstrap/Modal';
+import Sidebar from "./sidebar";
 
 
 const HomePage = () => {
@@ -134,12 +134,57 @@ const HomePage = () => {
     }
   };
 
-
-
   return (
     <>
-      <Container className="main-container" >
+      <Container fluid>
+        <Row>
+          <Col xs={3} md={3}>
+            <Sidebar />
+          </Col>
+          <Col xs={12} md={9} id="dashboard-bg">
+            <Row xs={1}>
+              <Navbar className="justify-content-end">
+                <div className="dashboard-nav">
+                  <div className="nav-content">
+                    <h1>SUPERADMIN</h1>
+                  </div>
+                  <div className="nav-button-container">
+                    <Button type="submit">Logout</Button>
+                  </div>
+                </div>
+              </Navbar>
+            </Row>
+            <Row xs={1}>
+              <Col>
+                <div className="text-center text-white">
+                  <h1 style={{ marginTop: "30px" }}>
+                    ADMIN
+                    <span
+                      style={{
+                        marginLeft: "10px",
+                        color: "red",
+                        transition: "color 0.3s",
+                        cursor: "text"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.color = "red";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.color = "white";
+                      }}
+                    >
+                      MEDIAHARBOR
+                    </span>
+                  </h1>
+                </div>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+      {/* <Container className="main-container" >
         <Row className="justify-content-md-center">
+          <Sidebar/>
           <Col xs={10} md={6}>
             <div className="text-center text-white">
               <h1 style={{ marginTop: "30px" }}>
@@ -171,7 +216,7 @@ const HomePage = () => {
             </Form>
           </Col>
         </Row>
-      </Container >
+      </Container > */}
     </>
   );
 };

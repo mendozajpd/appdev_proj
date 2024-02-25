@@ -20,7 +20,8 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
+Route::post('register-listener', [AuthController::class, 'registerListener']);
+Route::post('register-artist', [AuthController::class, 'registerArtist']);
 Route::post('resend-verification-email', [AuthController::class, 'sendVerificationEmail']);
 
 Route::group([
@@ -42,6 +43,6 @@ Route::group([
 
         $user->markEmailAsVerified();
 
-        return redirect('http://localhost:3000/home');
+        return redirect(env('FRONT_END_URL') . '/home');
     })->name('verification.verify');
 });

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -21,6 +21,18 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->registerPolicies();
+
+        Gate::define('create-music', function ($user) {
+            return $user->role == 'artist' && $user->is_approved;
+        });
+
+        Gate::define('manage-users', function ($user) {
+            return in_array($user->role, ['admin', 'superadmin']);
+        });
+
+        Gate::define('manage-system', function ($user) {
+            return $user->role == 'superadmin';
+        });
     }
 }

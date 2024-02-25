@@ -33,7 +33,7 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    public function register(Request $request)
+    public function registerListener(Request $request)
     {
         $request->validate([
             'name' => 'required|string|min:4|unique:users,name',
@@ -47,12 +47,14 @@ class AuthController extends Controller
                     // ->symbols() //accepts special character
                     // ->uncompromised(), //check to be sure that there is no data leak
             ],
+            'confirmPassword' => 'required|same:password'
         ]);
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->role = 'listener';
         $user->save();
 
         $verificationUrl = URL::temporarySignedRoute(
@@ -61,6 +63,43 @@ class AuthController extends Controller
 
         Mail::to($user->email)->send(new VerificationEmail($verificationUrl,$user->name));
 
+        
+        return response()->json(['message' => 'User registered successfully'], 201);
+    }
+
+    public function registerArtist(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|min:4|unique:users,name',
+            'email' => 'required|email|unique:users,email',
+            'password' => [
+                'required',
+                Password::min(8)
+                    ->mixedCase() // allows both uppercase and lowercase
+                    ->letters() //accepts letter
+                    ->numbers() //accepts numbers
+                    // ->symbols() //accepts special character
+                    // ->uncompromised(), //check to be sure that there is no data leak
+            ],
+            'confirmPassword' => 'required|same:password'
+        ]);
+
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->role = 'artist';
+        $user->save();
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify', now()->addMinutes(60), ['id' => $user->id]
+        );
+
+        Mail::to($user->email)->send(new VerificationEmail($verificationUrl,$user->name)); 
+        // send email for verification
+        // send another email after verification for pending approval
+
+        
         return response()->json(['message' => 'User registered successfully'], 201);
     }
     

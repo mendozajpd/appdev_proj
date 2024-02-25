@@ -332,6 +332,12 @@ h1 span:hover {
   text-align: left;
 }
 
+.Register-social-container a {
+  color: white;
+  /* text-decoration: none; */
+  font-size: 15px;
+}
+
 .Register-google,
 .Register-facebook,
 .Register-apple {
@@ -361,6 +367,7 @@ h1 span:hover {
 .Register-signup-text {
   font-size: 40px;
 }
+
 
 .Register-container .loginNavigate {
   display: flex;
@@ -392,4 +399,66 @@ h1 span:hover {
   text-align: left;
 }
 
-/* MODAL */
+
+/* SIDE NAV */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  min-height: 100vh !important;
+  z-index: 100;
+  padding: 48px 0 0;
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  background: linear-gradient(to bottom, #1C080A, #2C0D10);
+  border-right: 1px solid #ffffff;
+}
+
+#sidebar-wrapper{
+  min-height: 100vh !important;
+  width: 100vw;
+  margin-left: -1rem;
+  -webkit-transition: margin .25s ease-out;
+  -moz-transition: margin .25s ease-out;
+  -o-transition: margin .25s ease-out;
+  transition: margin .25s ease-out;
+}
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+
+#page-content-wrapper {
+  min-width: 0;
+  width: 100%;
+}
+
+.transparent-bg {
+  background: transparent;
+}
+
+#dashboard-bg {
+  background-color: #2C0C0F;
+  height: 100vh;
+}
+
+.dashboard-nav {
+  display: flex;
+}
+
+.nav-content {
+  padding-right: 20px;
+  color: white;
+  border-right: white 1px solid;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.nav-button-container {
+  padding: 10px;
+  margin-right: 100px;
+}
+
