@@ -8,10 +8,15 @@ import {
 import HomePage from "./js/HomePage";
 import Register from "./js/Register";
 import Login from "./js/Login";
-import AdminDashbooard from "./js/AdminDashboard";
+import AdminDashboard from "./js/AdminDashboard";
+import AdminManageUsers from "./js/AdminManageUsers";
+// import sidebar from './Sidebar'; // Import Sidebar component
 import EmptyPage from "./js/EmptyPage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PendingRequests from "./js/PendingRequests";
+import Banned from "./js/Banned"
+
 
 function App() {
   return (
@@ -19,15 +24,17 @@ function App() {
       <div className="App">
         <ToastContainer />
         <Routes>
-          {/* <Route path="/" element={<HomePage />} /> */}
-          <Route path="/home" element={<HomePage />} />
           <Route path="/" element={<Register />} />
-          <Route path="/admin/dashboard" element={<AdminDashbooard />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/manage-users" element={<AdminManageUsers />} />
+          <Route path="/admin/pending-requests" element={<PendingRequests />} />
+          <Route path="/admin/banned" element={<Banned />} />
           <Route path="*" element={<EmptyPage />} />
         </Routes>
       </div>
-    </Router>
+    </Router >
   );
 }
 

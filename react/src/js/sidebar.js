@@ -9,27 +9,47 @@ const Side = props => {
 
     return (
         <>
-            <Nav className="col-sm-3 d-none d-md-block sidebar"
+            <Nav className="col-sm-3 d-none d-md-block sidebar justify-content-center align-items-center flex-grow-1" // Add justify-content-center and align-items-center classes
                 activeKey="/home"
                 onSelect={selectedKey => {
-                    alert(`selected ${selectedKey}`);
+                    // alert(`selected ${selectedKey}`);
                     navigate(selectedKey);
                 }}
             >
                 <div className="sidebar-sticky"></div>
+                <div className="sidebar-logo">
+                    <Nav.Item>
+                        <img
+                            src={process.env.PUBLIC_URL + "/register/logo.png"}
+                            alt="MediaHarbor Logo"
+                            // className="mr-2"
+                            style={{
+                                margin: "flex",
+                            }}
+                        />
+                    </Nav.Item>
+                </div>
                 <Nav.Item>
-                    <Nav.Link href="/home">Active</Nav.Link>
+                    <div className="nav-center">
+                        <Nav.Link href="/admin/dashboard">Dashboard</Nav.Link>
+                    </div>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="link-1">Link</Nav.Link>
+                    <div className="nav-center">
+                        <Nav.Link href="/admin/manage-users">Manage Users</Nav.Link>
+                    </div>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="link-2">Link</Nav.Link>
+                    <div className="nav-center">
+                        <Nav.Link eventKey="disabled" disabled>Temp</Nav.Link>
+                    </div>
                 </Nav.Item>
                 <Nav.Item>
-                    <Nav.Link eventKey="disabled" disabled>
-                        Disabled
-                    </Nav.Link>
+                    <div className="nav-center">
+                        <Nav.Link eventKey="disabled" disabled>
+                            Temp
+                        </Nav.Link>
+                    </div>
                 </Nav.Item>
             </Nav>
 

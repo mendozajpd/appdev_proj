@@ -1,69 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar, Form, Button, Container, Row, Col } from "react-bootstrap";
+import { Navbar, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
-import Sidebar from "./sidebar";
+import { Chart } from 'react-chartjs-2';
+import 'chart.js/auto';
+import AdminManageUsers from "./AdminManageUsers";
 
+import {
+  CDBSidebar,
+  CDBSidebarContent,
+  CDBSidebarMenuItem,
+  CDBSidebarMenu,
+  CDBSidebarHeader
+} from 'cdbreact';
+import { NavLink } from 'react-router-dom';
 
 const HomePage = () => {
-  const [isVerified, setIsVerified] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(0);
   const [logoutDisabled, setLogoutDisabled] = useState(false);
-
-  // MODAL
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("jwt_token");
-  //   if (!token) {
-  //     navigate('/login');
-  //   } else {
-  //     fetchUserDetails();
-  //   }
-
-  //   if (isVerified) {
-  //     handleClose();
-  //   } else {
-  //     handleShow();
-  //   }
-  // }, [isVerified]);
+  const [timeInterval, setTimeInterval] = useState('months');
 
   const navigate = useNavigate();
-
-  const buttonStyle = {
-    marginTop: "30px",
-    fontSize: "150%",
-    borderRadius: "20px",
-    width: "100%",
-    height: "50px",
-    marginBottom: "10px",
-    backgroundColor: "transparent",
-    borderColor: "#8d4b4b",
-    color: "#ff3535",
-    transition: "background-color 0.3s, color 0.3s, transform 0.3",
-  };
-
-  const handleMouseEnter = (e) => {
-    e.target.style.backgroundColor = "red";
-    e.target.style.color = "white";
-    e.target.style.borderColor = "#8d4b4b";
-  };
-
-  const handleMouseLeave = (e) => {
-    e.target.style.backgroundColor = "transparent";
-    e.target.style.color = "#ff3535";
-    e.target.style.borderColor = "#8d4b4b";
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLogoutDisabled(true);
     try {
       const token = localStorage.getItem("jwt_token");
-      const response = await axios.post(
+      await axios.post(
         "http://127.0.0.1:8000/api/auth/logout",
         null,
         {
@@ -75,71 +38,93 @@ const HomePage = () => {
       localStorage.removeItem('jwt_token');
       navigate('/login');
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Logout failed:", error);
       setLogoutDisabled(false);
     }
   };
 
-  const fetchUserDetails = async () => {
-    try {
-      const token = localStorage.getItem("jwt_token");
-      const response = await axios.get("http://127.0.0.1:8000/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setIsVerified(response.data.email_verified_at !== null);
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
+  const handleIntervalChange = (event) => {
+    setTimeInterval(event.target.value);
+  };
+
+  // Chart data and options
+  const downloadsDataMonthly = [1000000, 1500000, 500000, 1800000, 700000, 62000, 320000, 180000, 14000, 55600, 9000, 43000];
+  const downloadsLabelsMonthly = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  const downloadsDataYearly = [4000000, 12000000, 6180000];
+  const downloadsLabelsYearly = ['2022', '2023', '2024'];
+
+  const downloadsHighestIndexMonthly = downloadsDataMonthly.indexOf(Math.max(...downloadsDataMonthly));
+  const downloadsHighestLabelMonthly = downloadsLabelsMonthly[downloadsHighestIndexMonthly];
+  const totalDownloadsMonthly = downloadsDataMonthly.reduce((acc, cur) => acc + cur, 0);
+
+  const downloadsHighestIndexYearly = downloadsDataYearly.indexOf(Math.max(...downloadsDataYearly));
+  const downloadsHighestLabelYearly = downloadsLabelsYearly[downloadsHighestIndexYearly];
+  const totalDownloadsYearly = downloadsDataYearly.reduce((acc, cur) => acc + cur, 0);
+
+  const downloadsChart = {
+    labels: timeInterval === 'months' ? downloadsLabelsMonthly : downloadsLabelsYearly,
+    datasets: [
+      {
+        label: timeInterval === 'months' ? 'App Downloads (Monthly)' : 'App Downloads (Yearly)',
+        data: timeInterval === 'months' ? downloadsDataMonthly : downloadsDataYearly,
+        backgroundColor: 'black',
+        borderColor: 'red',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const linechartOptions = {
+    maintainAspectRatio: false,
+    responsive: false,
+    scales: {
+      y: {
+        grid: {
+          color: 'white'
+        }
+      },
+      x: {
+        grid: {
+          color: 'white'
+        }
+      }
     }
   };
 
-  const handleSendVerify = async (e) => {
-    e.preventDefault();
-    setIsButtonDisabled(true); // disable the button
-    setRemainingTime(180); // set remaining time to 3 minutes
-    const timerId = setInterval(() => {
-      setRemainingTime((time) => time - 1);
-    }, 1000);
-    setTimeout(() => {
-      setIsButtonDisabled(false); // enable the button after 3 minutes
-      clearInterval(timerId); // clear the interval
-    }, 3 * 60 * 1000);
-    try {
-      const token = localStorage.getItem("jwt_token");
-      const userDetailsResponse = await axios.get("http://127.0.0.1:8000/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const user = userDetailsResponse.data;
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/resend-verification-email",
-        {
-          name: user.name, // use the name from the user's details
-          email: user.email, // use the email from the user's details
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (setShow) {
-        handleClose();
-      }
-      console.log(response.data);
-    } catch (error) {
-      console.error("Email sending failed:", error);
-    }
-  };
+  // End of chart data and options
 
   return (
     <>
       <Container fluid>
         <Row>
           <Col xs={3} md={3}>
-            <Sidebar />
+            <CDBSidebar textColor="#fff" backgroundColor="#333" className="sidebar">
+              <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
+                <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+                  SuperAdmin
+                </a>
+              </CDBSidebarHeader>
+              <CDBSidebarContent className="sidebar-content">
+                <CDBSidebarMenu>
+                  <NavLink exact to="/" activeClassName="activeClicked">
+                    <CDBSidebarMenuItem icon="columns">Home</CDBSidebarMenuItem>
+                  </NavLink>
+                  <NavLink exact to="/admin/dashboard" activeClassName="activeClicked">
+                    <CDBSidebarMenuItem icon="user">Admin Dashboard</CDBSidebarMenuItem>
+                  </NavLink>
+                  <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
+                    <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>
+                  </NavLink>
+                  <NavLink exact to="/tickets" activeClassName="activeClicked">
+                    <CDBSidebarMenuItem icon="user">Tickets</CDBSidebarMenuItem>
+                  </NavLink>
+                  <NavLink exact to="/revenue" activeClassName="activeClicked">
+                    <CDBSidebarMenuItem icon="user">Revenue</CDBSidebarMenuItem>
+                  </NavLink>
+                </CDBSidebarMenu>
+              </CDBSidebarContent>
+            </CDBSidebar>
           </Col>
           <Col xs={12} md={9} id="dashboard-bg">
             <Row xs={1}>
@@ -149,74 +134,88 @@ const HomePage = () => {
                     <h1>SUPERADMIN</h1>
                   </div>
                   <div className="nav-button-container">
-                    <Button type="submit">Logout</Button>
+                    <Button onClick={handleSubmit} variant="danger" disabled={logoutDisabled}>Logout</Button>
                   </div>
                 </div>
               </Navbar>
             </Row>
+            <Row xs={1} className="mb-3">
+              <Col xs={6}>
+                <div className="card-body bg-light">
+                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
+                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
+                      <option value="months">Months</option>
+                      <option value="years">Years</option>
+                    </select></h3>
+
+                  <div className="chart-container d-flex justify-content-between align-items-center">
+                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
+                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
+                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
+                    </strong><br /><br />
+                      Total Downloads: <strong className="text-warning">
+                        {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
+                      </strong></p>
+                  </div>
+                </div>
+              </Col>
+              <Col xs={6}>
+                <div className="card-body bg-light">
+                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
+                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
+                      <option value="months">Months</option>
+                      <option value="years">Years</option>
+                    </select></h3>
+
+                  <div className="chart-container d-flex justify-content-between align-items-center">
+                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
+                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
+                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
+                    </strong><br /><br />
+                      Total Downloads: <strong className="text-warning">
+                        {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
+                      </strong></p>
+                  </div>
+                </div>
+              </Col>
+            </Row>
             <Row xs={1}>
-              <Col>
-                <div className="text-center text-white">
-                  <h1 style={{ marginTop: "30px" }}>
-                    ADMIN
-                    <span
-                      style={{
-                        marginLeft: "10px",
-                        color: "red",
-                        transition: "color 0.3s",
-                        cursor: "text"
-                      }}
-                      onMouseEnter={(e) => {
-                        e.target.style.color = "red";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.target.style.color = "white";
-                      }}
-                    >
-                      MEDIAHARBOR
-                    </span>
-                  </h1>
+              <Col xs={6}>
+                <div className={`card col-md-11`}>
+                  <div className="card-body bg-light">
+                    <h3 className="card-title text-danger fw-bold">Listeners</h3>
+                    <div className="chart-container d-flex justify-content-between align-items-center">
+                      {/* <Chart type="pie" data={freeChart} options={piechartOptions} height={300} width={500} /> */}
+                      {/* <p className="text-white fw-bold">Most Number of Users: <strong className="text-danger">{percentages[freeHighestIndex]}%</strong> of Users are {freeHighestLabel}
+                        <br /><br />Total Listeners: <strong className="text-danger">{formatTotalListeners(totalUsers)}</strong> </p> */}
+                    </div>
+                  </div>
+                </div>
+              </Col>
+              <Col xs={6}>
+                <div className="card-body bg-light">
+                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
+                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
+                      <option value="months">Months</option>
+                      <option value="years">Years</option>
+                    </select></h3>
+
+                  {/* <div className="chart-container d-flex justify-content-between align-items-center">
+                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
+                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
+                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
+                    </strong><br /><br />
+                      Total Downloads: <strong className="text-warning">
+                        {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)}
+                      </strong></p> */}
+                  {/* </div> */}
                 </div>
               </Col>
             </Row>
           </Col>
-        </Row>
-      </Container>
-      {/* <Container className="main-container" >
-        <Row className="justify-content-md-center">
-          <Sidebar/>
-          <Col xs={10} md={6}>
-            <div className="text-center text-white">
-              <h1 style={{ marginTop: "30px" }}>
-                ADMIN
-                <span
-                  style={{
-                    marginLeft: "10px",
-                    color: "red",
-                    transition: "color 0.3s",
-                    cursor: "text"
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.color = "red";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.color = "white";
-                  }}
-                >
-                  MEDIAHARBOR
-                </span>
-              </h1>
-            </div>
-            <Form className="main-content" onSubmit={handleSubmit}>
+        </Row >
 
-
-              <div className="line"></div>
-
-              <hr className="my-4 bg-white" />
-            </Form>
-          </Col>
-        </Row>
-      </Container > */}
+      </Container >
     </>
   );
 };

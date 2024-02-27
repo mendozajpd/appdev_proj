@@ -402,20 +402,31 @@ h1 span:hover {
 
 /* SIDE NAV */
 
-.sidebar {
-  position: fixed;
+/* .sidebar {
+  position: left;
   top: 0;
   bottom: 0;
   left: 0;
   min-height: 100vh !important;
   z-index: 100;
-  padding: 48px 0 0;
+  padding: 10px 0 0;
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
   background: linear-gradient(to bottom, #1C080A, #2C0D10);
   border-right: 1px solid #ffffff;
 }
 
-#sidebar-wrapper{
+.sidebar-logo {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+.sidebar-logo img {
+  width: 250px;
+}
+
+
+#sidebar-wrapper {
   min-height: 100vh !important;
   width: 100vw;
   margin-left: -1rem;
@@ -424,10 +435,11 @@ h1 span:hover {
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
 }
+
 #sidebar-wrapper .sidebar-heading {
   padding: 0.875rem 1.25rem;
   font-size: 1.2rem;
-}
+} */
 
 
 #page-content-wrapper {
@@ -440,25 +452,97 @@ h1 span:hover {
 }
 
 #dashboard-bg {
-  background-color: #2C0C0F;
-  height: 100vh;
+  background-color: #977c7f;
+  margin-block-end: auto;
+  border: red solid 1px;
+  height: calc(100vh - 17px);
+  overflow-y: auto;
+  /* Add overflow-y property to enable scrolling if content exceeds height */
 }
 
 .dashboard-nav {
+  margin-right: 10px;
   display: flex;
 }
 
+
 .nav-content {
-  padding-right: 20px;
+  /* padding-right: 10px; */
+  /* Adjust as needed */
   color: white;
   border-right: white 1px solid;
-  align-items: center;
-  justify-content: center;
+  /* align-items: center;
+  justify-content: center; */
   display: flex;
 }
+
 
 .nav-button-container {
   padding: 10px;
-  margin-right: 100px;
+  margin-right: 0px;
 }
 
+.nav-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* NEW SIDEBAR FOR ADMINMANAGEUSERS */
+/* Sidebar styles */
+/* admin.css */
+
+/* Sidebar styles */
+.sidebar {
+  width: 250px;
+  background-color: #333;
+  color: #fff;
+}
+
+.sidebar-content {
+  padding: 20px;
+}
+
+.sidebar-menu-item {
+  margin-bottom: 10px;
+}
+
+.sidebar-menu-item a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sidebar-menu-item a:hover {
+  color: #ccc;
+}
+
+.sidebar-footer {
+  padding: 20px;
+  text-align: center;
+}
+
+/* Table styles */
+.table-danger th {
+  background-color: red;
+  /* Set table header background color to red */
+  color: transparent;
+  /* Set table header font color to white */
+}
+
+.table-danger th :hover {
+  background-color: transparent;
+  /* Set table header background color to red */
+  color: red;
+  /* Set table header font color to white */
+  cursor: pointer;
+}
+
+/* Main content area styles */
+.main-content h1:hover {
+  color: red;
+}
+
+.approve-button {
+  margin-right: 10px;
+}

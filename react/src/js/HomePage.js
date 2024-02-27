@@ -29,6 +29,9 @@ const HomePage = () => {
     } else {
       handleShow();
     }
+
+    // CHECK ROLE IF IT IS SUPERADMIN OR ADMIN
+
   }, [isVerified]);
 
   const navigate = useNavigate();
@@ -88,7 +91,15 @@ const HomePage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      setIsVerified(response.data.email_verified_at !== null);
+      const userData = response.data; // Assuming user details are directly in response.data
+      console.log(userData);
+      setIsVerified(userData.email_verified_at !== null);
+      // Check if the user has admin or superadmin role
+      const isAdmin = userData.role.includes('admin');
+      const isSuperAdmin = userData.role.includes('superadmin');
+      if (isAdmin || isSuperAdmin) {
+        navigate('/admin/dashboard');
+      }
     } catch (error) {
       console.error("Failed to fetch user:", error);
     }
