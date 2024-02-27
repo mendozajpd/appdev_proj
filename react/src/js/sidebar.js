@@ -1,60 +1,122 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import '../css/index.css'
+import {
+    CDBSidebar,
+    CDBSidebarContent,
+    CDBSidebarMenuItem,
+    CDBSidebarMenu,
+    CDBSidebarHeader
+} from 'cdbreact';
+import { Image } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { Container, Row, Col, Table } from 'react-bootstrap';
+import axios from "axios";
 
-const Side = props => {
+
+const Sidebar = props => {
+    useEffect(() => {
+        const token = localStorage.getItem("jwt_token");
+        if (!token) {
+            navigate('/login');
+        } else {
+            fetchUserDetails();
+        }
+    }, []);
+
+    const [isVerified, setIsVerified] = useState(false);
+    const [logoutDisabled, setLogoutDisabled] = useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
+
+    const fetchUserDetails = async () => {
+        try {
+            const token = localStorage.getItem("jwt_token");
+            const response = await axios.get("http://127.0.0.1:8000/api/auth/me", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const userData = response.data; // Assuming user details are directly in response.data
+            console.log(userData);
+            setIsVerified(userData.email_verified_at !== null);
+            // Check if the user has admin or superadmin role
+        } catch (error) {
+            console.error("Failed to fetch user:", error);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLogoutDisabled(true);
+        try {
+            const token = localStorage.getItem("jwt_token");
+            const response = await axios.post(
+                "http://127.0.0.1:8000/api/auth/logout",
+                null,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            localStorage.removeItem('jwt_token');
+            navigate('/login');
+        } catch (error) {
+            console.error("Login failed:", error);
+            setLogoutDisabled(false);
+        }
+    };
 
     return (
         <>
-            <Nav className="col-sm-3 d-none d-md-block sidebar justify-content-center align-items-center flex-grow-1" // Add justify-content-center and align-items-center classes
-                activeKey="/home"
-                onSelect={selectedKey => {
-                    // alert(`selected ${selectedKey}`);
-                    navigate(selectedKey);
-                }}
-            >
-                <div className="sidebar-sticky"></div>
-                <div className="sidebar-logo">
-                    <Nav.Item>
-                        <img
-                            src={process.env.PUBLIC_URL + "/register/logo.png"}
-                            alt="MediaHarbor Logo"
-                            // className="mr-2"
-                            style={{
-                                margin: "flex",
-                            }}
-                        />
-                    </Nav.Item>
-                </div>
-                <Nav.Item>
-                    <div className="nav-center">
-                        <Nav.Link href="/admin/dashboard">Dashboard</Nav.Link>
-                    </div>
-                </Nav.Item>
-                <Nav.Item>
-                    <div className="nav-center">
-                        <Nav.Link href="/admin/manage-users">Manage Users</Nav.Link>
-                    </div>
-                </Nav.Item>
-                <Nav.Item>
-                    <div className="nav-center">
-                        <Nav.Link eventKey="disabled" disabled>Temp</Nav.Link>
-                    </div>
-                </Nav.Item>
-                <Nav.Item>
-                    <div className="nav-center">
-                        <Nav.Link eventKey="disabled" disabled>
-                            Temp
-                        </Nav.Link>
-                    </div>
-                </Nav.Item>
-            </Nav>
+            <CDBSidebar textColor="#fff" backgroundColor="#333" className="sidebar">
+                <Image
+                    src="/register/logo-white.png"
+                    roundedCircle
+                    className="Register-apple"
+                    style={{
+                        width: "50px",
+                        height: "50px",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginTop: "10px",
+                    }}
+                />
 
+                <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
+                    <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+                        SUPER ADMIN
+                    </a>
+                </CDBSidebarHeader>
+                <Col className="flex-grow-1 d-flex flex-column vh-100" fluid={true}>
+                    <Row className="align-items-start">
+                        <CDBSidebarContent className="sidebar-content">
+                            <CDBSidebarMenu>
+                                <nav id="sidebar">
+                                    <NavLink exact to="/admin/dashboard" activeClassName="activeClicked">
+                                        <CDBSidebarMenuItem icon="home">Dashboard</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
+                                        <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink exact to="/tickets" activeClassName="activeClicked">
+                                        <CDBSidebarMenuItem icon="table">Subscription Settings</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink exact to="/revenue" activeClassName="activeClicked">
+                                        <CDBSidebarMenuItem icon="columns">Revenue</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink onClick={handleSubmit} activeClassName="activeClicked">
+                                        <CDBSidebarMenuItem icon="">Logout</CDBSidebarMenuItem>
+                                    </NavLink>
+                                </nav>
+                            </CDBSidebarMenu>
+                        </CDBSidebarContent>
+                    </Row>
+                </Col>
+
+            </CDBSidebar>
         </>
     );
 };
-
-export default Side;
+export default Sidebar;

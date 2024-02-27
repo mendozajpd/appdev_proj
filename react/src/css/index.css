@@ -452,9 +452,9 @@ h1 span:hover {
 }
 
 #dashboard-bg {
-  background-color: #977c7f;
+  /* background-color: #977c7f; */
+  /* border: red solid 1px; */
   margin-block-end: auto;
-  border: red solid 1px;
   height: calc(100vh - 17px);
   overflow-y: auto;
   /* Add overflow-y property to enable scrolling if content exceeds height */
@@ -494,32 +494,8 @@ h1 span:hover {
 /* admin.css */
 
 /* Sidebar styles */
-.sidebar {
-  width: 250px;
-  background-color: #333;
-  color: #fff;
-}
-
-.sidebar-content {
-  padding: 20px;
-}
-
-.sidebar-menu-item {
-  margin-bottom: 10px;
-}
-
-.sidebar-menu-item a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.sidebar-menu-item a:hover {
-  color: #ccc;
-}
-
-.sidebar-footer {
-  padding: 20px;
-  text-align: center;
+#sidebar a:hover {
+  font-weight: 500;
 }
 
 /* Table styles */
@@ -545,4 +521,90 @@ h1 span:hover {
 
 .approve-button {
   margin-right: 10px;
+}
+
+/* MANAGE USERS */
+
+.manage-users h1 {
+  font-size: 50px;
+  transition: color 0.3s;
+  text-decoration: none;
+  color: #dc3545;
+  /* Bootstrap's text-danger color */
+}
+
+/* Styling for container-md */
+.manage-users .container-md {
+  padding: 3px 10px;
+  margin: 2px auto;
+  background-color: #dc3545;
+  /* Bootstrap's bg-danger color */
+  border-radius: 10px;
+}
+
+/* Styling for text-white */
+.manage-users .text-white {
+  color: #fff !important;
+  /* Override Bootstrap's default text color */
+}
+
+/* Styling for text-dark */
+.manage-users .text-dark {
+  color: #212529 !important;
+  /* Bootstrap's text-dark color */
+}
+
+/* Styling for text-danger */
+.manage-users .text-danger {
+  color: #dc3545 !important;
+  /* Bootstrap's text-danger color */
+}
+
+/* Styling for links */
+.manage-users a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s;
+}
+
+.manage-users a:hover {
+  color: #dc3545;
+  /* Bootstrap's text-danger color */
+}
+
+/* Styling for columns */
+.manage-users .col {
+  margin-bottom: 30px;
+}
+
+/* Styling for NavLink */
+.manage-users .NavLink {
+  font-weight: bold;
+  font-size: 30px;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+/* Styling for Table */
+.manage-users .table-danger th {
+  background-color: #DC3545;
+  /* Bootstrap's bg-dark color */
+}
+
+/* Styling for table header */
+.manage-users .table-danger th {
+  /* color: #fff; */
+  /* White color for table header text */
+}
+
+/* Styling for table cells */
+.manage-users .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+  /* Lighten the background color of odd rows */
+}
+
+/* Styling for table hover effect */
+.manage-users .table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.075);
+  /* Lighten the background color of hovered rows */
 }

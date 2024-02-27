@@ -10,6 +10,8 @@ import {
 import { NavLink } from 'react-router-dom';
 import '../css/index.css';
 import { Image, Button } from 'react-bootstrap'; // Import Button component from react-bootstrap
+import Sidebar from './sidebar';
+
 
 const PendingRequests = () => {
     const [statuses, setStatuses] = useState({
@@ -36,51 +38,11 @@ const PendingRequests = () => {
 
     return (
         <>
-            <CDBSidebar textColor="#fff" backgroundColor="#333" className="sidebar">
-                <Image
-                    src="/register/logo-white.png"
-                    roundedCircle
-                    className="Register-apple"
-                    style={{
-                        width: "50px", // Change the width to your desired value
-                        height: "50px", // Change the height to your desired value
-                        marginLeft: "auto", // Auto margin on left and right to center horizontally
-                        marginRight: "auto",
-                        marginTop: "10px", // Adjust as needed
-                        // marginBottom: "10px"
-                    }}
-                />
-
-                <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-                    <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
-                        User Management
-                    </a>
-                </CDBSidebarHeader>
-
-                <CDBSidebarContent className="sidebar-content">
-                    <CDBSidebarMenu>
-                        <NavLink exact to="/" activeClassName="activeClicked">
-                            <CDBSidebarMenuItem icon="columns">Home</CDBSidebarMenuItem>
-                        </NavLink>
-                        <NavLink exact to="/admin/dashboard" activeClassName="activeClicked">
-                            <CDBSidebarMenuItem icon="user">Admin Dashboard</CDBSidebarMenuItem>
-                        </NavLink>
-                        <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
-                            <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>
-                        </NavLink>
-                        <NavLink exact to="/tickets" activeClassName="activeClicked">
-                            <CDBSidebarMenuItem icon="table">Tickets</CDBSidebarMenuItem>
-                        </NavLink>
-                        <NavLink exact to="/revenue" activeClassName="activeClicked">
-                            <CDBSidebarMenuItem icon="columns">Revenue</CDBSidebarMenuItem>
-                        </NavLink>
-                    </CDBSidebarMenu>
-                </CDBSidebarContent>
-            </CDBSidebar>
-            <Container fluid>
+            <Sidebar />
+            <Container className='manage-users' fluid>
                 <Row>
                     <Col>
-                        <h1 class="text-danger"
+                        <h1 class="text-white"
                             style={{ fontSize: '50px', transition: 'color 0.3s', textDecoration: 'none' }}>User Management</h1>
                         <div className="row">
                             <div className="col"
@@ -134,6 +96,38 @@ const PendingRequests = () => {
                                     <td>Not Verified</td>
                                     <td>
                                         <Button variant="success" style={{ marginRight: '10px' }}>Approve</Button>
+                                        <Button variant="danger">Reject</Button>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>jane_smith</td>
+                                    <td>jane@example.com</td>
+                                    <td>User</td>
+                                    <td>Verified</td>
+                                    <td>
+                                        <Button variant="success" className="approve-button">Approve</Button>
+                                        <Button variant="danger">Reject</Button>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>jane_smith</td>
+                                    <td>jane@example.com</td>
+                                    <td>User</td>
+                                    <td>Verified</td>
+                                    <td>
+                                        <Button variant="success" className="approve-button">Approve</Button>
+                                        <Button variant="danger">Reject</Button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>jane_smith</td>
+                                    <td>jane@example.com</td>
+                                    <td>User</td>
+                                    <td>Verified</td>
+                                    <td>
+                                        <Button variant="success" className="approve-button">Approve</Button>
                                         <Button variant="danger">Reject</Button>
                                     </td>
 

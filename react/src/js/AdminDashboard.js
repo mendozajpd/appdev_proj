@@ -5,15 +5,8 @@ import axios from "axios";
 import { Chart } from 'react-chartjs-2';
 import 'chart.js/auto';
 import AdminManageUsers from "./AdminManageUsers";
+import Sidebar from './sidebar';
 
-import {
-  CDBSidebar,
-  CDBSidebarContent,
-  CDBSidebarMenuItem,
-  CDBSidebarMenu,
-  CDBSidebarHeader
-} from 'cdbreact';
-import { NavLink } from 'react-router-dom';
 
 const HomePage = () => {
   const [logoutDisabled, setLogoutDisabled] = useState(false);
@@ -96,50 +89,11 @@ const HomePage = () => {
 
   return (
     <>
+      <Sidebar />
       <Container fluid>
         <Row>
-          <Col xs={3} md={3}>
-            <CDBSidebar textColor="#fff" backgroundColor="#333" className="sidebar">
-              <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-                <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
-                  SuperAdmin
-                </a>
-              </CDBSidebarHeader>
-              <CDBSidebarContent className="sidebar-content">
-                <CDBSidebarMenu>
-                  <NavLink exact to="/" activeClassName="activeClicked">
-                    <CDBSidebarMenuItem icon="columns">Home</CDBSidebarMenuItem>
-                  </NavLink>
-                  <NavLink exact to="/admin/dashboard" activeClassName="activeClicked">
-                    <CDBSidebarMenuItem icon="user">Admin Dashboard</CDBSidebarMenuItem>
-                  </NavLink>
-                  <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
-                    <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>
-                  </NavLink>
-                  <NavLink exact to="/tickets" activeClassName="activeClicked">
-                    <CDBSidebarMenuItem icon="user">Tickets</CDBSidebarMenuItem>
-                  </NavLink>
-                  <NavLink exact to="/revenue" activeClassName="activeClicked">
-                    <CDBSidebarMenuItem icon="user">Revenue</CDBSidebarMenuItem>
-                  </NavLink>
-                </CDBSidebarMenu>
-              </CDBSidebarContent>
-            </CDBSidebar>
-          </Col>
-          <Col xs={12} md={9} id="dashboard-bg">
-            <Row xs={1}>
-              <Navbar className="justify-content-end">
-                <div className="dashboard-nav">
-                  <div className="nav-content">
-                    <h1>SUPERADMIN</h1>
-                  </div>
-                  <div className="nav-button-container">
-                    <Button onClick={handleSubmit} variant="danger" disabled={logoutDisabled}>Logout</Button>
-                  </div>
-                </div>
-              </Navbar>
-            </Row>
-            <Row xs={1} className="mb-3">
+          <Col>
+            <Row xs={1} className="mb-3 align-content-center justify-content-center display-flex">
               <Col xs={6}>
                 <div className="card-body bg-light">
                   <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
@@ -214,7 +168,6 @@ const HomePage = () => {
             </Row>
           </Col>
         </Row >
-
       </Container >
     </>
   );
