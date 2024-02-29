@@ -16,6 +16,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PendingRequests from "./js/PendingRequests";
 import Banned from "./js/Banned"
+import ProfilePage from "./js/ProfilePage";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/admin/pending-requests" element={<PendingRequests />} />
           <Route path="/admin/banned" element={<Banned />} />
           <Route path="*" element={<EmptyPage />} />
+          <Route path="/admin/profilepage" element={<ProfilePage />} />
         </Routes>
       </div>
     </Router >

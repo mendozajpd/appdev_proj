@@ -748,3 +748,171 @@ h1 span:hover {
   background-color: transparent !important;
   color: #ff0000;
 }
+
+/* ProfilePage */
+/* Profile heading styling */
+.Profile_heading {
+  text-align: left;
+  color: #343a40;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  /* Space below the heading */
+}
+
+/* Sub-heading for the profile page */
+.Profile_sub_heading {
+  text-align: left;
+  color: #007ce9;
+  /* Lighter text color */
+  font-size: 1.5rem;
+  /* Medium font size */
+  margin-bottom: 10px;
+  /* Space below the sub-heading */
+}
+
+/* Profile picture styling */
+.profile-container {
+  background-color: #333;
+  display: flex;
+  flex-direction: row;
+  /* Changed from column to row to align items in a row */
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+  /* Added to distribute space between items */
+  margin-top: 20px;
+  /* Space from the top */
+}
+
+.profile-picture {
+  width: 350px;
+  height: 350px;
+  border-radius: 5%;
+  border-color: #fffefe;
+  object-fit: cover;
+  margin-right: 20px;
+  /* Added right margin to create space between the picture and the details */
+}
+
+.profile-details {
+  text-align: center;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-role {
+  font-size: 1.2rem;
+  /* Adjust the font size as needed */
+  color: #6c757d;
+  /* A lighter color for the role */
+  margin-top: 10px;
+  /* Add some space above the role */
+}
+
+
+.profile-name {
+  margin-top: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #ffe7e7 !important;
+  align-items: center;
+}
+
+.profile-bio {
+  font-size: 16px;
+  text-align: center;
+  color: #dbcfcf !important;
+}
+
+.profile-about {
+  text-align: justify;
+  /* Center-align the text */
+  color: #fff;
+  /* Text color */
+  /* Add any additional styles as needed */
+}
+
+
+.interests {
+  font-size: 16px;
+  text-align: justify;
+  color: #dbcfcf !important;
+}
+
+.interests p {
+  list-style-type: disc;
+  margin-left: 20px;
+  /* Adjust margin as needed */
+}
+
+/* Flexbox utility classes */
+.d-flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-right {
+  align-items: right;
+}
+
+/* Social media icon spacing */
+.contact-socialmed {
+  margin-right: 10px;
+  /* Space to the right of the social media icon */
+}
+
+/* Login button styling */
+.login-facebook {
+  margin-top: 10px;
+  /* Space above the Facebook login button */
+}
+
+.About {
+  text-align: justify;
+  padding: 10px;
+  /* Adds some space around the content inside the container */
+  background-color: #f8f9fa;
+  /* Light background color */
+  border-radius: 10px;
+  /* Rounded corners for a softer look */
+  margin-top: 10px;
+  /* Space from the top */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Optional: Adds a subtle shadow for depth */
+  margin-left: 10px;
+}
+
+.name {
+  color: red;
+}
+
+/* CSS for the employe-details container */
+.employe-contacts {
+  padding: 5px;
+  /* Adds some space around the content inside the container */
+  /* background-color: #f8f9fa; */
+  /* Light background color */
+  border-radius: 10px;
+  /* Rounded corners for a softer look */
+  margin-top: 10px;
+  /* Space from the top */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Optional: Adds a subtle shadow for depth */
+  margin-left: 10px;
+}
+
+.contact {
+  text-align: start;
+  color: red;
+}

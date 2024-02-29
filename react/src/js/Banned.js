@@ -44,6 +44,29 @@ const Banned = () => {
                     <Col>
                         <h1 className="text-white heading">Banned Users</h1>
 
+                        <div className="row">
+                            <div className="col">
+                                <div className="container-md p-3 my-2 bg-danger text card">
+                                    <h1 className="sub-heading">Admin</h1>
+                                    <p className="text-dark">3</p>
+                                </div>
+                            </div>
+
+                            <div className="col">
+                                <div className="container-md p-3 my-2 bg-danger text card">
+                                    <h1 className="sub-heading">Listeners</h1>
+                                    <p className="text-dark">9,800,567</p>
+                                </div>
+                            </div>
+
+                            <div className="col">
+                                <div className="container-md p-3 my-2 bg-danger text card">
+                                    <h1 className="sub-heading">Artists</h1>
+                                    <p className="text-dark">9,800,567</p>
+                                </div>
+                            </div>
+                        </div>  
+
                         {/* Search bar */}
                         <Form>
                             <Form.Group controlId="search">
