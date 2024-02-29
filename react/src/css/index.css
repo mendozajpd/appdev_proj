@@ -400,48 +400,6 @@ h1 span:hover {
 }
 
 
-/* SIDE NAV */
-
-/* .sidebar {
-  position: left;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  min-height: 100vh !important;
-  z-index: 100;
-  padding: 10px 0 0;
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-  background: linear-gradient(to bottom, #1C080A, #2C0D10);
-  border-right: 1px solid #ffffff;
-}
-
-.sidebar-logo {
-  display: flex;
-  justify-content: center;
-  padding-bottom: 20px;
-}
-
-.sidebar-logo img {
-  width: 250px;
-}
-
-
-#sidebar-wrapper {
-  min-height: 100vh !important;
-  width: 100vw;
-  margin-left: -1rem;
-  -webkit-transition: margin .25s ease-out;
-  -moz-transition: margin .25s ease-out;
-  -o-transition: margin .25s ease-out;
-  transition: margin .25s ease-out;
-}
-
-#sidebar-wrapper .sidebar-heading {
-  padding: 0.875rem 1.25rem;
-  font-size: 1.2rem;
-} */
-
-
 #page-content-wrapper {
   min-width: 0;
   width: 100%;
@@ -722,29 +680,13 @@ h1 span:hover {
   border-radius: 3px;
 }
 
-/* for pagination */
-.pagination {
-  display: flex;
-  justify-content: right;
-  list-style: none;
-  padding: 0;
-}
-
-.pagination .page-item {
-  margin: 0 5px;
-}
-
-.pagination .page-link {
-  color: #ff0000;
-  background-color: transparent;
-  border: 1px solid #ff0000;
-  padding: 5px 10px;
+/* Styling for table */
+.table-background {
   border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  background-color: white;
+  width: 100vh
 }
 
-.pagination .page-link:hover {
-  background-color: transparent !important;
-  color: #ff0000;
+.clickable-row {
+  cursor: pointer;
 }

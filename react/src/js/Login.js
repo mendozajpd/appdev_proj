@@ -4,7 +4,7 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import mediaharbor_api from "../config";
+import BACKEND_URL from "../config";
 
 function Login() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -69,7 +69,7 @@ function Login() {
 
     try {
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/login",
+        `${BACKEND_URL}/login`,
         formData,
       );
       setFormData({

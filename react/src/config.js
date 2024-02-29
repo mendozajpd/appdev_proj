@@ -1,8 +1,4 @@
-import axios from 'axios';
 
-const mediaharbor_api = axios.create({
-    withCredentials: true,
-    baseURL: 'http://localhost:8000/api'
-});
+const BACKEND_URL = 'http://localhost:8000/api';
 
-export default mediaharbor_api;
+export default BACKEND_URL;

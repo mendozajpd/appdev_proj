@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
+import BACKEND_URL from "../config";
+
 
 
 const HomePage = () => {
@@ -67,7 +69,7 @@ const HomePage = () => {
     try {
       const token = localStorage.getItem("jwt_token");
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/auth/logout",
+        `${BACKEND_URL}/auth/logout`,
         null,
         {
           headers: {
@@ -86,7 +88,7 @@ const HomePage = () => {
   const fetchUserDetails = async () => {
     try {
       const token = localStorage.getItem("jwt_token");
-      const response = await axios.get("http://127.0.0.1:8000/api/auth/me", {
+      const response = await axios.get(`${BACKEND_URL}/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -102,6 +104,7 @@ const HomePage = () => {
       }
     } catch (error) {
       console.error("Failed to fetch user:", error);
+      localStorage.removeItem("jwt_token");
     }
   };
 

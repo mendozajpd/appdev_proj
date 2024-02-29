@@ -13,6 +13,8 @@ import { Image } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import axios from "axios";
+import BACKEND_URL from "../config";
+
 
 
 const Sidebar = props => {
@@ -32,7 +34,7 @@ const Sidebar = props => {
     const fetchUserDetails = async () => {
         try {
             const token = localStorage.getItem("jwt_token");
-            const response = await axios.get("http://127.0.0.1:8000/api/auth/me", {
+            const response = await axios.get(`${BACKEND_URL}/auth/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -52,7 +54,7 @@ const Sidebar = props => {
         try {
             const token = localStorage.getItem("jwt_token");
             const response = await axios.post(
-                "http://127.0.0.1:8000/api/auth/logout",
+                `${BACKEND_URL}/auth/logout`,
                 null,
                 {
                     headers: {
@@ -114,7 +116,6 @@ const Sidebar = props => {
                         </CDBSidebarContent>
                     </Row>
                 </Col>
-
             </CDBSidebar>
         </>
     );
