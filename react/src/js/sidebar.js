@@ -96,7 +96,7 @@ const Sidebar = props => {
                         <CDBSidebarContent className="sidebar-content">
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
-                                    <NavLink exact to="/admin/dashboard" activeClassName="activeClicked">
+                                    <NavLink exact to="/admin" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="home">Dashboard</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">

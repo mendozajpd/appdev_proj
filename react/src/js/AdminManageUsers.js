@@ -3,6 +3,7 @@ import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { DataTbl } from './DataTbl';
 import { Tbl } from './Tbl';
+import { Breadcrumbs } from "./components/Breadcrumbs";
 import axios from "axios";
 import Sidebar from './sidebar';
 import '../css/index.css'; // Import CSS file
@@ -33,9 +34,11 @@ const AdminManageUsers = () => {
     return (
         <>
             <Sidebar />
-            <Container className='manage-users' fluid>
-                <Row>
+            <Container className='manage-users align-self-start'>
+                <Row xs={1}>
                     <Col>
+                        <Breadcrumbs/>
+
                         <h1 className="text-white heading">User Management</h1>
                         <div className="row">
                             <div className="col">
@@ -66,7 +69,6 @@ const AdminManageUsers = () => {
                             <NavLink to="/admin/pending-requests" className="col-link">Pending Requests</NavLink>
                             <NavLink to="/admin/banned" className="col-link">Banned Lists</NavLink>
                         </div>
-                        {/* <DataTbl data={users}/> */}
                         <Tbl data={users} />
                     </Col>
                 </Row>

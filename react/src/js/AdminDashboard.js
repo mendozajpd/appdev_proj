@@ -6,6 +6,7 @@ import { Chart } from 'react-chartjs-2';
 import 'chart.js/auto';
 import AdminManageUsers from "./AdminManageUsers";
 import Sidebar from './sidebar';
+import { Breadcrumbs } from "./components/Breadcrumbs";
 
 
 const HomePage = () => {
@@ -90,10 +91,11 @@ const HomePage = () => {
   return (
     <>
       <Sidebar />
-      <Container fluid>
-        <Row>
+      <Container className="manage-users align-self-start">
+        <Row xs={1}>
           <Col>
-            <Row xs={1} className="mb-3 align-content-center justify-content-center display-flex">
+            <Breadcrumbs />
+            <Row xs={1} className="mb-3 align-self-start">
               <Col xs={6}>
                 <div className="card-body bg-light">
                   <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
@@ -135,7 +137,7 @@ const HomePage = () => {
             </Row>
             <Row xs={1}>
               <Col xs={6}>
-                <div className={`card col-md-11`}>
+                <div className={`card col-md-11 `}>
                   <div className="card-body bg-light">
                     <h3 className="card-title text-danger fw-bold">Listeners</h3>
                     <div className="chart-container d-flex justify-content-between align-items-center">
@@ -167,7 +169,15 @@ const HomePage = () => {
               </Col>
             </Row>
           </Col>
-        </Row >
+        </Row>
+
+{/* 
+        <Breadcrumbs />
+        <Row>
+          <Col>
+
+          </Col>
+        </Row > */}
       </Container >
     </>
   );

@@ -27,7 +27,7 @@ function App() {
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<HomePage />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/manage-users" element={<AdminManageUsers />} />
           <Route path="/admin/pending-requests" element={<PendingRequests />} />
           <Route path="/admin/banned" element={<Banned />} />

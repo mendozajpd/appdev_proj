@@ -471,9 +471,12 @@ h1 span:hover {
 }
 
 /* MANAGE USERS */
-/* .container .manage-users {
-  align-items: flex-start;
-} */
+.manage-users {
+  display: 'flex';
+  flex-direction: column;
+  align-items: start;
+  top: 0;
+}
 
 .manage-users h1 {
   font-size: 50px;
@@ -512,12 +515,12 @@ h1 span:hover {
 /* Styling for links */
 .manage-users a {
   text-decoration: none;
-  color: inherit;
+  color: #ffffff;
   transition: color 0.3s;
 }
 
 .manage-users a:hover {
-  color: #ffffff;
+  color: #f02020;
 }
 
 /* Styling for columns */
@@ -537,9 +540,6 @@ h1 span:hover {
 .manage-users .table-danger th {
   background-color: #4e020a;
 }
-
-/* Styling for table header */
-.manage-users .table-danger th {}
 
 /* Styling for table cells */
 .manage-users .table-striped tbody tr:nth-of-type(odd) {
@@ -689,4 +689,8 @@ h1 span:hover {
 
 .clickable-row {
   cursor: pointer;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+color: white !important;
 }
