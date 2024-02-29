@@ -491,6 +491,13 @@ h1 span:hover {
   font-weight: 500;
 }
 
+.sidebar {
+  /* Your existing sidebar styles */
+  /* Make sure sidebar has a fixed width */
+  width: 250px;
+  /* Adjust width as needed */
+}
+
 /* Table styles */
 .table-danger th {
   background-color: red;
@@ -772,16 +779,31 @@ h1 span:hover {
 
 /* Profile picture styling */
 .profile-container {
+  overflow-y: auto;
   background-color: #333;
   display: flex;
   flex-direction: row;
   /* Changed from column to row to align items in a row */
-  align-items: center;
+  align-items: stretch;
   padding: 20px;
   justify-content: space-between;
   /* Added to distribute space between items */
   margin-top: 20px;
   /* Space from the top */
+}
+
+.profile-container::-webkit-scrollbar {
+  width: 10px;
+  /* Width of the scrollbar */
+}
+
+.profile-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Track color */
+}
+.profile-container::-webkit-scrollbar-thumb {
+  background: #888; /* Thumb color */
+  border-radius: 5px; /* Roundness of the thumb */
 }
 
 .profile-picture {
@@ -796,6 +818,7 @@ h1 span:hover {
 
 .profile-details {
   text-align: center;
+  flex-grow: 1;
 }
 
 .profile-section {
@@ -905,14 +928,18 @@ h1 span:hover {
   /* Light background color */
   border-radius: 10px;
   /* Rounded corners for a softer look */
-  margin-top: 10px;
+  margin-top: 0px;
   /* Space from the top */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   /* Optional: Adds a subtle shadow for depth */
   margin-left: 10px;
+
 }
 
 .contact {
-  text-align: start;
-  color: red;
+  text-align: justify;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: white;
 }

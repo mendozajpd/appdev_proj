@@ -35,6 +35,7 @@ const ProfilePage = () => {
     return (
         <>
             <Sidebar />
+            {/* <scrollbars></scrollbars> */}
             <Container className='profile-container'>
                 <div className="d-flex flex-column align-items-center">
                     <img
@@ -49,8 +50,9 @@ const ProfilePage = () => {
                         <p className="profile-role">Executive Vice President of Admission</p>
 
                         <Container className='employe-contacts'>
+                            <p className="contact">Contacts</p>
                             <div className="d-flex flex-row align-items-center">
-                                <p className="contact">Contacts</p>
+
                                 {/* <h3 className="name d-flex flex-column">Name: John Doe</h3>
                                 <h4 className="role"> Role:Admin </h4>
                                 <p className="is_approved d-flex flex-column"></p>
