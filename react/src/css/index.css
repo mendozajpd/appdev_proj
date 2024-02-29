@@ -452,12 +452,9 @@ h1 span:hover {
 }
 
 #dashboard-bg {
-  /* background-color: #977c7f; */
-  /* border: red solid 1px; */
   margin-block-end: auto;
   height: calc(100vh - 17px);
   overflow-y: auto;
-  /* Add overflow-y property to enable scrolling if content exceeds height */
 }
 
 .dashboard-nav {
@@ -467,12 +464,8 @@ h1 span:hover {
 
 
 .nav-content {
-  /* padding-right: 10px; */
-  /* Adjust as needed */
   color: white;
   border-right: white 1px solid;
-  /* align-items: center;
-  justify-content: center; */
   display: flex;
 }
 
@@ -501,16 +494,12 @@ h1 span:hover {
 /* Table styles */
 .table-danger th {
   background-color: red;
-  /* Set table header background color to red */
   color: transparent;
-  /* Set table header font color to white */
 }
 
 .table-danger th :hover {
   background-color: transparent;
-  /* Set table header background color to red */
   color: red;
-  /* Set table header font color to white */
   cursor: pointer;
 }
 
@@ -524,40 +513,42 @@ h1 span:hover {
 }
 
 /* MANAGE USERS */
+/* .container .manage-users {
+  align-items: flex-start;
+} */
 
 .manage-users h1 {
   font-size: 50px;
   transition: color 0.3s;
   text-decoration: none;
-  color: #dc3545;
-  /* Bootstrap's text-danger color */
 }
 
-/* Styling for container-md */
-.manage-users .container-md {
-  padding: 3px 10px;
-  margin: 2px auto;
-  background-color: #dc3545;
-  /* Bootstrap's bg-danger color */
-  border-radius: 10px;
-}
 
 /* Styling for text-white */
-.manage-users .text-white {
-  color: #fff !important;
-  /* Override Bootstrap's default text color */
+.manage-users .text {
+  color: #c98c8c !important;
+  text-shadow: 1px 1px 2px #130f10;
 }
 
 /* Styling for text-dark */
 .manage-users .text-dark {
-  color: #212529 !important;
-  /* Bootstrap's text-dark color */
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  /* text-shadow: 1px 1px 3px #f0efef; */
+  color: #f5f5f8 !important;
+}
+
+.sub-heading {
+  color: #ff0000;
+  text-shadow: 1px 1px 2px #f0f0f0;
+  transition: color 0.3s;
+  text-decoration: none;
 }
 
 /* Styling for text-danger */
 .manage-users .text-danger {
   color: #dc3545 !important;
-  /* Bootstrap's text-danger color */
 }
 
 /* Styling for links */
@@ -568,45 +559,94 @@ h1 span:hover {
 }
 
 .manage-users a:hover {
-  color: #dc3545;
-  /* Bootstrap's text-danger color */
+  color: #ffffff;
 }
 
 /* Styling for columns */
 .manage-users .col {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 /* Styling for NavLink */
-.manage-users .NavLink {
+/* .manage-users .NavLink {
   font-weight: bold;
   font-size: 30px;
   transition: color 0.3s;
   text-decoration: none;
-}
+} */
 
 /* Styling for Table */
 .manage-users .table-danger th {
-  background-color: #DC3545;
-  /* Bootstrap's bg-dark color */
+  background-color: #4e020a;
 }
 
 /* Styling for table header */
-.manage-users .table-danger th {
-  /* color: #fff; */
-  /* White color for table header text */
-}
+.manage-users .table-danger th {}
 
 /* Styling for table cells */
 .manage-users .table-striped tbody tr:nth-of-type(odd) {
   background-color: rgba(255, 255, 255, 0.05);
-  /* Lighten the background color of odd rows */
 }
 
 /* Styling for table hover effect */
 .manage-users .table-hover tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.075);
-  /* Lighten the background color of hovered rows */
+
+}
+
+.manage-users h1 {
+  font-size: 50px;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+.manage-users .container-md {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #290206 !important;
+  border: solid 1px #4e080f;
+  /* Corrected border-color property */
+  box-shadow: 0 0 10px rgba(36, 14, 14, 0.678);
+  /* Corrected box-shadow property */
+}
+
+
+.manage-users .col-link {
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 30px;
+  transition: color 0.3s;
+  text-decoration: none;
+  margin-right: 50px;
+  position: relative;
+  /* Ensure relative positioning for pseudo-element */
+}
+
+.manage-users .col-link:hover {
+  color: #ffffff;
+}
+
+.manage-users .col-link:focus::after {
+  content: '';
+  /* Add pseudo-element for underline */
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  /* Adjust as needed */
+  width: 100%;
+  height: 2px;
+  background-color: rgb(243, 243, 243);
+}
+
+.manage-users .table-danger th {
+  background-color: #4e080f;
+  color: white;
+  border-color: #000000;
+}
+
+.manage-users .table-danger td,
+.manage-users .table-danger th {
+  border-color: #d1bbbd;
 }
 
 /* style for IDK */
@@ -622,19 +662,8 @@ h1 span:hover {
   background-color: #333;
 }
 
-.sub-heading {
-  font-size: 30px;
-  transition: color 0.3s;
-  text-decoration: none;
-}
-
-.count {
-  text-align: center;
-  font-size: 50px;
-  font-weight: bold;
-}
-
 .nav-link {
+  font-weight: bold;
   font-size: 30px;
   transition: color 0.3s;
   text-decoration: none;
@@ -646,7 +675,7 @@ h1 span:hover {
 #search {
   background-color: transparent;
   color: white;
-  width: 30%;
+  width: 25%;
   margin-bottom: 20px;
   float: right;
   border: 2px solid #5c5757;
@@ -657,6 +686,8 @@ h1 span:hover {
 #search::placeholder {
   color: #999;
 }
+
+
 
 /* button DELETE REJECT APPROVE */
 /* PendingRequests.css */
@@ -689,4 +720,31 @@ h1 span:hover {
   border: none;
   padding: 5px 10px;
   border-radius: 3px;
+}
+
+/* for pagination */
+.pagination {
+  display: flex;
+  justify-content: right;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination .page-item {
+  margin: 0 5px;
+}
+
+.pagination .page-link {
+  color: #ff0000;
+  background-color: transparent;
+  border: 1px solid #ff0000;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination .page-link:hover {
+  background-color: transparent !important;
+  color: #ff0000;
 }

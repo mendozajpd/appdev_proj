@@ -1,4 +1,3 @@
-// PendingRequests.js
 import React, { useState } from 'react';
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
@@ -12,10 +11,20 @@ const PendingRequests = () => {
         // Add more users as needed
     ]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [usersPerPage] = useState(5); // Change this value to adjust the number of users per page
 
     // Function to handle approval
     const handleApprove = (id) => {
-        setUsers(users.map(user => user.id === id ? { ...user, status: 'Approved' } : user));
+        const updatedUsers = users.map(user => {
+            if (user.id === id) {
+                return { ...user, status: 'Approved' };
+            }
+            return user;
+        });
+        setUsers(updatedUsers);
+        // Add the approved user to the list of all users
+        setAllUsers(prevAllUsers => [...prevAllUsers, users.find(user => user.id === id)]);
     };
 
     // Function to handle rejection
@@ -38,10 +47,23 @@ const PendingRequests = () => {
         setSearchQuery(event.target.value);
     };
 
+    // Calculate index of the last user on the current page
+    const indexOfLastUser = currentPage * usersPerPage;
+    // Calculate index of the first user on the current page
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    // Get users for the current page
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    // Function to handle pagination
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     // Filter users based on search query
     const filteredUsers = users.filter(user =>
         user.username.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+    // State to store all users
+    const [allUsers, setAllUsers] = useState([]);
 
     return (
         <>
@@ -49,17 +71,50 @@ const PendingRequests = () => {
             <Container className='manage-users' fluid>
                 <Row>
                     <Col>
-                        <div className="col">
-                            <NavLink to="/admin/manage-users" className="text-danger" style={{ fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none', marginRight: '50px' }}>Users</NavLink>
-                            <NavLink to="/admin/pending-requests" className="text-white" style={{ fontWeight: 'bold', fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none', marginRight: '50px' }}>Pending Requests</NavLink>
-                            <NavLink to="/admin/banned" className="text-danger" style={{ fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none' }}>Banned</NavLink>
+                        <h1 className="text-white heading">User Management</h1>
+                        <div className="row">
+                            <div className="col">
+                                <div className="container-md p-3 my-2 bg-danger text card">
+                                    <h1 className="sub-heading">Admin</h1>
+                                    <p className="text-dark">3</p>
+                                </div>
+                            </div>
+
+                            <div className="col">
+                                <div className="container-md p-3 my-2 bg-danger text card">
+                                    <h1 className="sub-heading">Listeners</h1>
+                                    <p className="text-dark">9,800,567</p>
+                                </div>
+                            </div>
+
+                            <div className="col">
+                                <div className="container-md p-3 my-2 bg-danger text card">
+                                    <h1 className="sub-heading">Artists</h1>
+                                    <p className="text-dark">9,800,567</p>
+                                </div>
+                            </div>
                         </div>
-                        <Form.Group controlId="search">
-                            <Form.Control type="text" placeholder="Search by username" value={searchQuery} onChange={handleSearchChange} />
-                        </Form.Group>
+
+                        {/* Search bar */}
+                        <Form>
+                            <Form.Group controlId="search">
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Search by username"
+                                    value={searchQuery}
+                                    onChange={handleSearchChange}
+                                />
+                            </Form.Group>
+                        </Form>
+
+                        <div className="col">
+                            <NavLink to="/admin/manage-users" className="col-link">All Users</NavLink>
+                            <NavLink to="/admin/pending-requests" className="col-link">Pending Requests</NavLink>
+                            <NavLink to="/admin/banned" className="col-link">Banned Lists</NavLink>
+                        </div>
                         <Table striped bordered hover variant="dark">
                             <thead>
-                                <tr>
+                                <tr className='table-danger'>
                                     <th>ID</th>
                                     <th>Username</th>
                                     <th>Status</th>
@@ -67,7 +122,7 @@ const PendingRequests = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredUsers.map(user => (
+                                {currentUsers.map(user => (
                                     <tr key={user.id} onClick={() => handleRowClick(user.id)} className="user-row">
                                         <td>{user.id}</td>
                                         <td>{user.username}</td>
@@ -81,6 +136,19 @@ const PendingRequests = () => {
                                 ))}
                             </tbody>
                         </Table>
+
+                        {/* Pagination */}
+                        <nav>
+                            <ul className="pagination">
+                                {Array.from({ length: Math.ceil(filteredUsers.length / usersPerPage) }, (_, i) => (
+                                    <li key={i} className="page-item">
+                                        <button onClick={() => paginate(i + 1)} className="page-link">
+                                            {i + 1}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
                     </Col>
                 </Row>
             </Container>
