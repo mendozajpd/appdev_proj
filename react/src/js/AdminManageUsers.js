@@ -31,7 +31,12 @@ const AdminManageUsers = () => {
     };
 
     useEffect(() => {
-        fetchUsers();
+        const intervalId = setInterval(() => {
+            fetchUsers();
+        }, 5000); // Fetches users every 5 seconds
+    
+        // Remember to clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     return (

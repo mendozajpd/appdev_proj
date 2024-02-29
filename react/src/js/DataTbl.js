@@ -1,6 +1,6 @@
 import '../css/dataTables.css'
 import '../css/index.css';
-import React, { Component } from "react";
+import React, { Component, useRef } from "react";
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ const $ = require('jquery')
 $.DataTable = require('datatables.net')
 
 export class DataTbl extends Component {
+    
     componentDidMount() {
         this.createDataTable();
     }
