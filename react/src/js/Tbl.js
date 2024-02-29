@@ -1,36 +1,25 @@
 import '../css/dataTables.css'
 import '../css/index.css';
-import React, { Component, useRef } from "react";
+import React, { Component, useEffect, useRef } from "react";
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
-const $ = require('jquery')
-$.DataTable = require('datatables.net')
 
-export class DataTbl extends Component {
-    
-    componentDidMount() {
-        this.createDataTable();
-    }
+export function Tbl(props) {
+    const $ = require('jquery')
+    $.DataTable = require('datatables.net')
+    const tableRef = useRef();
 
-    componentDidUpdate(prevProps) {
-        if (this.table && prevProps.data !== this.props.data) {
-            this.table.clear();
-            this.table.rows.add(this.props.data);
-            this.table.draw();
-            console.log('DataTbl update');
+    useEffect(() => {
+        if (!props.data) {
+            return;
         }
-    }
 
-    componentWillUnmount() {
-        this.$el.DataTable().destroy();
-    }
-
-    createDataTable() {
-        if (!this.table) {
-            this.$el = $(this.el);
-            this.$el.DataTable({
-                data: this.props.data,
+        console.log(tableRef.current)
+        const $table = $(tableRef.current);
+        const table = $(tableRef.current).
+            DataTable({
+                data: props.data,
                 columns: [
                     { data: 'id', title: "ID" },
                     { data: 'name', title: "Username" },
@@ -60,23 +49,25 @@ export class DataTbl extends Component {
                     $(row).addClass('clickable-row').on('click', function () {
                         console.log('Row clicked:', data);
                     });
-                }
+                },
+                destroy: true,
             });
-        }
 
-
-        this.$el.on('click', 'button.alert-button', function () {
+        $table.on('click', 'button.alert-button', function () {
             // alert('Hello, World');
             console.log('Hello, World');
         });
+        
+        return function () {
+            console.log("Table destroyed")
+            table.destroy()
+        }
+    }, [props.data]);
 
-    }
-    render() {
-        return <Container className='table-background' fluid>
-            <div className='table'>
-                <table className='display' width="100%" ref={el => this.el = el}>
-                </table>
-            </div>
-        </Container>
-    }
+    return (<Container className='table-background' fluid>
+        <div className='table'>
+            <table className='display' width="100%" ref={tableRef}>
+            </table>
+        </div>
+    </Container>)
 }
