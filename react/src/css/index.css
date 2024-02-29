@@ -608,3 +608,85 @@ h1 span:hover {
   background-color: rgba(255, 255, 255, 0.075);
   /* Lighten the background color of hovered rows */
 }
+
+/* style for IDK */
+.heading {
+  font-size: 50px;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+.card {
+  border-radius: 10px;
+  padding: 10px;
+  background-color: #333;
+}
+
+.sub-heading {
+  font-size: 30px;
+  transition: color 0.3s;
+  text-decoration: none;
+}
+
+.count {
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.nav-link {
+  font-size: 30px;
+  transition: color 0.3s;
+  text-decoration: none;
+  margin-right: 50px;
+}
+
+
+/* Search bar for manage users */
+#search {
+  background-color: transparent;
+  color: white;
+  width: 30%;
+  margin-bottom: 20px;
+  float: right;
+  border: 2px solid #5c5757;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+#search::placeholder {
+  color: #999;
+}
+
+/* button DELETE REJECT APPROVE */
+/* PendingRequests.css */
+.user-row:hover {
+  background-color: #000000 !important;
+  /* Change background color on hover */
+}
+
+.approve-btn {
+  background-color: #08b12f !important;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+.reject-btn {
+  background-color: #8a141f !important;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+.delete-btn {
+  background-color: #ff0000 !important;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+}

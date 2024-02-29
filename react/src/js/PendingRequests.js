@@ -1,40 +1,47 @@
+// PendingRequests.js
 import React, { useState } from 'react';
-import { Container, Row, Col, Table } from 'react-bootstrap';
-import {
-    CDBSidebar,
-    CDBSidebarContent,
-    CDBSidebarMenuItem,
-    CDBSidebarMenu,
-    CDBSidebarHeader
-} from 'cdbreact';
+import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import '../css/index.css';
-import { Image, Button } from 'react-bootstrap'; // Import Button component from react-bootstrap
 import Sidebar from './sidebar';
-
+import '../css/index.css'; // Import CSS file
 
 const PendingRequests = () => {
-    const [statuses, setStatuses] = useState({
-        john_doe: 'Not Verified',
-        jane_smith: 'Verified'
-        // Add more rows as needed
-    });
+    const [users, setUsers] = useState([
+        { id: 1, username: 'john_doe', status: 'Not Verified', message: 'This is a sample message for John Doe.' },
+        { id: 2, username: 'jane_smith', status: 'Verified', message: 'This is a sample message for Jane Smith.' },
+        // Add more users as needed
+    ]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Function to handle approval
-    const handleApprove = (username) => {
-        setStatuses(prevStatuses => ({
-            ...prevStatuses,
-            [username]: 'Approved' // Update status to 'Approved' for the given username
-        }));
+    const handleApprove = (id) => {
+        setUsers(users.map(user => user.id === id ? { ...user, status: 'Approved' } : user));
     };
 
     // Function to handle rejection
-    const handleReject = (username) => {
-        setStatuses(prevStatuses => ({
-            ...prevStatuses,
-            [username]: 'Rejected' // Update status to 'Rejected' for the given username
-        }));
+    const handleReject = (id) => {
+        setUsers(users.map(user => user.id === id ? { ...user, status: 'Rejected' } : user));
     };
+
+    // Function to handle deletion
+    const handleDelete = (id) => {
+        setUsers(users.filter(user => user.id !== id));
+    };
+
+    // Function to handle row click
+    const handleRowClick = (id) => {
+        // Add logic here to handle row click
+    };
+
+    // Function to handle search query change
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+    };
+
+    // Filter users based on search query
+    const filteredUsers = users.filter(user =>
+        user.username.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <>
@@ -42,111 +49,38 @@ const PendingRequests = () => {
             <Container className='manage-users' fluid>
                 <Row>
                     <Col>
-                        <h1 class="text-white"
-                            style={{ fontSize: '50px', transition: 'color 0.3s', textDecoration: 'none' }}>User Management</h1>
-                        <div className="row">
-                            <div className="col"
-                                style={{ marginBottom: '30px' }}>
-                                <div className="container-md p-3 my-2 bg-danger text-white"
-                                    style={{ borderRadius: '10px', padding: '10px', backgroundColor: '#333' }}>
-                                    <h1 className="text-white" style={{ marginTop: 'none', fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none' }}>Admin</h1>
-                                    <p className="text-dark" style={{ textAlign: 'center', fontSize: '50px', fontWeight: 'bold' }}>3</p> {/* Add margin-left */}
-                                </div>
-                            </div>
-
-                            <div className="col"
-                                style={{ marginBottom: '30px' }}>
-                                <div className="container-md p-3 my-2 bg-danger text-white"
-                                    style={{ borderRadius: '10px', padding: '10px', backgroundColor: '#333' }}>
-                                    <h1 className="text-white" style={{ fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none' }}>Listeners</h1>
-                                    <p className="text-dark" style={{ textAlign: 'center', fontSize: '50px', fontWeight: 'bold' }}>9,800,567</p> {/* Add margin-left */}
-                                </div>
-                            </div>
-
-                            <div className="col"
-                                style={{ marginBottom: '30px' }}>
-                                <div className="container-md p-3 my-2 bg-danger text-white"
-                                    style={{ borderRadius: '10px', padding: '10px', backgroundColor: '#333' }}>
-                                    <h1 className="text-white" style={{ fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none' }}>Artists</h1>
-                                    <p className="text-dark" style={{ textAlign: 'center', fontSize: '50px', fontWeight: 'bold' }}>9,800,567</p> {/* Add margin-left */}
-                                </div>
-                            </div>
-                        </div>
-
                         <div className="col">
                             <NavLink to="/admin/manage-users" className="text-danger" style={{ fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none', marginRight: '50px' }}>Users</NavLink>
                             <NavLink to="/admin/pending-requests" className="text-white" style={{ fontWeight: 'bold', fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none', marginRight: '50px' }}>Pending Requests</NavLink>
                             <NavLink to="/admin/banned" className="text-danger" style={{ fontSize: '30px', transition: 'color 0.3s', textDecoration: 'none' }}>Banned</NavLink>
                         </div>
+                        <Form.Group controlId="search">
+                            <Form.Control type="text" placeholder="Search by username" value={searchQuery} onChange={handleSearchChange} />
+                        </Form.Group>
                         <Table striped bordered hover variant="dark">
                             <thead>
-                                <tr className='table-danger'>
+                                <tr>
+                                    <th>ID</th>
                                     <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
                                     <th>Status</th>
-                                    <th>Actions</th> {/* Add a new column for actions */}
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>john_doe</td>
-                                    <td>john@example.com</td>
-                                    <td>Admin</td>
-                                    <td>Not Verified</td>
-                                    <td>
-                                        <Button variant="success" style={{ marginRight: '10px' }}>Approve</Button>
-                                        <Button variant="danger">Reject</Button>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>jane_smith</td>
-                                    <td>jane@example.com</td>
-                                    <td>User</td>
-                                    <td>Verified</td>
-                                    <td>
-                                        <Button variant="success" className="approve-button">Approve</Button>
-                                        <Button variant="danger">Reject</Button>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>jane_smith</td>
-                                    <td>jane@example.com</td>
-                                    <td>User</td>
-                                    <td>Verified</td>
-                                    <td>
-                                        <Button variant="success" className="approve-button">Approve</Button>
-                                        <Button variant="danger">Reject</Button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>jane_smith</td>
-                                    <td>jane@example.com</td>
-                                    <td>User</td>
-                                    <td>Verified</td>
-                                    <td>
-                                        <Button variant="success" className="approve-button">Approve</Button>
-                                        <Button variant="danger">Reject</Button>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>jane_smith</td>
-                                    <td>jane@example.com</td>
-                                    <td>User</td>
-                                    <td>Verified</td>
-                                    <td>
-                                        <Button variant="success" className="approve-button">Approve</Button>
-                                        <Button variant="danger">Reject</Button>
-                                    </td>
-
-                                </tr>
-                                {/* Add more rows as needed */}
+                                {filteredUsers.map(user => (
+                                    <tr key={user.id} onClick={() => handleRowClick(user.id)} className="user-row">
+                                        <td>{user.id}</td>
+                                        <td>{user.username}</td>
+                                        <td>{user.status}</td>
+                                        <td>
+                                            <button className="approve-btn" onClick={() => handleApprove(user.id)}>Approve</button>
+                                            <button className="reject-btn" onClick={() => handleReject(user.id)}>Reject</button>
+                                            <button className="delete-btn" onClick={() => handleDelete(user.id)}>Delete</button> {/* Add delete button */}
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </Table>
-
                     </Col>
                 </Row>
             </Container>
