@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\ArtistRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -91,14 +92,18 @@ class AuthController extends Controller
         $user->role = 'artist';
         $user->save();
 
+        $verifyRequest = new ArtistRequest();
+        $verifyRequest->id = $user->id;
+        $verifyRequest->username = $user->name;
+        $verifyRequest->email = $user->email;
+        $verifyRequest->is_approved = false;
+        $verifyRequest->save(); 
+
         $verificationUrl = URL::temporarySignedRoute(
             'verification.verify', now()->addMinutes(60), ['id' => $user->id]
         );
 
         Mail::to($user->email)->send(new VerificationEmail($verificationUrl,$user->name)); 
-        // send email for verification
-        // send another email after verification for pending approval
-
         
         return response()->json(['message' => 'User registered successfully'], 201);
     }

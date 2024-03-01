@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ArtistRequestController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 
@@ -26,6 +27,10 @@ Route::post('register-artist', [AuthController::class, 'registerArtist']);
 Route::post('resend-verification-email', [AuthController::class, 'sendVerificationEmail']);
 
 Route::get('users', [UserController::class, 'getUsers']);
+Route::get('artist-requests', [ArtistRequestController::class, 'getArtistRequests']);
+Route::get('users/{id}', [UserController::class, 'getUser']);
+Route::put('users/{id}', [UserController::class, 'updateUser']);
+Route::delete('users/{id}', [UserController::class, 'deleteUser']);
 
 Route::group([
 

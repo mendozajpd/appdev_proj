@@ -7,6 +7,7 @@ import 'chart.js/auto';
 import AdminManageUsers from "./AdminManageUsers";
 import Sidebar from './sidebar';
 import { Breadcrumbs } from "./components/Breadcrumbs";
+import BACKEND_URL from "../config";
 
 
 const HomePage = () => {
@@ -21,7 +22,7 @@ const HomePage = () => {
     try {
       const token = localStorage.getItem("jwt_token");
       await axios.post(
-        "http://127.0.0.1:8000/api/auth/logout",
+        `${BACKEND_URL}/api/auth/logout`,
         null,
         {
           headers: {
@@ -137,24 +138,24 @@ const HomePage = () => {
             </Row>
             <Row xs={1}>
               <Col xs={6}>
-                <div className={`card col-md-11 `}>
+                {/* <div className={`card col-md-11 `}>
                   <div className="card-body bg-light">
                     <h3 className="card-title text-danger fw-bold">Listeners</h3>
                     <div className="chart-container d-flex justify-content-between align-items-center">
-                      {/* <Chart type="pie" data={freeChart} options={piechartOptions} height={300} width={500} /> */}
-                      {/* <p className="text-white fw-bold">Most Number of Users: <strong className="text-danger">{percentages[freeHighestIndex]}%</strong> of Users are {freeHighestLabel}
-                        <br /><br />Total Listeners: <strong className="text-danger">{formatTotalListeners(totalUsers)}</strong> </p> */}
+                      <Chart type="pie" data={freeChart} options={piechartOptions} height={300} width={500} />
+                      <p className="text-white fw-bold">Most Number of Users: <strong className="text-danger">{percentages[freeHighestIndex]}%</strong> of Users are {freeHighestLabel}
+                        <br /><br />Total Listeners: <strong className="text-danger">{formatTotalListeners(totalUsers)}</strong> </p>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </Col>
               <Col xs={6}>
                 <div className="card-body bg-light">
-                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
+                  {/* <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
                     <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
                       <option value="months">Months</option>
                       <option value="years">Years</option>
-                    </select></h3>
+                    </select></h3> */}
 
                   {/* <div className="chart-container d-flex justify-content-between align-items-center">
                     <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />

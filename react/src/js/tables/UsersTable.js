@@ -1,11 +1,11 @@
-import '../css/dataTables.css'
-import '../css/index.css';
+import '../../css/dataTables.css'
+import '../../css/index.css';
 import React, { Component, useEffect, useRef } from "react";
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 
 
-export function Tbl(props) {
+export function UsersTable (props) {
     const $ = require('jquery')
     $.DataTable = require('datatables.net')
     const tableRef = useRef();
@@ -41,22 +41,36 @@ export function Tbl(props) {
                     {
                         title: "Action",
                         data: null,
-                        defaultContent: "<button class='alert-button'>Click!</button>",
+                        defaultContent: "<button class='view-button'>View</button> <button class='edit-button'>Edit</button> <button class='deactivate-button'>Deactivate</button> <button class='delete-button'>Delete</button>",
                         orderable: false
                     }
                 ],
-                rowCallback: function (row, data, index) {
-                    $(row).addClass('clickable-row').on('click', function () {
-                        console.log('Row clicked:', data);
-                    });
-                },
+                // rowCallback: function (row, data, index) {
+                //     $(row).addClass('clickable-row').on('click', function () {
+                //         console.log('Row clicked:', data);
+                //     });
+                // }
                 destroy: true,
             });
 
-        $table.on('click', 'button.alert-button', function () {
-            // alert('Hello, World');
-            console.log('Hello, World');
-        });
+            $table.on('click', 'button.view-button', function () {
+                const data = table.row($(this).parents('tr')).data();
+            });
+            
+            $table.on('click', 'button.edit-button', function () {
+                const data = table.row($(this).parents('tr')).data();
+                console.log(data);
+            });
+            
+            $table.on('click', 'button.deactivate-button', function () {
+                const data = table.row($(this).parents('tr')).data();
+                console.log(data);
+            });
+            
+            $table.on('click', 'button.delete-button', function () {
+                const data = table.row($(this).parents('tr')).data();
+                console.log(data);
+            });
         
         return function () {
             console.log("Table destroyed")

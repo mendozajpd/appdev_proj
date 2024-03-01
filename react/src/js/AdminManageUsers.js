@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import { DataTbl } from './DataTbl';
-import { Tbl } from './Tbl';
+import { UsersTable } from './tables/UsersTable';
 import { Breadcrumbs } from "./components/Breadcrumbs";
 import axios from "axios";
 import Sidebar from './sidebar';
-import '../css/index.css'; // Import CSS file
+import '../css/index.css'; 
 import BACKEND_URL from "../config";
 
 
@@ -69,7 +68,7 @@ const AdminManageUsers = () => {
                             <NavLink to="/admin/pending-requests" className="col-link">Pending Requests</NavLink>
                             <NavLink to="/admin/banned" className="col-link">Banned Lists</NavLink>
                         </div>
-                        <Tbl data={users} />
+                        <UsersTable data={users} />
                     </Col>
                 </Row>
             </Container>

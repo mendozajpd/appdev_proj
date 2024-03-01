@@ -100,7 +100,7 @@ const HomePage = () => {
       const isAdmin = userData.role.includes('admin');
       const isSuperAdmin = userData.role.includes('superadmin');
       if (isAdmin || isSuperAdmin) {
-        navigate('/admin/dashboard');
+        navigate('/admin');
       }
     } catch (error) {
       console.error("Failed to fetch user:", error);
@@ -121,14 +121,14 @@ const HomePage = () => {
     }, 3 * 60 * 1000);
     try {
       const token = localStorage.getItem("jwt_token");
-      const userDetailsResponse = await axios.get("http://127.0.0.1:8000/api/auth/me", {
+      const userDetailsResponse = await axios.get(`${BACKEND_URL}/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const user = userDetailsResponse.data;
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/resend-verification-email",
+        `${BACKEND_URL}/resend-verification-email`,
         {
           name: user.name, // use the name from the user's details
           email: user.email, // use the email from the user's details
