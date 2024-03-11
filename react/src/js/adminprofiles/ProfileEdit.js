@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../sidebar';
-// import './profilePictureStyles.css'; // Import the CSS file
+import '../adminprofiles/profilePictureStyles.css';
+
 
 
 
@@ -56,7 +57,7 @@ function ProfileEdit({ onSaveProfile }) {
             <div className="name-text"> Edit Profile
                 {/* <div className="font-weight-bold">Edogaru</div> */}
             </div>
-            <div className="container rounded bg-white mt-5 mb-5">
+            <div className="container rounded bg-light mt-5 mb-5">
                 <div className="row">
                     <div className="col-md-3 border-right">
                         <div className="d-flex flex-column align-items-center text-center p-3 py-5">
