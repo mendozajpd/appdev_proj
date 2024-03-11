@@ -35,6 +35,7 @@ Route::delete('users/{id}', [UserController::class, 'deleteUser']);
 
 Route::get('albums', [ArtistController::class, 'getAlbums']);
 Route::get('artists', [ArtistController::class, 'getArtists']);
+Route::get('/artists/{id}', [ArtistController::class, 'getArtist']);
 Route::get('/songs/{id}', [ArtistController::class, 'getArtistSongs']);
 Route::post('upload-song', [ArtistController::class, 'uploadSong']);
 Route::delete('songs/{id}', [ArtistController::class, 'deleteSong']);

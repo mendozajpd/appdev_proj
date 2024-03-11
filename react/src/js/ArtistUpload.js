@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
@@ -7,25 +7,36 @@ import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import ArtistItem from "./items/ArtistItem";
+import { SongsTable } from "./tables/SongsTable";
 
-
-const HomePage = () => {
+const ArtistPage = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
   const [logoutDisabled, setLogoutDisabled] = useState(false);
 
-  const [artists, setArtists] = useState([]);
+  const [artist, setArtist] = useState(null);
+  const { id } = useParams();
 
   // Player
   const [currentSong, setCurrentSong] = useState(null);
   const playerRef = useRef();
 
+  // SONGS
+  const [songs, setSongs] = useState([]);
+
+  // ALBUMS
+  const [albums, setAlbums] = useState([]);
+  const [selectedAlbum, setSelectedAlbum] = useState('');
+
   // MODAL
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  // FILES
+  const [songTitle, setSongTitle] = useState('');
+  const [songFile, setSongFile] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
@@ -35,23 +46,22 @@ const HomePage = () => {
       fetchUserDetails();
     }
 
-
-    axios.get(`${BACKEND_URL}/artists`)
+    axios.get(`${BACKEND_URL}/albums`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(response => {
-        setArtists(response.data);
+        setAlbums(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
 
-  }, [isVerified]);
 
-  // NAVIGATION
+  }, [id, isVerified]);
+
   const navigate = useNavigate();
-
-  const handleArtistClick = (artistId) => {
-    navigate(`/artist/${artistId}`);
-  };
 
   const buttonStyle = {
     marginTop: "30px",
@@ -147,6 +157,30 @@ const HomePage = () => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('display_name', songTitle);
+    formData.append('song', songFile);
+    formData.append('album_id', selectedAlbum);
+  
+    const token = localStorage.getItem("jwt_token");
+  
+    try {
+      const response = await axios.post(`${BACKEND_URL}/upload-song`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error('There was an error!', error);
+    }
+  };
+
 
 
   return (
@@ -178,15 +212,40 @@ const HomePage = () => {
               <Row className="mb-5">
                 <Form.Control className="search-bar" placeholder="Search" />
               </Row>
-              <p className="home-page-text">
-                Upcoming Artists
-              </p>
+              <h1 className="home-page-text mb-5">
+                Upload Song
+              </h1>
 
-              <Stack direction="horizontal" className="artist-item-container p-3" gap={3}>
-                {artists.map(artist => (
-                  <ArtistItem key={artist.id} name={artist.name} onClick={() => handleArtistClick(artist.id)} />
-                ))}
-              </Stack>
+
+              <Form onSubmit={handleSubmit}>
+                <Stack direction="vertical" className="song-item-container p-3" gap={1}>
+                  <Form.Group controlId="songTitle">
+                    <Form.Label className="home-page-text">Song Title</Form.Label>
+                    <Form.Control type="text" placeholder="Enter song title" value={songTitle} onChange={e => setSongTitle(e.target.value)} />
+                  </Form.Group>
+
+                  <Form.Group controlId="songFile" className="mb-4">
+                    <Form.Label className="home-page-text">Song File</Form.Label>
+                    <Form.Control type="file" onChange={e => setSongFile(e.target.files[0])} />
+                  </Form.Group>
+
+                  <Form.Group controlId="album">
+                    <Form.Label>Album</Form.Label>
+                    <Form.Control as="select" onChange={e => setSelectedAlbum(e.target.value)}>
+                      <option>Choose an existing album</option>
+                      {albums.map(album => (
+                        <option key={album.album_id} value={album.album_id}>{album.album_name}</option>
+                      ))}
+                    </Form.Control>
+
+                  </Form.Group>
+
+                  <Button variant="danger" type="submit">
+                    Upload
+                  </Button>
+                </Stack>
+              </Form>
+
             </Col>
             <Col xs={4} className="right-sidebar">
               <Row className="p-5">
@@ -280,4 +339,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ArtistPage;

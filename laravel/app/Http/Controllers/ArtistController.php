@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 
 class ArtistController extends Controller
 {
+    public function getArtist($id)
+    {
+    $artist = User::find($id);
+
+    if ($artist) {
+        return response()->json($artist);
+    } else {
+        return response()->json(['error' => 'Artist not found'], 404);
+    }
+    }
 
     public function getArtists(Request $request)
     {
@@ -39,9 +49,9 @@ class ArtistController extends Controller
 
     public function uploadSong(Request $request)
     {
-        if (!$request->hasFile('image')) {
-            return response()->json(['message' => 'Image file is empty'], 400);
-        }
+        // if (!$request->hasFile('image')) {
+        //     return response()->json(['message' => 'Image file is empty'], 400);
+        // }
         
         if (!$request->hasFile('song')) {
             return response()->json(['message' => 'Song file is empty'], 400);
@@ -50,28 +60,28 @@ class ArtistController extends Controller
         $request->validate([
             'display_name' => 'required',
             'song' => 'required|file|mimes:mp3,wav,ogg',
-            'image' => 'required|file|mimes:jpeg,png,jpg,gif', // validate the image file
+            // 'image' => 'required|file|mimes:jpeg,png,jpg,gif', // validate the image file
             'new_album_name' => 'sometimes|required',
             'new_album_description' => 'sometimes|required',
-            'new_album_photo' => 'sometimes|required|file|mimes:jpeg,png,jpg,gif',
+            // 'new_album_photo' => 'sometimes|required|file|mimes:jpeg,png,jpg,gif',
         ]);
 
         $currentTime = time();
         $hashedTime = hash('sha256', $currentTime);
     
         $songExtension = $request->file('song')->getClientOriginalExtension();
-        $imageExtension = $request->file('image')->getClientOriginalExtension();
+        // $imageExtension = $request->file('image')->getClientOriginalExtension();
     
         $hashedSongName = $hashedTime . '.' . $songExtension;
-        $hashedImageName = $hashedTime . '.' . $imageExtension;
+        // $hashedImageName = $hashedTime . '.' . $imageExtension;
     
         $request->file('song')->storeAs('songs', $hashedSongName, 'public');
-        $request->file('image')->storeAs('images', $hashedImageName, 'public');
+        // $request->file('image')->storeAs('images', $hashedImageName, 'public');
     
         $song = new Song;
         $song->display_name = $request->display_name;
         $song->hashed_name = $hashedSongName;
-        $song->photo_hashed_name = $hashedImageName;
+        $song->photo_hashed_name = 'tempnone';
         $song->user_id = auth()->id();
         
 
@@ -106,6 +116,27 @@ class ArtistController extends Controller
         }
 
         return response()->json(null, 204);
+    }
+
+    public function createAlbum(Request $request)
+    {
+    $request->validate([
+        'album_name' => 'required',
+        'album_description' => 'required',
+        'album_photo' => 'required|file|mimes:jpeg,png,jpg,gif',
+    ]);
+
+    $album = new Album;
+    $album->album_name = $request->album_name;
+    $album->album_description = $request->album_description;
+    $album->photo_hashed_name = $request->file('album_photo')->hashName();
+    $album->user_id = auth()->id();
+
+    $request->file('album_photo')->storeAs('album_images', $album->photo_hashed_name);
+
+    $album->save();
+
+    return response()->json(['message' => 'Album Created Successfully'], 201);
     }
 
     public function editAlbum(Request $request, $id)

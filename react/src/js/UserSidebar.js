@@ -29,6 +29,10 @@ const UserSidebar = props => {
 
     const [isVerified, setIsVerified] = useState(false);
     const [logoutDisabled, setLogoutDisabled] = useState(false);
+
+    const [user, setUser] = useState(null);
+    const [isArtist, setIsArtist] = useState(false);
+
     const navigate = useNavigate();
 
     const fetchUserDetails = async () => {
@@ -41,6 +45,8 @@ const UserSidebar = props => {
             });
             const userData = response.data; // Assuming user details are directly in response.data
             console.log(userData);
+            setUser(userData);
+            setIsArtist(userData.role === 'artist');
             setIsVerified(userData.email_verified_at !== null);
             // Check if the user has admin or superadmin role
         } catch (error) {
@@ -86,8 +92,8 @@ const UserSidebar = props => {
                     }}
                 />
                 <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-                    <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
-                        USER
+                    <a href="/home" className="text-decoration-none" style={{ color: 'inherit' }}>
+                        {user ? user.name : 'Loading...'}
                     </a>
                 </CDBSidebarHeader>
                 <Col className="flex-grow-1 d-flex flex-column vh-100" fluid={true}>
@@ -95,18 +101,26 @@ const UserSidebar = props => {
                         <CDBSidebarContent className="sidebar-content">
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
+                                    <NavLink exact to="/home" activeClassName="activeClicked">
+                                        <CDBSidebarMenuItem icon="">Home</CDBSidebarMenuItem>
+                                    </NavLink>
                                     <NavLink exact to="/admin" activeClassName="activeClicked">
-                                        <CDBSidebarMenuItem icon="anchor">Dashboard</CDBSidebarMenuItem>
+                                        <CDBSidebarMenuItem icon="">Podcast</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
-                                        <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>
+                                        <CDBSidebarMenuItem icon="">Videocasts</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink exact to="/tickets" activeClassName="activeClicked">
-                                        <CDBSidebarMenuItem icon="table">Subscription Settings</CDBSidebarMenuItem>
+                                        <CDBSidebarMenuItem icon="">Subscription Settings</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="/revenue" activeClassName="activeClicked">
-                                        <CDBSidebarMenuItem icon="columns">Revenue</CDBSidebarMenuItem>
-                                    </NavLink>
+                                    {isArtist && (
+                                        <>
+                                            <h5 className="px-3 sub-header">ARTIST</h5>
+                                            <NavLink exact to="/upload" activeClassName="activeClicked">
+                                                <CDBSidebarMenuItem icon="">Upload</CDBSidebarMenuItem>
+                                            </NavLink>
+                                        </>
+                                    )}
                                     <NavLink onClick={handleSubmit} activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="">Logout</CDBSidebarMenuItem>
                                     </NavLink>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
@@ -7,20 +7,23 @@ import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import ArtistItem from "./items/ArtistItem";
+import { SongsTable } from "./tables/SongsTable";
 
-
-const HomePage = () => {
+const ArtistPage = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
   const [logoutDisabled, setLogoutDisabled] = useState(false);
 
-  const [artists, setArtists] = useState([]);
+  const [artist, setArtist] = useState(null);
+  const { id } = useParams();
 
   // Player
   const [currentSong, setCurrentSong] = useState(null);
   const playerRef = useRef();
+
+  // SONGS
+  const [songs, setSongs] = useState([]);
 
   // MODAL
   const [show, setShow] = useState(false);
@@ -35,23 +38,25 @@ const HomePage = () => {
       fetchUserDetails();
     }
 
-
-    axios.get(`${BACKEND_URL}/artists`)
+    axios.get(`${BACKEND_URL}/artists/${id}`)
       .then(response => {
-        setArtists(response.data);
+        setArtist(response.data);
+      }).catch(error => {
+        console.error('There was an error!', error);
+      });
+
+
+    axios.get(`${BACKEND_URL}/songs/${id}`)
+      .then(response => {
+        setSongs(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
 
-  }, [isVerified]);
+  }, [id, isVerified]);
 
-  // NAVIGATION
   const navigate = useNavigate();
-
-  const handleArtistClick = (artistId) => {
-    navigate(`/artist/${artistId}`);
-  };
 
   const buttonStyle = {
     marginTop: "30px",
@@ -178,15 +183,27 @@ const HomePage = () => {
               <Row className="mb-5">
                 <Form.Control className="search-bar" placeholder="Search" />
               </Row>
+              <h1 className="home-page-text mb-5">
+                {artist ? artist.name : 'Loading...'}
+              </h1>
               <p className="home-page-text">
-                Upcoming Artists
+                NEW RELEASES
               </p>
 
-              <Stack direction="horizontal" className="artist-item-container p-3" gap={3}>
-                {artists.map(artist => (
-                  <ArtistItem key={artist.id} name={artist.name} onClick={() => handleArtistClick(artist.id)} />
+
+              <Stack direction="vertical" className="song-item-container p-3" gap={1}>
+                {songs.map((song, index) => (
+                  <Row key={index} className="song-item p-3">
+                    <Col xs={1}>
+                      {index + 1}
+                    </Col>
+                    <Col>
+                      {song.display_name}
+                    </Col>
+                  </Row>
                 ))}
               </Stack>
+              
             </Col>
             <Col xs={4} className="right-sidebar">
               <Row className="p-5">
@@ -280,4 +297,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ArtistPage;

@@ -16,6 +16,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PendingRequests from "./js/PendingRequests";
 import Banned from "./js/Banned"
+import ArtistPage from "./js/ArtistPage";
+import ArtistUpload from "./js/ArtistUpload";
 
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
           <Route path="/" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/artist/:id" element={<ArtistPage />} />
+          <Route path="/upload" element={<ArtistUpload />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/admin/manage-users" element={<AdminManageUsers />} />
           <Route path="/admin/pending-requests" element={<PendingRequests />} />

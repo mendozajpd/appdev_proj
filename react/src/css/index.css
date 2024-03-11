@@ -701,6 +701,11 @@ h1 span:hover {
 .user-sidebar {
   border-right: 1px solid #800000;
 }
+
+.sub-header {
+  color: #dd0000
+}
+
 /* HOMEPAGE */
 .home-page {
   background:
@@ -778,6 +783,23 @@ h1 span:hover {
   background: #dadada; 
   border-radius: 10px;
 
+}
+
+
+/* SONG ITEM */
+.song-item-container {
+  border-top: 1px solid #ffffff9f;
+  border-bottom: 1px solid #ffffff9f;
+}
+
+.song-item {
+  color: #fff;
+}
+
+.song-item:hover {
+  background: #f5f5f555;
+  transition: 0.2s;
+  cursor: pointer;
 }
 
 
