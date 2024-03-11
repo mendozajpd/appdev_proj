@@ -260,13 +260,13 @@ const HomePage = () => {
           <div className="position-relative flex-grow-1 d-flex">
             <div className="user-player-bar d-flex position-fixed bottom-0 w-100 flex-grow-1">
               <Col xs={2}>
-                <h1>Now Playing</h1>
+                {/* <h1>Now Playing</h1> */}
               </Col>
               <Col xs={6}>
                 <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
               </Col>
               <Col xs={2}>
-                <h1>Settings</h1>
+                {/* <h1>Settings</h1> */}
               </Col>
               <Col xs={2} className="invisible-text">
                 extra space (bad practice, but it works for now)

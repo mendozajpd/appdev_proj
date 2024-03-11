@@ -20,6 +20,7 @@ const ArtistPage = () => {
 
   // Player
   const [currentSong, setCurrentSong] = useState(null);
+  const [currentSongName, setCurrentSongName] = useState(null);
   const playerRef = useRef();
 
   // SONGS
@@ -193,7 +194,12 @@ const ArtistPage = () => {
 
               <Stack direction="vertical" className="song-item-container p-3" gap={1}>
                 {songs.map((song, index) => (
-                  <Row key={index} className="song-item p-3">
+                  <Row key={index} className="song-item p-3" onClick={() => {
+                    const songUrl = `http://127.0.0.1:8000/storage/songs/${song.hashed_name}`;
+                    setCurrentSong(songUrl);
+                    setCurrentSongName(song.display_name);
+                    console.log(songUrl);
+                  }}>
                     <Col xs={1}>
                       {index + 1}
                     </Col>
@@ -203,7 +209,7 @@ const ArtistPage = () => {
                   </Row>
                 ))}
               </Stack>
-              
+
             </Col>
             <Col xs={4} className="right-sidebar">
               <Row className="p-5">
@@ -276,14 +282,19 @@ const ArtistPage = () => {
 
           <div className="position-relative flex-grow-1 d-flex">
             <div className="user-player-bar d-flex position-fixed bottom-0 w-100 flex-grow-1">
-              <Col xs={2}>
-                <h1>Now Playing</h1>
+              <Col xs={2} className="d-flex align-items-center p-3 flex-direction-column">
+                {currentSongName && (
+                  <>
+                    <Image src="https://via.placeholder.com/50" rounded />
+                    <p className="home-page-text d-flex align-items-center p-2">{currentSongName}</p>
+                  </>
+                )}
               </Col>
               <Col xs={6}>
                 <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
               </Col>
               <Col xs={2}>
-                <h1>Settings</h1>
+                {/* <h1>Settings</h1> */}
               </Col>
               <Col xs={2} className="invisible-text">
                 extra space (bad practice, but it works for now)
