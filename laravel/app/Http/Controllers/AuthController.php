@@ -26,12 +26,18 @@ class AuthController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-
+    
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        return $this->respondWithToken($token);
+    
+        // Get the authenticated user
+        $user = auth()->user();
+    
+        // Check if the user is an admin or superadmin
+        $isAdmin = $user->role === 'admin' || $user->role === 'superadmin';
+    
+        return $this->respondWithToken($token, $isAdmin);
     }
 
     public function registerListener(Request $request)
@@ -42,13 +48,12 @@ class AuthController extends Controller
             'password' => [
                 'required',
                 Password::min(8)
-                    ->mixedCase() // allows both uppercase and lowercase
-                    ->letters() //accepts letter
-                    ->numbers() //accepts numbers
-                    // ->symbols() //accepts special character
-                    // ->uncompromised(), //check to be sure that there is no data leak
+                    ->mixedCase() 
+                    ->letters() 
+                    ->numbers() 
             ],
-            'confirmPassword' => 'required|same:password'
+            'confirmPassword' => 'required|same:password',
+            'profilePicture' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $user = new User();
@@ -56,6 +61,16 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->role = 'listener';
+
+        if ($request->hasFile('profilePicture')) {
+            $currentTime = time();
+            $hashedTime = hash('sha256', $currentTime);
+            $extension = $request->file('profilePicture')->getClientOriginalExtension();
+            $request->file('profilePicture')->storeAs('profile_pics', $hashedTime . '.' . $extension, 'public');
+            $profilePicName = $hashedTime . '.' . $extension;
+            $user->profile_pic_name = $profilePicName;
+        }
+
         $user->save();
 
         $verificationUrl = URL::temporarySignedRoute(
@@ -76,11 +91,9 @@ class AuthController extends Controller
             'password' => [
                 'required',
                 Password::min(8)
-                    ->mixedCase() // allows both uppercase and lowercase
-                    ->letters() //accepts letter
-                    ->numbers() //accepts numbers
-                    // ->symbols() //accepts special character
-                    // ->uncompromised(), //check to be sure that there is no data leak
+                    ->mixedCase()
+                    ->letters() 
+                    ->numbers()
             ],
             'confirmPassword' => 'required|same:password'
         ]);
@@ -127,7 +140,13 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+    
+        if (!$user) {
+            $user = ['name' => 'Guest'];
+        }
+    
+        return response()->json($user);
     }
 
     /**
@@ -159,12 +178,13 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken($token, $isAdmin)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'is_admin' => $isAdmin
         ]);
     }
 }

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         DB::table('users')->insert([
             'name' => 'SuperAdmin',
-            'email' => 'superadmin@mediaharbor.com',
-            'password' => Hash::make('Mini5643'),
+            'email' => 'superadmin@mixify.com',
+            'password' => Hash::make('superadmin'),
             'role' => 'superadmin',
             'email_verified_at' => now(),
         ]);

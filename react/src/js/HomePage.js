@@ -26,11 +26,6 @@ const HomePage = () => {
       fetchUserDetails();
     }
 
-    if (isVerified) {
-      handleClose();
-    } else {
-      handleShow();
-    }
 
     // CHECK ROLE IF IT IS SUPERADMIN OR ADMIN
 
@@ -96,6 +91,10 @@ const HomePage = () => {
       const userData = response.data; // Assuming user details are directly in response.data
       console.log(userData);
       setIsVerified(userData.email_verified_at !== null);
+      if(userData.email_verified_at === null) { 
+        handleShow();
+      }
+
       // Check if the user has admin or superadmin role
       const isAdmin = userData.role.includes('admin');
       const isSuperAdmin = userData.role.includes('superadmin');

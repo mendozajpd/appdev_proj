@@ -66,7 +66,7 @@ export class DataTbl extends Component {
 
 
         this.$el.on('click', 'button.alert-button', function () {
-            // alert('Hello, World');
+            alert('Hello, World');
             console.log('Hello, World');
         });
 
