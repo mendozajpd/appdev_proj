@@ -1,25 +1,22 @@
 import React, { useState } from 'react';
 import Sidebar from '../sidebar';
+// import './profilePictureStyles.css'; // Import the CSS file
 
-// import '../css/admindashboard.css';
+
 
 function ProfileEdit({ onSaveProfile }) {
     const [formState, setFormState] = useState({
         FirstName: '',
         Surname: '',
         MobileNumber: '',
-        // addressLine1: '',
-        // addressLine2: '',
-
-        // state: '',
-        // area: '',
         EmailID: '',
         Education: '',
         EducationalAttainment: '',
         Country: '',
         Region: '',
         Experience: '',
-        AditionalDetails: ''
+        AditionalDetails: '',
+        ProfilePicture: null // State to store the selected profile picture
     });
 
     // Handler for input changes
@@ -31,9 +28,19 @@ function ProfileEdit({ onSaveProfile }) {
         }));
     };
 
+    // Handler for profile picture upload
+    const handleProfilePictureChange = (event) => {
+        const file = event.target.files[0];
+        setFormState(prevState => ({
+            ...prevState,
+            ProfilePicture: file
+        }));
+    };
+
     const handleSave = () => {
         onSaveProfile(formState);
     };
+
     const renderInputFields = () => {
         return Object.keys(formState).map(key => (
             <div key={key} className="col-md-6">
@@ -48,15 +55,22 @@ function ProfileEdit({ onSaveProfile }) {
             <Sidebar />
             <div className="name-text"> Edit Profile
                 {/* <div className="font-weight-bold">Edogaru</div> */}
-
             </div>
             <div className="container rounded bg-white mt-5 mb-5">
                 <div className="row">
                     <div className="col-md-3 border-right">
                         <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                            <img className="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg" alt="Profile" />
-                            <span className="font-weight-bold">Jean Paul Mendoza</span>
-                            <span className="text-black-50">jeypi@gmail.com</span>
+                            {/* Display the selected profile picture */}
+                            {formState.ProfilePicture ? (
+                                <img className="rounded-circle mt-5" width="290px" src={URL.createObjectURL(formState.ProfilePicture)} alt="Profile" />
+                            ) : (
+                                <div>
+                                    <input type="file" accept="image/*" onChange={handleProfilePictureChange} />
+                                    <label htmlFor="fileInput" className="form-label">Choose a profile picture</label>
+                                </div>
+                            )}
+                            {/* <span className="font-weight-bolder">JEAN PAUL MENDOZA</span>
+                            <span className="text-black-50">jeypi@gmail.com</span> */}
                             <span> </span>
                         </div>
                     </div>
@@ -64,9 +78,7 @@ function ProfileEdit({ onSaveProfile }) {
                         <div className="p-3 py-5">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <h4 className="text-right">Profile Settings</h4>
-
                             </div>
-                            {/* <h5 className="text-right">Profile Settings</h5> */}
                             <div className="row mt-2">
                                 {renderInputFields()}
                             </div>

@@ -30,7 +30,6 @@ function AdminProfile({ profileData }) {
                                 <h4 className="text-right">Profile Settings</h4>
                             </div>
                             <div className="row mt-2">
-                                {/* Assuming you want to display profile data here */}
                                 <p>Education Background: {profileData.Education}</p>
                                 <p>Educational Attainment: {profileData.EducationalAttainment}</p>
                                 <p>Country: {profileData.Country}</p>
@@ -40,11 +39,9 @@ function AdminProfile({ profileData }) {
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
     );
 }
 

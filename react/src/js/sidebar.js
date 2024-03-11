@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Nav } from "react-bootstrap";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Nav, NavDropdown } from "react-bootstrap";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import '../css/index.css'
 import {
     CDBSidebar,
@@ -10,17 +10,17 @@ import {
     CDBSidebarHeader
 } from 'cdbreact';
 import { Image } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import axios from "axios";
 import BACKEND_URL from "../config";
 
-
-
 const Sidebar = props => {
+    const location = useLocation();
+    const navigate = useNavigate();
+
     useEffect(() => {
         const token = localStorage.getItem("jwt_token");
-        if (!token) {
+        if (!token && location.pathname !== '/login') {
             navigate('/login');
         } else {
             fetchUserDetails();
@@ -29,7 +29,6 @@ const Sidebar = props => {
 
     const [isVerified, setIsVerified] = useState(false);
     const [logoutDisabled, setLogoutDisabled] = useState(false);
-    const navigate = useNavigate();
 
     const fetchUserDetails = async () => {
         try {
@@ -39,10 +38,9 @@ const Sidebar = props => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            const userData = response.data; // Assuming user details are directly in response.data
+            const userData = response.data;
             console.log(userData);
             setIsVerified(userData.email_verified_at !== null);
-            // Check if the user has admin or superadmin role
         } catch (error) {
             console.error("Failed to fetch user:", error);
         }
@@ -53,7 +51,7 @@ const Sidebar = props => {
         setLogoutDisabled(true);
         try {
             const token = localStorage.getItem("jwt_token");
-            const response = await axios.post(
+            await axios.post(
                 `${BACKEND_URL}/auth/logout`,
                 null,
                 {
@@ -65,7 +63,7 @@ const Sidebar = props => {
             localStorage.removeItem('jwt_token');
             navigate('/login');
         } catch (error) {
-            console.error("Login failed:", error);
+            console.error("Logout failed:", error);
             setLogoutDisabled(false);
         }
     };
@@ -74,25 +72,25 @@ const Sidebar = props => {
         <>
             <CDBSidebar textColor="#fff" backgroundColor="#282626" className="sidebar position-fixed">
                 <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-                    <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
+                    <NavLink to="/" className="text-decoration-none" style={{ color: 'inherit' }}>
                         SUPER ADMIN
-                    </a>
+                    </NavLink>
                 </CDBSidebarHeader>
                 <Col className="flex-grow-1 d-flex flex-column vh-100" fluid={true}>
                     <Row className="align-items-start">
                         <CDBSidebarContent className="sidebar-content">
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
-
                                     <NavLink exact to="/admin" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="home">Dashboard</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="/adminprofile" activeClassName="activeClicked">
-                                        <CDBSidebarMenuItem icon="user">Admin Profile</CDBSidebarMenuItem>
-                                    </NavLink>
-                                    <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
-                                        <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>
-                                    </NavLink>
+
+                                    <NavDropdown title={<span className="nav-dropdown-title"><i className="fa fa-user"></i>Profiles</span>} id="basic-nav-dropdown">
+                                        <NavDropdown.Item as={NavLink} exact to="/adminprofile" activeClassName="activeClicked">Admin Profile</NavDropdown.Item>
+                                        <NavDropdown.Item as={NavLink} exact to="/profile-management" activeClassName="activeClicked">Profile Management</NavDropdown.Item>
+                                        <NavDropdown.Item as={NavLink} exact to="/admin/manage-users" activeClassName="activeClicked">Manage Users</NavDropdown.Item>
+                                    </NavDropdown>
+
                                     <NavLink exact to="/tickets" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="table">Subscription Settings</CDBSidebarMenuItem>
                                     </NavLink>
