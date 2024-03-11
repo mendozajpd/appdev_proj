@@ -72,20 +72,7 @@ const Sidebar = props => {
 
     return (
         <>
-            <CDBSidebar textColor="#fff" backgroundColor="#333" className="sidebar">
-                <Image
-                    src="/register/logo-white.png"
-                    roundedCircle
-                    className="Register-apple"
-                    style={{
-                        width: "50px",
-                        height: "50px",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        marginTop: "10px",
-                    }}
-                />
-
+            <CDBSidebar textColor="#fff" backgroundColor="#282626" className="sidebar position-fixed">
                 <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
                     <a href="/" className="text-decoration-none" style={{ color: 'inherit' }}>
                         SUPER ADMIN
@@ -96,8 +83,12 @@ const Sidebar = props => {
                         <CDBSidebarContent className="sidebar-content">
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
+
                                     <NavLink exact to="/admin" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="home">Dashboard</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink exact to="/adminprofile" activeClassName="activeClicked">
+                                        <CDBSidebarMenuItem icon="user">Admin Profile</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>

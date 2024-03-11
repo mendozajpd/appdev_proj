@@ -1,0 +1,106 @@
+.chart-container {
+    padding-left: 100px;
+    margin-top: 10px;
+    /* background-color: #eeeded; */
+}
+
+.form-select-container {
+    display: flex;
+    align-items: center
+}
+
+.form-select {
+    /* margin-left: 50px; */
+    padding: 8px 12px;
+    font-size: 16px;
+}
+
+.chart-wrapper {
+    padding-left: 50px;
+    padding: 20px;
+}
+
+.dough {
+    margin-right: 10px
+}
+
+/* Admin Profile */
+
+
+/* AdminProfile.css */
+.admin-profile {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.admin-profile p {
+    margin: 0 0 10px 0;
+}
+
+.admin-profile-loading {
+    text-align: center;
+    font-size: 1.2em;
+    color: #6c757d;
+}
+
+/* AdminProfile.css */
+
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #ad0000
+}
+
+.profile-button {
+    background: rgb(83, 6, 14);
+    box-shadow: none;
+    border: none
+}
+
+.profile-button:hover {
+    background: #ff0000
+}
+
+.profile-button:focus {
+    background: #ff0000;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 11px
+}
+
+.add-experience:hover {
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #c86870
+}
+
+.name-text {
+    font-size: 50px;
+    font-weight: bold;
+    color: white
+}
+
+.text-right h5 {}
+
+/* Add this to your CSS file */
+.scrollable-container {
+    max-height: 100vh;
+    /* Adjust this value based on your needs */
+    overflow-y: auto;
+    /* Enables vertical scrolling */
+}

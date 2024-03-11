@@ -1,42 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Navbar, Button, Container, Row, Col } from "react-bootstrap";
-import axios from "axios";
-import { Chart } from 'react-chartjs-2';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import { Chart, Doughnut, Line } from 'react-chartjs-2'; // Import Doughnut and Line
 import 'chart.js/auto';
-import AdminManageUsers from "./AdminManageUsers";
 import Sidebar from './sidebar';
 import { Breadcrumbs } from "./components/Breadcrumbs";
 import BACKEND_URL from "../config";
-
+import '../css/admindashboard.css';
 
 const HomePage = () => {
-  const [logoutDisabled, setLogoutDisabled] = useState(false);
   const [timeInterval, setTimeInterval] = useState('months');
-
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLogoutDisabled(true);
-    try {
-      const token = localStorage.getItem("jwt_token");
-      await axios.post(
-        `${BACKEND_URL}/api/auth/logout`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      localStorage.removeItem('jwt_token');
-      navigate('/login');
-    } catch (error) {
-      console.error("Logout failed:", error);
-      setLogoutDisabled(false);
-    }
-  };
 
   const handleIntervalChange = (event) => {
     setTimeInterval(event.target.value);
@@ -73,18 +47,171 @@ const HomePage = () => {
   const linechartOptions = {
     maintainAspectRatio: false,
     responsive: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'MAEDIA HARBOR MONITORING GRAPH'
+      },
+    },
     scales: {
       y: {
         grid: {
-          color: 'white'
+          color: 'black'
         }
       },
       x: {
         grid: {
-          color: 'white'
+          color: 'black'
         }
       }
     }
+  };
+
+  const doughnutData = {
+    labels: ['Listeners', 'Admin', 'Artist'],
+    datasets: [{
+      data: [300, 50, 100],
+      backgroundColor: ['#CD1818', '#1B1A55', '#EBF400'],
+      hoverBackgroundColor: ['#7D0A0A', '#070F2B', '#FFCE56']
+    }]
+  };
+
+  const data = [];
+  const data2 = [];
+  let prev = 100;
+  let prev2 = 80;
+  for (let i = 0; i < 1000; i++) {
+    prev += 5 - Math.random() * 10;
+    data.push({ x: i, y: prev });
+    prev2 += 5 - Math.random() * 10;
+    data2.push({ x: i, y: prev2 });
+  }
+
+  const totalDuration = 10000;
+  const delayBetweenPoints = totalDuration / data.length;
+  const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+  const animation = {
+    x: {
+      type: 'number',
+      easing: 'linear',
+      duration: delayBetweenPoints,
+      from: NaN,
+      delay(ctx) {
+        if (ctx.type !== 'data' || ctx.xStarted) {
+          return 0;
+        }
+        ctx.xStarted = true;
+        return ctx.index * delayBetweenPoints;
+      }
+    },
+    y: {
+      type: 'number',
+      easing: 'linear',
+      duration: delayBetweenPoints,
+      from: previousY,
+      delay(ctx) {
+        if (ctx.type !== 'data' || ctx.yStarted) {
+          return 0;
+        }
+        ctx.yStarted = true;
+        return ctx.index * delayBetweenPoints;
+      }
+    }
+  };
+
+  const redColor = '#FF5733';
+  const blueColor = '#3377FF';
+
+  const lineConfig = {
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'Data 1',
+        borderColor: redColor,
+        backgroundColor: 'rgba(255, 0, 0, 0.3)', // Background color for Data 1
+        borderWidth: 1,
+        radius: 0,
+        data: data.map(({ x, y }) => ({ x, y: y || null })),
+        pointStyle: data.map(({ y }) => y === null ? 'circle' : undefined),
+        pointRadius: data.map(({ y }) => y === null ? 3 : undefined),
+      },
+      {
+        label: 'Data 2',
+        borderColor: blueColor,
+        backgroundColor: 'rgba(0, 0, 255, 0.3)', // Background color for Data 2
+        borderWidth: 1,
+        radius: 0,
+        data: data2.map(({ x, y }) => ({ x, y: y || null })),
+        pointStyle: data2.map(({ y }) => y === null ? 'circle' : undefined),
+        pointRadius: data2.map(({ y }) => y === null ? 3 : undefined),
+      }]
+    },
+    options: {
+      animation,
+      interaction: {
+        intersect: false
+      },
+      plugins: {
+        legend: false,
+        title: {
+          display: true,
+          text: 'ARTIST UPLOAD AND LISTENERS DOWNLOAD'
+        },
+        background: {
+          color: 'black'
+        }
+      },
+      scales: {
+        x: {
+          type: 'linear'
+        }
+      }
+    }
+  };
+
+  const radarConfig = {
+    type: 'radar',
+    data: data,
+    options: {
+      elements: {
+        line: {
+          borderWidth: 3
+        }
+      }
+    },
+  };
+
+  const data1 = {
+    labels: [
+      'Eating',
+      'Drinking',
+      'Sleeping',
+      'Designing',
+      'Coding',
+      'Cycling',
+      'Running'
+    ],
+    datasets: [{
+      label: 'My First Dataset',
+      data: [65, 59, 90, 81, 56, 55, 40],
+      fill: true,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgb(255, 99, 132)',
+      pointBackgroundColor: 'rgb(255, 99, 132)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgb(255, 99, 132)'
+    }, {
+      label: 'My Second Dataset',
+      data: [28, 48, 40, 19, 96, 27, 100],
+      fill: true,
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgb(54, 162, 235)',
+      pointBackgroundColor: 'rgb(54, 162, 235)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgb(54, 162, 235)'
+    }]
   };
 
   // End of chart data and options
@@ -92,96 +219,51 @@ const HomePage = () => {
   return (
     <>
       <Sidebar />
-      <Container className="manage-users align-self-start">
-        <Row xs={1}>
-          <Col>
-            <Breadcrumbs />
-            <Row xs={1} className="mb-3 align-self-start">
-              <Col xs={6}>
-                <div className="card-body bg-light">
-                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
-                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
-                      <option value="months">Months</option>
-                      <option value="years">Years</option>
-                    </select></h3>
-
-                  <div className="chart-container d-flex justify-content-between align-items-center">
-                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
-                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
-                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
-                    </strong><br /><br />
-                      Total Downloads: <strong className="text-warning">
-                        {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
-                      </strong></p>
-                  </div>
-                </div>
+      <Row xs={1}>
+        <Col>
+          {/* <Breadcrumbs /> */}
+          <div className="chart-container">
+            <select className="form-select" value={timeInterval} onChange={handleIntervalChange}>
+              <option value="months">Months</option>
+              <option value="years">Years</option>
+            </select>
+            <Row>
+              <Col>
+                <div style={{ padding: '10px' }}></div>
+                <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
               </Col>
-              <Col xs={6}>
-                <div className="card-body bg-light">
-                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
-                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
-                      <option value="months">Months</option>
-                      <option value="years">Years</option>
-                    </select></h3>
-
-                  <div className="chart-container d-flex justify-content-between align-items-center">
-                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
-                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
-                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
-                    </strong><br /><br />
-                      Total Downloads: <strong className="text-warning">
-                        {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
-                      </strong></p>
-                  </div>
+            </Row>
+            <Row>
+              <Col>
+                <div style={{ padding: '10px' }}>
+                  <Line data={lineConfig.data} options={lineConfig.options} />
                 </div>
               </Col>
             </Row>
-            <Row xs={1}>
-              <Col xs={6}>
-                {/* <div className={`card col-md-11 `}>
-                  <div className="card-body bg-light">
-                    <h3 className="card-title text-danger fw-bold">Listeners</h3>
-                    <div className="chart-container d-flex justify-content-between align-items-center">
-                      <Chart type="pie" data={freeChart} options={piechartOptions} height={300} width={500} />
-                      <p className="text-white fw-bold">Most Number of Users: <strong className="text-danger">{percentages[freeHighestIndex]}%</strong> of Users are {freeHighestLabel}
-                        <br /><br />Total Listeners: <strong className="text-danger">{formatTotalListeners(totalUsers)}</strong> </p>
-                    </div>
-                  </div>
-                </div> */}
-              </Col>
-              <Col xs={6}>
-                <div className="card-body bg-light">
-                  {/* <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
-                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
-                      <option value="months">Months</option>
-                      <option value="years">Years</option>
-                    </select></h3> */}
+            <Row>
 
-                  {/* <div className="chart-container d-flex justify-content-between align-items-center">
-                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
-                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
-                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
-                    </strong><br /><br />
-                      Total Downloads: <strong className="text-warning">
-                        {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)}
-                      </strong></p> */}
-                  {/* </div> */}
-                </div>
+              <Col>
+                <Line data={data1} />
               </Col>
             </Row>
-          </Col>
-        </Row>
 
-{/* 
-        <Breadcrumbs />
+          </div>
+
+        </Col>
+      </Row >
+      <div className="dough">
         <Row>
-          <Col>
+          <div style={{ marginRight: '20px' }}>
+            <Doughnut data={doughnutData} options={{}} height={300} width={500} />
+          </div>
+        </Row >
 
-          </Col>
-        </Row > */}
-      </Container >
+      </div >
+
+      {/* </Container > */}
     </>
   );
 };
 
 export default HomePage;
+

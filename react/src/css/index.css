@@ -19,13 +19,18 @@ code {
 
 body {
   margin: 0;
+  padding: 0;
   font-family: 'Archievo', sans-serif;
-  background: linear-gradient(to bottom, rgba(105, 18, 18, 1) 0%, rgba(0, 0, 0, 0.3) 70%) no-repeat center fixed,
-    linear-gradient(to bottom, rgba(105, 18, 18, 0.3) 0%, rgba(0, 0, 0, 0.8) 70%) no-repeat center fixed,
-    url("../../public/register/bg.jpeg") no-repeat center fixed;
-  background-size: cover, cover, cover;
-  margin: 0;
+  background: linear-gradient(to bottom, rgba(105, 18, 18, 1) 0%, rgba(0, 0, 0, 0.3) 70%),
+    linear-gradient(to bottom, rgba(105, 18, 18, 0.3) 0%, rgba(0, 0, 0, 0.8) 70%),
+    url("../../public/register/bg.jpeg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  overflow: hidden;
 }
+
 
 .tooltip {
   position: absolute;
@@ -440,15 +445,6 @@ h1 span:hover {
 }
 
 
-/* NEW SIDEBAR FOR ADMINMANAGEUSERS */
-/* Sidebar styles */
-/* admin.css */
-
-/* Sidebar styles */
-#sidebar a:hover {
-  font-weight: 500;
-}
-
 /* Table styles */
 .table-danger th {
   background-color: red;
@@ -472,17 +468,11 @@ h1 span:hover {
 
 /* MANAGE USERS */
 .manage-users {
-  display: 'flex';
-  flex-direction: column;
-  align-items: start;
-  top: 0;
+  overflow: auto;
+  /* height: 100vh; */
 }
 
-.manage-users h1 {
-  font-size: 50px;
-  transition: color 0.3s;
-  text-decoration: none;
-}
+
 
 
 /* Styling for text-white */
@@ -528,13 +518,6 @@ h1 span:hover {
   margin-bottom: 10px;
 }
 
-/* Styling for NavLink */
-/* .manage-users .NavLink {
-  font-weight: bold;
-  font-size: 30px;
-  transition: color 0.3s;
-  text-decoration: none;
-} */
 
 /* Styling for Table */
 .manage-users .table-danger th {
@@ -692,5 +675,62 @@ h1 span:hover {
 }
 
 .breadcrumb-item+.breadcrumb-item::before {
-color: white !important;
+  color: white !important;
 }
+
+
+
+
+
+.downloads-info {
+  background-color: #282626;
+  color: white;
+  font-weight: bold;
+}
+
+.downloads-info strong {
+  /* background-color: ; */
+  color: #FFCE56;
+  /* Adjust color as needed */
+}
+
+
+
+/* HomePage.css */
+
+
+.card-title {
+  color: #dc3545;
+  /* text-danger color */
+  font-weight: bold;
+}
+
+.card-title.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+
+/* sidebar */
+.sidebar {
+  width: 250px;
+  /* Set the width of the sidebar */
+  height: 100vh;
+  /* Make the sidebar cover the full height of the viewport */
+  top: 0;
+  /* Position the sidebar at the top of the viewport */
+  left: 0;
+  /* Position the sidebar at the left side of the viewport */
+  z-index: 1000;
+  /* Ensure the sidebar is above other content */
+}
+
+.sidebar-content {
+  overflow-y: auto;
+  /* Allow vertical scrolling within the sidebar */
+}
+
+.background {
+  background-color: red;
+}
+
