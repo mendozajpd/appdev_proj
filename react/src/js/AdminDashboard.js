@@ -5,7 +5,7 @@ import axios from "axios";
 import { Chart } from 'react-chartjs-2';
 import 'chart.js/auto';
 import AdminManageUsers from "./AdminManageUsers";
-import Sidebar from './sidebar';
+import Sidebar from './AdminSidebar';
 import { Breadcrumbs } from "./components/Breadcrumbs";
 import BACKEND_URL from "../config";
 
@@ -91,54 +91,56 @@ const HomePage = () => {
 
   return (
     <>
-      <Sidebar />
-      <Container className="manage-users align-self-start">
-        <Row xs={1}>
-          <Col>
-            <Breadcrumbs />
-            <Row xs={1} className="mb-3 align-self-start">
-              <Col xs={6}>
-                <div className="card-body bg-light">
-                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
-                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
-                      <option value="months">Months</option>
-                      <option value="years">Years</option>
-                    </select></h3>
+      <div className="d-flex vh-100 justify-content-center align-items-center">
 
-                  <div className="chart-container d-flex justify-content-between align-items-center">
-                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
-                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
-                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
-                    </strong><br /><br />
-                      Total Downloads: <strong className="text-warning">
-                        {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
-                      </strong></p>
-                  </div>
-                </div>
-              </Col>
-              <Col xs={6}>
-                <div className="card-body bg-light">
-                  <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
-                    <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
-                      <option value="months">Months</option>
-                      <option value="years">Years</option>
-                    </select></h3>
+        <Sidebar />
+        <Container className="manage-users align-self-start">
+          <Row xs={1}>
+            <Col>
+              <Breadcrumbs />
+              <Row xs={1} className="mb-3 align-self-start">
+                <Col xs={6}>
+                  <div className="card-body bg-light">
+                    <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
+                      <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
+                        <option value="months">Months</option>
+                        <option value="years">Years</option>
+                      </select></h3>
 
-                  <div className="chart-container d-flex justify-content-between align-items-center">
-                    <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
-                    <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
-                      {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
-                    </strong><br /><br />
-                      Total Downloads: <strong className="text-warning">
-                        {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
-                      </strong></p>
+                    <div className="chart-container d-flex justify-content-between align-items-center">
+                      <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
+                      <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
+                        {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
+                      </strong><br /><br />
+                        Total Downloads: <strong className="text-warning">
+                          {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
+                        </strong></p>
+                    </div>
                   </div>
-                </div>
-              </Col>
-            </Row>
-            <Row xs={1}>
-              <Col xs={6}>
-                {/* <div className={`card col-md-11 `}>
+                </Col>
+                <Col xs={6}>
+                  <div className="card-body bg-light">
+                    <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
+                      <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
+                        <option value="months">Months</option>
+                        <option value="years">Years</option>
+                      </select></h3>
+
+                    <div className="chart-container d-flex justify-content-between align-items-center">
+                      <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
+                      <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
+                        {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
+                      </strong><br /><br />
+                        Total Downloads: <strong className="text-warning">
+                          {/* {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)} */}
+                        </strong></p>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <Row xs={1}>
+                <Col xs={6}>
+                  {/* <div className={`card col-md-11 `}>
                   <div className="card-body bg-light">
                     <h3 className="card-title text-danger fw-bold">Listeners</h3>
                     <div className="chart-container d-flex justify-content-between align-items-center">
@@ -148,16 +150,16 @@ const HomePage = () => {
                     </div>
                   </div>
                 </div> */}
-              </Col>
-              <Col xs={6}>
-                <div className="card-body bg-light">
-                  {/* <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
+                </Col>
+                <Col xs={6}>
+                  <div className="card-body bg-light">
+                    {/* <h3 className="card-title text-danger fw-bold d-flex align-items-center">App Downloads
                     <select className="form-select ms-auto" value={timeInterval} onChange={handleIntervalChange} style={{ fontSize: 'small', width: '100px' }}>
                       <option value="months">Months</option>
                       <option value="years">Years</option>
                     </select></h3> */}
 
-                  {/* <div className="chart-container d-flex justify-content-between align-items-center">
+                    {/* <div className="chart-container d-flex justify-content-between align-items-center">
                     <Chart type="line" data={downloadsChart} options={linechartOptions} height={300} width={500} />
                     <p className="text-white fw-bold">    Highest Downloads: <strong className="text-warning">
                       {timeInterval === 'months' ? downloadsHighestLabelMonthly : downloadsHighestLabelYearly}
@@ -165,21 +167,23 @@ const HomePage = () => {
                       Total Downloads: <strong className="text-warning">
                         {timeInterval === 'months' ? formatTotalListeners(totalDownloadsMonthly) : formatTotalListeners(totalDownloadsYearly)}
                       </strong></p> */}
-                  {/* </div> */}
-                </div>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+                    {/* </div> */}
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
 
-{/* 
+          {/* 
         <Breadcrumbs />
         <Row>
           <Col>
 
           </Col>
         </Row > */}
-      </Container >
+        </Container >
+      </div>
+
     </>
   );
 };

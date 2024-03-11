@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
-import Sidebar from './sidebar';
+import Sidebar from './AdminSidebar';
 import '../css/index.css'; // Import CSS file
 
 const Banned = () => {
@@ -38,66 +38,68 @@ const Banned = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container className='manage-users' fluid>
-                <Row>
-                    <Col>
-                        <h1 className="text-white heading">Banned Users</h1>
+            <div className='vh-100 d-flex justify-content-center align-items-center'>
+                <Sidebar />
+                <Container className='manage-users' fluid>
+                    <Row>
+                        <Col>
+                            <h1 className="text-white heading">Banned Users</h1>
 
-                        {/* Search bar */}
-                        <Form>
-                            <Form.Group controlId="search">
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Search by username, email, or reason"
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
-                                />
-                            </Form.Group>
-                        </Form>
+                            {/* Search bar */}
+                            <Form>
+                                <Form.Group controlId="search">
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Search by username, email, or reason"
+                                        value={searchQuery}
+                                        onChange={handleSearchChange}
+                                    />
+                                </Form.Group>
+                            </Form>
 
-                        <div className="col">
-                            <NavLink to="/admin/manage-users" className="col-link">All Users</NavLink>
-                            <NavLink to="/admin/pending-requests" className="col-link">Pending Requests</NavLink>
-                            <NavLink to="/admin/banned" className="col-link">Banned Lists</NavLink>
-                        </div>
-                        <Table striped bordered hover variant="dark">
-                            <thead>
-                                <tr className='table-danger'>
-                                    <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Reason</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {currentBannedUsers.map(user => (
-                                    <tr key={user.id}>
-                                        <td>{user.id}</td>
-                                        <td>{user.username}</td>
-                                        <td>{user.email}</td>
-                                        <td>{user.reason}</td>
+                            <div className="col">
+                                <NavLink to="/admin/manage-users" className="col-link">All Users</NavLink>
+                                <NavLink to="/admin/pending-requests" className="col-link">Pending Requests</NavLink>
+                                <NavLink to="/admin/banned" className="col-link">Banned Lists</NavLink>
+                            </div>
+                            <Table striped bordered hover variant="dark">
+                                <thead>
+                                    <tr className='table-danger'>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Reason</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </Table>
+                                </thead>
+                                <tbody>
+                                    {currentBannedUsers.map(user => (
+                                        <tr key={user.id}>
+                                            <td>{user.id}</td>
+                                            <td>{user.username}</td>
+                                            <td>{user.email}</td>
+                                            <td>{user.reason}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
 
-                        {/* Pagination */}
-                        <nav>
-                            <ul className="pagination">
-                                {Array.from({ length: Math.ceil(filteredBannedUsers.length / usersPerPage) }, (_, i) => (
-                                    <li key={i} className="page-item">
-                                        <button onClick={() => paginate(i + 1)} className="page-link">
-                                            {i + 1}
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </nav>
+                            {/* Pagination */}
+                            <nav>
+                                <ul className="pagination">
+                                    {Array.from({ length: Math.ceil(filteredBannedUsers.length / usersPerPage) }, (_, i) => (
+                                        <li key={i} className="page-item">
+                                            <button onClick={() => paginate(i + 1)} className="page-link">
+                                                {i + 1}
+                                            </button>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </nav>
 
-                    </Col>
-                </Row>
-            </Container>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         </>
     );
 };

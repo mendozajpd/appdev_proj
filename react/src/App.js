@@ -21,7 +21,8 @@ import Banned from "./js/Banned"
 function App() {
   return (
     <Router>
-      <div className="App">
+      {/* <div className="App"> */}
+      <div className="no-overflow">
         <ToastContainer />
         <Routes>
           <Route path="/" element={<Register />} />
@@ -34,6 +35,7 @@ function App() {
           <Route path="*" element={<EmptyPage />} />
         </Routes>
       </div>
+      {/* </div> */}
     </Router >
   );
 }

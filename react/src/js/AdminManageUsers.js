@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 import { UsersTable } from './tables/UsersTable';
 import { Breadcrumbs } from "./components/Breadcrumbs";
 import axios from "axios";
-import Sidebar from './sidebar';
-import '../css/index.css'; 
+import Sidebar from './AdminSidebar';
+import '../css/index.css';
 import BACKEND_URL from "../config";
 
 
@@ -32,46 +32,49 @@ const AdminManageUsers = () => {
 
     return (
         <>
-            <Sidebar />
-            <Container className='manage-users align-self-start'>
-                <Row xs={1}>
-                    <Col>
-                        <Breadcrumbs/>
+            <div className="d-flex vh-100 justify-content-center align-items-center">
 
-                        <h1 className="text-white heading">User Management</h1>
-                        <div className="row">
-                            <div className="col">
-                                <div className="container-md p-3 my-2 bg-danger text card">
-                                    <h1 className="sub-heading">Admin</h1>
-                                    <p className="text-dark">3</p>
+                <Sidebar />
+                <Container className='manage-users align-self-start'>
+                    <Row xs={1}>
+                        <Col>
+                            <Breadcrumbs />
+
+                            <h1 className="text-white heading">User Management</h1>
+                            <div className="row">
+                                <div className="col">
+                                    <div className="container-md p-3 my-2 bg-danger text card">
+                                        <h1 className="sub-heading">Admin</h1>
+                                        <p className="text-dark">3</p>
+                                    </div>
+                                </div>
+
+                                <div className="col">
+                                    <div className="container-md p-3 my-2 bg-danger text card">
+                                        <h1 className="sub-heading">Listeners</h1>
+                                        <p className="text-dark">9,800,567</p>
+                                    </div>
+                                </div>
+
+                                <div className="col">
+                                    <div className="container-md p-3 my-2 bg-danger text card">
+                                        <h1 className="sub-heading">Artists</h1>
+                                        <p className="text-dark">9,800,567</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="col">
-                                <div className="container-md p-3 my-2 bg-danger text card">
-                                    <h1 className="sub-heading">Listeners</h1>
-                                    <p className="text-dark">9,800,567</p>
-                                </div>
-                            </div>
 
                             <div className="col">
-                                <div className="container-md p-3 my-2 bg-danger text card">
-                                    <h1 className="sub-heading">Artists</h1>
-                                    <p className="text-dark">9,800,567</p>
-                                </div>
+                                <NavLink to="/admin/manage-users" className="col-link">All Users</NavLink>
+                                <NavLink to="/admin/pending-requests" className="col-link">Pending Requests</NavLink>
+                                <NavLink to="/admin/banned" className="col-link">Banned Lists</NavLink>
                             </div>
-                        </div>
-
-
-                        <div className="col">
-                            <NavLink to="/admin/manage-users" className="col-link">All Users</NavLink>
-                            <NavLink to="/admin/pending-requests" className="col-link">Pending Requests</NavLink>
-                            <NavLink to="/admin/banned" className="col-link">Banned Lists</NavLink>
-                        </div>
-                        <UsersTable data={users} />
-                    </Col>
-                </Row>
-            </Container>
+                            <UsersTable data={users} />
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         </>
     );
 };

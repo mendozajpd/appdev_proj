@@ -9,6 +9,6 @@ root.render(
   // Remove strict mode in Admin mode to avoid double invoke
   <React.StrictMode>
     <App />
-  // </React.StrictMode>
+  </React.StrictMode>
 );
 

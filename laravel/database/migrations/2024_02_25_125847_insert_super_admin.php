@@ -13,7 +13,7 @@ return new class extends Migration
     {
         DB::table('users')->insert([
             'name' => 'SuperAdmin',
-            'email' => 'superadmin@mixify.com',
+            'email' => 'superadmin@mediaharbor.com',
             'password' => Hash::make('superadmin'),
             'role' => 'superadmin',
             'email_verified_at' => now(),

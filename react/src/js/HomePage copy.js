@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Image } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import ArtistItem from "./items/ArtistItem";
 
 
 const HomePage = () => {
@@ -15,8 +14,6 @@ const HomePage = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
   const [logoutDisabled, setLogoutDisabled] = useState(false);
-
-  const [artists, setArtists] = useState([]);
 
   // Player
   const [currentSong, setCurrentSong] = useState(null);
@@ -36,13 +33,7 @@ const HomePage = () => {
     }
 
 
-    axios.get(`${BACKEND_URL}/artists`)
-      .then(response => {
-        setArtists(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+    // CHECK ROLE IF IT IS SUPERADMIN OR ADMIN
 
   }, [isVerified]);
 
@@ -73,7 +64,27 @@ const HomePage = () => {
     e.target.style.borderColor = "#8d4b4b";
   };
 
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLogoutDisabled(true);
+    try {
+      const token = localStorage.getItem("jwt_token");
+      const response = await axios.post(
+        `${BACKEND_URL}/auth/logout`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      localStorage.removeItem('jwt_token');
+      navigate('/login');
+    } catch (error) {
+      console.error("Login failed:", error);
+      setLogoutDisabled(false);
+    }
+  };
 
   const fetchUserDetails = async () => {
     try {
@@ -146,7 +157,7 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="home-page d-flex vh-100">
+      <div className="home-page d-flex justify-content-center align-items-center vh-100">
         <UserSidebar />
         <Modal show={show} onHide={handleClose} backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
@@ -167,109 +178,113 @@ const HomePage = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Container className="home-page-content" fluid>
-          <Row className="h-100">
-            <Col className="p-5">
-              <Row className="mb-5">
-                <Form.Control className="search-bar" placeholder="Search" />
-              </Row>
-              <p className="home-page-text">
-                Upcoming Artists
-              </p>
+        <Container className="main-container" >
+          <Row className="justify-content-md-center">
+            <Col xs={10} md={6}>
+              <div className="text-center text-white">
+                <h1 style={{ marginTop: "30px" }}>
+                  Welcome to
+                  <span
+                    style={{
+                      marginLeft: "10px",
+                      color: "red",
+                      transition: "color 0.3s",
+                      cursor: "text"
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.color = "red";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.color = "white";
+                    }}
+                  >
+                    MEDIAHARBOR
+                  </span>
+                </h1>
+              </div>
 
-              <Stack direction="horizontal" className="artist-item-container p-3" gap={3}>
-                {artists.map(artist => (
-                  <ArtistItem key={artist.id} name={artist.name} onClick={() => console.log(artist.id)} />
-                ))}
-              </Stack>
-            </Col>
-            <Col xs={4} className="right-sidebar">
-              <Row className="p-5">
-                <Col>
-                  <div className="text-center text-white">
-                    <h1 style={{ marginTop: "30px" }}>
-                      Welcome to
-                      <span
-                        style={{
-                          marginLeft: "10px",
-                          color: "red",
-                          transition: "color 0.3s",
-                          cursor: "text"
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.color = "red";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.color = "white";
-                        }}
-                      >
-                        MEDIAHARBOR
-                      </span>
-                    </h1>
-                  </div>
+              {/* IF NOT VERIFIED */}
+              {!isVerified ? (
+                <>
+                  <Button
+                    variant="primary"
+                    className="login-button btn-block"
+                    style={buttonStyle}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={handleSendVerify}
+                    disabled={isButtonDisabled}
+                  >
+                    Send Verification Email
+                  </Button>
+                  {isButtonDisabled && <p>Next email can be sent in {remainingTime} seconds</p>}
+                </>
+              ) : (
+                <div className="text-center text-white">
+                  <h1 style={{ marginTop: "30px" }}>
+                    <span
+                      style={{
+                        marginLeft: "10px",
+                        color: "red",
+                        transition: "color 0.3s",
+                        cursor: "text"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.color = "red";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.color = "white";
+                      }}
+                    >
+                      YOU'RE VERIFIED!
+                    </span>
+                  </h1>
+                </div>
+              )}
+              <Form className="main-content" onSubmit={handleSubmit}>
+                <Button
+                  variant="primary"
+                  className="login-button btn-block"
+                  style={buttonStyle}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                  disabled={logoutDisabled}
+                  type="submit"
+                >
+                  Log out
+                </Button>
 
-                  {/* IF NOT VERIFIED */}
-                  {!isVerified ? (
-                    <>
-                      <Button
-                        variant="primary"
-                        className="login-button btn-block"
-                        style={buttonStyle}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={handleSendVerify}
-                        disabled={isButtonDisabled}
-                      >
-                        Send Verification Email
-                      </Button>
-                      {isButtonDisabled && <p>Next email can be sent in {remainingTime} seconds</p>}
-                    </>
-                  ) : (
-                    <div className="text-center text-white">
-                      <h1 style={{ marginTop: "30px" }}>
-                        <span
-                          style={{
-                            marginLeft: "10px",
-                            color: "red",
-                            transition: "color 0.3s",
-                            cursor: "text"
-                          }}
-                          onMouseEnter={(e) => {
-                            e.target.style.color = "red";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.color = "white";
-                          }}
-                        >
-                          YOU'RE VERIFIED!
-                        </span>
-                      </h1>
-                    </div>
-                  )}
-                  <div className="line"></div>
-                </Col>
-              </Row>
+
+                <div className="line"></div>
+
+                <hr className="my-4 bg-white" />
+              </Form>
             </Col>
           </Row>
-
-          <div className="position-relative flex-grow-1 d-flex">
-            <div className="user-player-bar d-flex position-fixed bottom-0 w-100 flex-grow-1">
-              <Col xs={2}>
-                <h1>Now Playing</h1>
+        </Container >
+        <div className='user-player position-absolute bottom-0 d-flex'>
+          <Col xs={3} className='d-flex align-items-center '>
+            <Row className='h-100 p-4 flex-grow-1'>
+              <Col xs={4} className=' d-flex align-items-center'>
+                {/* {songDetails.photo && <Image src={songDetails.photo} className='song-cover-image' />} */}
               </Col>
-              <Col xs={6}>
-                <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
+              <Col xs={8} className='p-3 h-100 align-items-center song-details'>
+                <Row className='h-60 align-items-end song-name'>
+                  {/* {songDetails.name} */}
+                </Row>
+                <Row className='h-40'>
+                  {/* {songDetails.author} */}
+                </Row>
               </Col>
-              <Col xs={2}>
-                <h1>Settings</h1>
-              </Col>
-              <Col xs={2} className="invisible-text">
-                extra space (bad practice, but it works for now)
-              </Col>
-            </div>
-          </div>
-        </Container>
-
+            </Row>
+          </Col>
+          <Col xs={6} className=''>
+            <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => console.log("onPlay")} className='mixify-player h-100' />
+          </Col>
+          <Col xs={3}>
+            Extra options
+          </Col>
+        </div>
       </div>
     </>
   );

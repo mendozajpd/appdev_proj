@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { ArtistRequestTable } from './tables/ArtistsRequestTable';
 import { Breadcrumbs } from "./components/Breadcrumbs";
 import axios from "axios";
-import Sidebar from './sidebar';
+import Sidebar from './AdminSidebar';
 import '../css/index.css'; 
 import BACKEND_URL from "../config";
 
@@ -31,6 +31,7 @@ const PendingRequests = () => {
 
     return (
         <>
+        <div className='d-flex justify-content-center align-items-center vh-100'>
             <Sidebar />
             <Container className='manage-users align-self-start'>
                 <Row xs={1}>
@@ -71,6 +72,7 @@ const PendingRequests = () => {
                     </Col>
                 </Row>
             </Container>
+            </div>
         </>
     );
 };

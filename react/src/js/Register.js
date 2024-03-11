@@ -267,400 +267,401 @@ function Register() {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Terms and Conditions</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-            ipsam atque a dolores quisquam quisquam adipisci possimus
-            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-            deleniti rem!
-          </p></Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="danger" onClick={handleAccept}>
-            Accept
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <div className="Register-container">
-        <div className="Register-social-container">
-          <div>
-            <h1 style={{ marginTop: "30px" }}>
-              Sign up to start
-              <span
-                style={{
-                  marginLeft: "10px",
-                  transition: "color 0.3s",
-                  cursor: "text",
-                }}
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <Modal show={show} onHide={handleClose} backdrop="static"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Terms and Conditions</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
+              commodi aspernatur enim, consectetur. Cumque deleniti temporibus
+              ipsam atque a dolores quisquam quisquam adipisci possimus
+              laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
+              accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
+              reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
+              deleniti rem!
+            </p></Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="danger" onClick={handleAccept}>
+              Accept
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <div className="Register-container">
+          <div className="Register-social-container">
+            <div>
+              <h1 style={{ marginTop: "30px" }}>
+                Sign up to start
+                <span
+                  style={{
+                    marginLeft: "10px",
+                    transition: "color 0.3s",
+                    cursor: "text",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = "white";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = "red";
+                  }}
+                >
+                  {registerAs === 'listener' ? (
+                    <h1 style={{ color: 'red' }}>
+                      LISTENING
+                    </h1>
+                  ) : (
+                    <h1 style={{ color: 'red' }}>
+                      CREATING
+                    </h1>
+                  )}
+                </span>
+              </h1>
+            </div>
+
+            {/* google */}
+
+            <Button
+              className="Register-social-button rounded-pill"
+              variant="light"
+              style={{
+                width: "100%",
+                height: "50px",
+                marginTop: "30px",
+                marginBottom: "10px",
+                backgroundColor: "transparent",
+                borderColor: "rgba(185, 128, 128, 0.3)",
+                color: "white",
+                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseEnter={handleSocialButtonMouseEnter}
+              onMouseLeave={handleSocialButtonMouseLeave}
+            >
+              <div
+                className="buttonContent"
                 onMouseEnter={(e) => {
-                  e.target.style.color = "white";
+                  e.stopPropagation();
                 }}
                 onMouseLeave={(e) => {
-                  e.target.style.color = "red";
+                  e.stopPropagation();
                 }}
               >
-                {registerAs === 'listener' ? (
-                  <h1 style={{ color: 'red' }}>
-                    LISTENING
-                  </h1>
-                ) : (
-                  <h1 style={{ color: 'red' }}>
-                    CREATING
-                  </h1>
-                )}
-              </span>
-            </h1>
+                <Image
+                  src="/register/google.png"
+                  roundedCircle
+                  className="Register-google"
+                  style={{
+                    marginRight: "20px",
+                    width: "30px",
+                    margin: "flex",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseLeave={(e) => {
+                    e.stopPropagation();
+                  }}
+                />
+                <p
+                  style={{ fontSize: "20px", fontWeight: "500" }}
+                  onMouseEnter={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseLeave={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  Login with Google
+                </p>
+              </div>
+            </Button>
+
+            {/* facebook */}
+            <Button
+              className="Register-social-button rounded-pill"
+              variant="light"
+              style={{
+                width: "100%",
+                height: "50px",
+                marginTop: "10px",
+                marginBottom: "10px",
+                backgroundColor: "transparent",
+                borderColor: "rgba(185, 128, 128, 0.3)",
+                color: "#333333",
+                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseEnter={handleSocialButtonMouseEnter}
+              onMouseLeave={handleSocialButtonMouseLeave}
+            >
+              <div
+                className="buttonContent"
+                onMouseEnter={(e) => {
+                  e.stopPropagation();
+                }}
+                onMouseLeave={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <Image
+                  src="/register/facebook.png"
+                  roundedCircle
+                  className="Register-facebook"
+                  style={{
+                    marginRight: "20px",
+                    width: "30px",
+                    margin: "flex",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseLeave={(e) => {
+                    e.stopPropagation();
+                  }}
+                />
+                <p
+                  style={{ fontSize: "20px", fontWeight: "500" }}
+                  onMouseEnter={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseLeave={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  Login with Facebook
+                </p>
+              </div>
+            </Button>
+
+            {/* apple */}
+
+            <Button
+              className="Register-social-button rounded-pill"
+              variant="light"
+              style={{
+                width: "100%",
+                height: "50px",
+                marginTop: "10px",
+                marginBottom: "10px",
+                backgroundColor: "transparent",
+                borderColor: "rgba(185, 128, 128, 0.3)",
+                color: "white",
+                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
+                position: "relative",
+                overflow: "hidden",
+              }}
+              onMouseEnter={handleSocialButtonMouseEnter}
+              onMouseLeave={handleSocialButtonMouseLeave}
+            >
+              <div
+                className="buttonContent"
+                onMouseEnter={(e) => {
+                  e.stopPropagation();
+                }}
+                onMouseLeave={(e) => {
+                  e.stopPropagation();
+                }}
+              >
+                <Image
+                  src="/register/apple.png"
+                  roundedCircle
+                  className="Register-apple"
+                  style={{
+                    marginRight: "20px",
+                    width: "30px",
+                    margin: "flex",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseLeave={(e) => {
+                    e.stopPropagation();
+                  }}
+                />
+                <p
+                  style={{ fontSize: "20px", fontWeight: "500" }}
+                  onMouseEnter={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onMouseLeave={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  Continue with Apple
+                </p>
+              </div>
+            </Button>
+
+            <div>
+              {registerAs === 'listener' ? (
+                <a href="#" className="myLink" onClick={() => handleRegisterAs('artist')}>Switch to Artist Registration</a>
+              ) : (
+                <a href="#" onClick={() => handleRegisterAs('listener')}>Switch to Listener Registration</a>
+              )}
+            </div>
+
           </div>
 
-          {/* google */}
-
-          <Button
-            className="Register-social-button rounded-pill"
-            variant="light"
-            style={{
-              width: "100%",
-              height: "50px",
-              marginTop: "30px",
-              marginBottom: "10px",
-              backgroundColor: "transparent",
-              borderColor: "rgba(185, 128, 128, 0.3)",
-              color: "white",
-              transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-              position: "relative",
-              overflow: "hidden",
-            }}
-            onMouseEnter={handleSocialButtonMouseEnter}
-            onMouseLeave={handleSocialButtonMouseLeave}
-          >
-            <div
-              className="buttonContent"
-              onMouseEnter={(e) => {
-                e.stopPropagation();
-              }}
-              onMouseLeave={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <Image
-                src="/register/google.png"
-                roundedCircle
-                className="Register-google"
-                style={{
-                  marginRight: "20px",
-                  width: "30px",
-                  margin: "flex",
-                }}
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
-              />
-              <p
-                style={{ fontSize: "20px", fontWeight: "500" }}
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                Login with Google
-              </p>
-            </div>
-          </Button>
-
-          {/* facebook */}
-          <Button
-            className="Register-social-button rounded-pill"
-            variant="light"
-            style={{
-              width: "100%",
-              height: "50px",
-              marginTop: "10px",
-              marginBottom: "10px",
-              backgroundColor: "transparent",
-              borderColor: "rgba(185, 128, 128, 0.3)",
-              color: "#333333",
-              transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-              position: "relative",
-              overflow: "hidden",
-            }}
-            onMouseEnter={handleSocialButtonMouseEnter}
-            onMouseLeave={handleSocialButtonMouseLeave}
-          >
-            <div
-              className="buttonContent"
-              onMouseEnter={(e) => {
-                e.stopPropagation();
-              }}
-              onMouseLeave={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <Image
-                src="/register/facebook.png"
-                roundedCircle
-                className="Register-facebook"
-                style={{
-                  marginRight: "20px",
-                  width: "30px",
-                  margin: "flex",
-                }}
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
-              />
-              <p
-                style={{ fontSize: "20px", fontWeight: "500" }}
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                Login with Facebook
-              </p>
-            </div>
-          </Button>
-
-          {/* apple */}
-
-          <Button
-            className="Register-social-button rounded-pill"
-            variant="light"
-            style={{
-              width: "100%",
-              height: "50px",
-              marginTop: "10px",
-              marginBottom: "10px",
-              backgroundColor: "transparent",
-              borderColor: "rgba(185, 128, 128, 0.3)",
-              color: "white",
-              transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-              position: "relative",
-              overflow: "hidden",
-            }}
-            onMouseEnter={handleSocialButtonMouseEnter}
-            onMouseLeave={handleSocialButtonMouseLeave}
-          >
-            <div
-              className="buttonContent"
-              onMouseEnter={(e) => {
-                e.stopPropagation();
-              }}
-              onMouseLeave={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <Image
-                src="/register/apple.png"
-                roundedCircle
-                className="Register-apple"
-                style={{
-                  marginRight: "20px",
-                  width: "30px",
-                  margin: "flex",
-                }}
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
-              />
-              <p
-                style={{ fontSize: "20px", fontWeight: "500" }}
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                Continue with Apple
-              </p>
-            </div>
-          </Button>
-
-          <div>
-            {registerAs === 'listener' ? (
-              <a href="#" className="myLink" onClick={() => handleRegisterAs('artist')}>Switch to Artist Registration</a>
-            ) : (
-              <a href="#" onClick={() => handleRegisterAs('listener')}>Switch to Listener Registration</a>
-            )}
-          </div>
-
-        </div>
-
-        <div className="Register-signup-form">
-          <div className="Register-textbox">
-            <Form onSubmit={handleSubmit}>
-              {/* {registerAs === 'listener' ? (
+          <div className="Register-signup-form">
+            <div className="Register-textbox">
+              <Form onSubmit={handleSubmit}>
+                {/* {registerAs === 'listener' ? (
                 <p>Sign up</p>
               ) : (
                 <p>Sign up</p>
               )} */}
-              <div className="line"></div>
+                <div className="line"></div>
 
-              <Form.Group
-                className="Register-textbox"
-                controlId="formGroupUsername"
-              >
-                <Form.Label className="label">Username</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="name"
-                  onChange={handleChange}
-                  onClick={() => handleFieldClick("name")}
-                  value={formData.name}
-                  style={getInputStyle(
-                    "name",
-                    formData.name,
-                    clickedFields,
-                    myInteger,
-                    formData
+                <Form.Group
+                  className="Register-textbox"
+                  controlId="formGroupUsername"
+                >
+                  <Form.Label className="label">Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    onChange={handleChange}
+                    onClick={() => handleFieldClick("name")}
+                    value={formData.name}
+                    style={getInputStyle(
+                      "name",
+                      formData.name,
+                      clickedFields,
+                      myInteger,
+                      formData
+                    )}
+                  />
+                  {clickedFields.name && !formData.name && myInteger < 1 && (
+                    <div className="error-message">Enter your username</div>
                   )}
-                />
-                {clickedFields.name && !formData.name && myInteger < 1 && (
-                  <div className="error-message">Enter your username</div>
-                )}
-              </Form.Group>
+                </Form.Group>
 
-              <Form.Group className="Register-textbox" controlId="formGroupEmail">
-                <Form.Label className="label">Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  onChange={handleChange}
-                  onClick={() => handleFieldClick("email")}
-                  value={formData.email}
-                  style={getInputStyle(
-                    "email",
-                    formData.email,
-                    clickedFields,
-                    myInteger,
-                    formData
-                  )}
-                />
-                {clickedFields.email &&
-                  !isValidEmail(formData.email) && myInteger < 1 &&
-                  (
-                    <div className="error-message">Enter a valid email</div>
-                  )}
-              </Form.Group>
+                <Form.Group className="Register-textbox" controlId="formGroupEmail">
+                  <Form.Label className="label">Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    onChange={handleChange}
+                    onClick={() => handleFieldClick("email")}
+                    value={formData.email}
+                    style={getInputStyle(
+                      "email",
+                      formData.email,
+                      clickedFields,
+                      myInteger,
+                      formData
+                    )}
+                  />
+                  {clickedFields.email &&
+                    !isValidEmail(formData.email) && myInteger < 1 &&
+                    (
+                      <div className="error-message">Enter a valid email</div>
+                    )}
+                </Form.Group>
 
-              <Form.Group className="Register-textbox" controlId="formGroupPass">
-                <Form.Label className="label">Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  onChange={handleChange}
-                  onClick={() => handleFieldClick("password")}
-                  onFocus={() => handleFieldClick("password")}
-                  value={formData.password}
-                  style={getInputStyle(
-                    "password",
-                    formData.password,
-                    clickedFields,
-                    myInteger,
-                    formData
-                  )}
-                />
-                {clickedFields.password &&
-                  !isValidPassword(formData.password) && myInteger < 1 &&
-                  (
-                    <div className="error-message">
-                      Password must be atleast 8 characters long, contain uppercase,
-                      lowercase, and numbers
-                    </div>
-                  )}
-                {/* {displayPasswordRequirements()} */}
-              </Form.Group>
+                <Form.Group className="Register-textbox" controlId="formGroupPass">
+                  <Form.Label className="label">Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    onChange={handleChange}
+                    onClick={() => handleFieldClick("password")}
+                    onFocus={() => handleFieldClick("password")}
+                    value={formData.password}
+                    style={getInputStyle(
+                      "password",
+                      formData.password,
+                      clickedFields,
+                      myInteger,
+                      formData
+                    )}
+                  />
+                  {clickedFields.password &&
+                    !isValidPassword(formData.password) && myInteger < 1 &&
+                    (
+                      <div className="error-message">
+                        Password must be atleast 8 characters long, contain uppercase,
+                        lowercase, and numbers
+                      </div>
+                    )}
+                  {/* {displayPasswordRequirements()} */}
+                </Form.Group>
 
-              <Form.Group
-                className="Register-textbox"
-                controlId="formGroupConPass"
-              >
-                <Form.Label className="label">Confirm Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="confirmPassword"
-                  onChange={handleChange}
-                  onClick={() => handleFieldClick("confirmPassword")}
-                  onFocus={() => handleFieldClick("confirmPassword")}
-                  value={formData.confirmPassword}
-                  style={getInputStyle(
-                    "confirmPassword",
-                    formData.confirmPassword,
-                    clickedFields,
-                    myInteger,
-                    formData
-                  )}
-                />
-                {clickedFields.confirmPassword &&
-                  formData.password !== formData.confirmPassword && myInteger < 1 && (
-                    <div className="error-message">Passwords do not match</div>
-                  )}
-              </Form.Group>
+                <Form.Group
+                  className="Register-textbox"
+                  controlId="formGroupConPass"
+                >
+                  <Form.Label className="label">Confirm Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    name="confirmPassword"
+                    onChange={handleChange}
+                    onClick={() => handleFieldClick("confirmPassword")}
+                    onFocus={() => handleFieldClick("confirmPassword")}
+                    value={formData.confirmPassword}
+                    style={getInputStyle(
+                      "confirmPassword",
+                      formData.confirmPassword,
+                      clickedFields,
+                      myInteger,
+                      formData
+                    )}
+                  />
+                  {clickedFields.confirmPassword &&
+                    formData.password !== formData.confirmPassword && myInteger < 1 && (
+                      <div className="error-message">Passwords do not match</div>
+                    )}
+                </Form.Group>
 
-              <div className="remember-me">
-                <Form.Check
-                  type="checkbox"
-                  label={
-                    <span>
-                      I agree to{" "}
-                      <span
-                        style={{ color: "white", cursor: "pointer" }}
-                        onClick={handleShow}
-                      >
-                        Terms and Conditions
+                <div className="remember-me">
+                  <Form.Check
+                    type="checkbox"
+                    label={
+                      <span>
+                        I agree to{" "}
+                        <span
+                          style={{ color: "white", cursor: "pointer" }}
+                          onClick={handleShow}
+                        >
+                          Terms and Conditions
+                        </span>
                       </span>
-                    </span>
-                  }
-                  checked={termsChecked}
-                  onChange={() => setTermsChecked(!termsChecked)}
-                />
-              </div>
+                    }
+                    checked={termsChecked}
+                    onChange={() => setTermsChecked(!termsChecked)}
+                  />
+                </div>
 
-              <Button
-                className="Register-button"
-                variant="outline-danger"
-                type="submit"
-                style={submitButtonStyle}
-                disabled={!termsChecked || buttonDisabled}
-              >
-                <span style={submitButtonTextStyle}>Register</span>
-              </Button>
-            </Form>
+                <Button
+                  className="Register-button"
+                  variant="outline-danger"
+                  type="submit"
+                  style={submitButtonStyle}
+                  disabled={!termsChecked || buttonDisabled}
+                >
+                  <span style={submitButtonTextStyle}>Register</span>
+                </Button>
+              </Form>
+            </div>
+            <div className="line"></div>
+            <div className="loginNavigate">
+              <p>Have an account? </p>
+              <Link to={"/login"} style={{ textDecoration: "none" }}></Link>
+              <Link to={"/login"}> Log in here</Link>
+            </div>
           </div>
-          <div className="line"></div>
-          <div className="loginNavigate">
-            <p>Have an account? </p>
-            <Link to={"/login"} style={{ textDecoration: "none" }}></Link>
-            <Link to={"/login"}> Log in here</Link>
-          </div>
-        </div>
-        <ToastContainer />
-      </div >
+          <ToastContainer />
+        </div >
+      </div>
     </>
-
   );
 }
 
