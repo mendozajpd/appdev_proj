@@ -7,7 +7,9 @@ import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { SongsTable } from "./tables/SongsTable";
+// import { SongsTable } from "./tables/SongsTable";
+import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ArtistPage = () => {
   const [isVerified, setIsVerified] = useState(false);
@@ -37,6 +39,41 @@ const ArtistPage = () => {
   // FILES
   const [songTitle, setSongTitle] = useState('');
   const [songFile, setSongFile] = useState(null);
+
+  // TOASTIFY 
+  const upload_success = (message) => {
+    toast.success(message, {
+      position: "top-center",
+      autoClose: 1000,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      onClose: () => {
+        window.location.reload();
+      }
+    });
+  }
+
+  const upload_failed = (message) => {
+    toast.error(message, {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+      onClose: () => {
+        localStorage.setItem('justRegistered', 'false');
+      }
+    });
+  }
 
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
@@ -159,14 +196,14 @@ const ArtistPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append('display_name', songTitle);
     formData.append('song', songFile);
     formData.append('album_id', selectedAlbum);
-  
+
     const token = localStorage.getItem("jwt_token");
-  
+
     try {
       const response = await axios.post(`${BACKEND_URL}/upload-song`, formData, {
         headers: {
@@ -174,9 +211,11 @@ const ArtistPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       console.log(response.data);
+      upload_success(response.data.message);
     } catch (error) {
+      upload_failed(error.response.data.message);
       console.error('There was an error!', error);
     }
   };
@@ -333,8 +372,8 @@ const ArtistPage = () => {
             </div>
           </div>
         </Container>
-
       </div>
+      <ToastContainer />
     </>
   );
 };

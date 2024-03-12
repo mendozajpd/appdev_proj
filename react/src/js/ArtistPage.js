@@ -7,7 +7,9 @@ import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { SongsTable } from "./tables/SongsTable";
+// import { SongsTable } from "./tables/SongsTable";
+import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ArtistPage = () => {
   const [isVerified, setIsVerified] = useState(false);
@@ -30,6 +32,8 @@ const ArtistPage = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+
 
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
@@ -193,21 +197,25 @@ const ArtistPage = () => {
 
 
               <Stack direction="vertical" className="song-item-container p-3" gap={1}>
-                {songs.map((song, index) => (
-                  <Row key={index} className="song-item p-3" onClick={() => {
-                    const songUrl = `http://127.0.0.1:8000/storage/songs/${song.hashed_name}`;
-                    setCurrentSong(songUrl);
-                    setCurrentSongName(song.display_name);
-                    console.log(songUrl);
-                  }}>
-                    <Col xs={1}>
-                      {index + 1}
-                    </Col>
-                    <Col>
-                      {song.display_name}
-                    </Col>
-                  </Row>
-                ))}
+                {songs.length === 0 ? (
+                  <div className="home-page-text">This artist doesn't have songs yet :((</div>
+                ) : (
+                  songs.map((song, index) => (
+                    <Row key={index} className="song-item p-3" onClick={() => {
+                      const songUrl = `http://127.0.0.1:8000/storage/songs/${song.hashed_name}`;
+                      setCurrentSong(songUrl);
+                      setCurrentSongName(song.display_name);
+                      console.log(songUrl);
+                    }}>
+                      <Col xs={1}>
+                        {index + 1}
+                      </Col>
+                      <Col>
+                        {song.display_name}
+                      </Col>
+                    </Row>
+                  ))
+                )}
               </Stack>
 
             </Col>
@@ -302,8 +310,8 @@ const ArtistPage = () => {
             </div>
           </div>
         </Container>
-
       </div>
+      <ToastContainer />
     </>
   );
 };

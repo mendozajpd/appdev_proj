@@ -183,9 +183,17 @@ const HomePage = () => {
               </p>
 
               <Stack direction="horizontal" className="artist-item-container p-3" gap={3}>
-                {artists.map(artist => (
-                  <ArtistItem key={artist.id} name={artist.name} onClick={() => handleArtistClick(artist.id)} />
-                ))}
+                {artists.length === 0 ?
+                  (
+                    <div className="user-white-text">
+                      No Artists Yet :((
+                    </div>
+                  )
+                  :
+                  (artists.map(artist => (
+                    <ArtistItem key={artist.id} name={artist.name} onClick={() => handleArtistClick(artist.id)} />
+                  )))
+                }
               </Stack>
             </Col>
             <Col xs={4} className="right-sidebar">
