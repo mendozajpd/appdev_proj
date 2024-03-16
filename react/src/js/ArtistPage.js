@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, CSSProperties } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
 import axios from "axios";
@@ -7,11 +7,20 @@ import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-// import { SongsTable } from "./tables/SongsTable";
-import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { SyncLoader } from "react-spinners"
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
 
 const ArtistPage = () => {
+  let [loading, setLoading] = useState(true);
+  let [color, setColor] = useState("#ffffff");
+
   const [isVerified, setIsVerified] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -33,6 +42,7 @@ const ArtistPage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const song = 'http://localhost:8000/storage/songs/3b0758c3129702d71a2b379c73fa142e05c8e3733cee52d958128810c98d5317.mp3';
 
 
   useEffect(() => {
@@ -202,10 +212,14 @@ const ArtistPage = () => {
                 ) : (
                   songs.map((song, index) => (
                     <Row key={index} className="song-item p-3" onClick={() => {
-                      const songUrl = `http://127.0.0.1:8000/storage/songs/${song.hashed_name}`;
-                      setCurrentSong(songUrl);
-                      setCurrentSongName(song.display_name);
-                      console.log(songUrl);
+                      const songUrl = `${BACKEND_URL}/play/${song.hashed_name}`;
+                      fetch(songUrl)
+                        .then(response => response.blob())
+                        .then(blob => {
+                          const audioBlobURL = URL.createObjectURL(blob);
+                          setCurrentSong(audioBlobURL);
+                          setCurrentSongName(song.display_name);
+                        });
                     }}>
                       <Col xs={1}>
                         {index + 1}
@@ -282,6 +296,20 @@ const ArtistPage = () => {
                       </h1>
                     </div>
                   )}
+                  <div className="sweet-loading">
+                    <button onClick={() => setLoading(!loading)}>Toggle Loader</button>
+                    <input value={color} onChange={(input) => setColor(input.target.value)} placeholder="Color of the loader" />
+                    <p className="user-white-text">Testing out the Loader</p>
+                    <a></a>
+                    <SyncLoader
+                      color={color}
+                      loading={loading}
+                      cssOverride={override}
+                      size={20}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                  </div>
                   <div className="line"></div>
                 </Col>
               </Row>
@@ -299,7 +327,7 @@ const ArtistPage = () => {
                 )}
               </Col>
               <Col xs={6}>
-                <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
+                <AudioPlayer src={currentSong} showSkipControls={true} showJumpControls={false} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
               </Col>
               <Col xs={2}>
                 {/* <h1>Settings</h1> */}

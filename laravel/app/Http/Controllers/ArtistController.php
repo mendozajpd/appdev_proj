@@ -59,7 +59,7 @@ class ArtistController extends Controller
 
         $request->validate([
             'display_name' => 'required',
-            'song' => 'required|file|mimes:mp3,wav,ogg',
+            'song' => 'required|file|mimes:mp3,wav,ogg|max:40000',
             // 'image' => 'required|file|mimes:jpeg,png,jpg,gif', // validate the image file
             'new_album_name' => 'sometimes|required',
             'new_album_description' => 'sometimes|required',

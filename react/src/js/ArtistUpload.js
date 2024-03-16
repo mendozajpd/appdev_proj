@@ -7,7 +7,8 @@ import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-// import { SongsTable } from "./tables/SongsTable";
+import AlbumCoverDropzone from './components/AlbumCoverDropzone';
+import MediaDropzone from './components/MediaDropzone';
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -37,6 +38,9 @@ const ArtistPage = () => {
   const handleShow = () => setShow(true);
 
   // FILES
+  const [albumTitle, setAlbumTitle] = useState('');
+  const [albumDescription, setAlbumDescription] = useState('');
+  const [albumPhoto, setAlbumPhoto] = useState(null);
   const [songTitle, setSongTitle] = useState('');
   const [songFile, setSongFile] = useState(null);
 
@@ -57,6 +61,9 @@ const ArtistPage = () => {
       }
     });
   }
+
+  // Modal Pages
+  const [uploadStep, setUploadStep] = useState(0);
 
   const upload_failed = (message) => {
     toast.error(message, {
@@ -221,38 +228,114 @@ const ArtistPage = () => {
   };
 
 
+  // Modal page handlers
+  const resetUpload = () => {
+    setUploadStep(0);
+    setAlbumTitle('');
+    setAlbumDescription('');
+    setAlbumPhoto(null);
+    setSongTitle('');
+    setSongFile(null);
+    setSelectedAlbum('');
+  };
+
+  const handleContinue = () => {
+    setUploadStep(uploadStep + 1); // Add this function
+  };
+
+  const handleBack = () => {
+    setUploadStep(uploadStep - 1); // Add this function
+  };
 
   return (
     <>
       <div className="home-page d-flex vh-100">
         <UserSidebar />
-        <Modal show={show} onHide={handleClose} backdrop="static"
+        <Modal className="upload-modal" show={show} size='lg' onHide={handleClose} backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered>
           <Modal.Header closeButton>
-            <Modal.Title>Email Verification Required</Modal.Title>
+            <Modal.Title>Create Album</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>
-              We noticed that your email address has not been verified yet.
-              To ensure the security of your account and to gain full access
-              to all features of our application, it's important to verify your
-              email address. We kindly request you to check your email for the verification link.
-            </p></Modal.Body>
+            {uploadStep === 0 ? (
+              <>
+                <Row className='py-3' style={{ borderBottom: '1px solid var(--bs-border-color-translucent)' }}>
+                  <Col>
+                    <Form onSubmit={handleSubmit}>
+                      <Stack direction="vertical" className="px-3" gap={1}>
+                        <Form.Group controlId="songTitle">
+                          <Form.Label>Album Title</Form.Label>
+                          <Form.Control type="text" placeholder="Enter album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
+                        </Form.Group>
+                        <Form.Group controlId="songTitle">
+                          <Form.Label>Album Description</Form.Label>
+                          <Form.Control as="textarea" rows={3} placeholder="Enter album description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} style={{ resize: 'none' }} />
+                        </Form.Group>
+                      </Stack>
+                    </Form>
+                  </Col>
+                  <Col xs={5} className="d-flex align-items-center" style={{minWidth: '280px'}}>
+                    <Row className="px-4">
+                      <AlbumCoverDropzone iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                    </Row>
+                  </Col>
+                </Row>
+                <Row className="d-flex justify-content-center py-3">
+                  <Col className="d-flex justify-content-center">
+                    <MediaDropzone iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                  </Col>
+                </Row>
+              </>
+            ) : uploadStep === 1 ? (
+              <div>Page 1 (prevButton, nextButton)</div>
+            ) : uploadStep === 2 ? (
+              <div>Page 2 (prevButton)</div>
+            ) : ''}
+
+
+
+
+
+          </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Ok
-            </Button>
+            {uploadStep > 0 && (
+              <Button variant="secondary" onClick={handleBack}>
+                Back
+              </Button>
+            )}
+            {uploadStep < 2 ? (
+              <Button variant="secondary" onClick={handleContinue}>
+                Continue
+              </Button>
+            ) : (
+              <Button variant="secondary" onClick={handleClose}>
+                Ok
+              </Button>
+            )}
           </Modal.Footer>
         </Modal>
         <Container className="home-page-content" fluid>
           <Row className="h-100">
             <Col className="p-5">
               <Row className="mb-5">
-                <Form.Control className="search-bar" placeholder="Search" />
+                <Col xs={4}>
+                  <Row>
+                    <div className="search-bar d-flex align-items-center">
+                      <i className="fa fa-search" aria-hidden="true" />
+                      <Form.Control className="search-bar-input" placeholder="Search" />
+                    </div>
+                  </Row>
+                </Col>
+                <Col className="d-flex justify-content-end">
+                  <Button className="btn-danger" onClick={() => { handleShow(); resetUpload(); }}>
+                    <i class="fa fa-plus-square px-2" aria-hidden="true" />
+                    CREATE
+                  </Button>
+                </Col>
               </Row>
               <h1 className="home-page-text mb-5">
-                Upload Song
+                This should show ALBUMS of the artist
               </h1>
 
 
@@ -286,7 +369,7 @@ const ArtistPage = () => {
               </Form>
 
             </Col>
-            <Col xs={4} className="right-sidebar">
+            {/* <Col xs={4} className="right-sidebar">
               <Row className="p-5">
                 <Col>
                   <div className="text-center text-white">
@@ -311,7 +394,6 @@ const ArtistPage = () => {
                     </h1>
                   </div>
 
-                  {/* IF NOT VERIFIED */}
                   {!isVerified ? (
                     <>
                       <Button
@@ -352,7 +434,7 @@ const ArtistPage = () => {
                   <div className="line"></div>
                 </Col>
               </Row>
-            </Col>
+            </Col> */}
           </Row>
 
           <div className="position-relative flex-grow-1 d-flex">

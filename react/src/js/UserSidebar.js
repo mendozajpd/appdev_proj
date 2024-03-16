@@ -115,12 +115,15 @@ const UserSidebar = props => {
                                     </NavLink>
                                     {isArtist && (
                                         <>
-                                            <h5 className="px-3 sub-header">ARTIST</h5>
+                                            <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
+                                            <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem>
+                                            {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
                                             <NavLink exact to="/upload" activeClassName="activeClicked">
-                                                <CDBSidebarMenuItem icon="">Upload</CDBSidebarMenuItem>
+                                                <CDBSidebarMenuItem icon="">Content</CDBSidebarMenuItem>
                                             </NavLink>
                                         </>
                                     )}
+                                    <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
                                     <NavLink onClick={handleSubmit} activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="">Logout</CDBSidebarMenuItem>
                                     </NavLink>
