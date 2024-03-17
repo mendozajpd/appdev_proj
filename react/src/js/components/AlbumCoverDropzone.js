@@ -8,9 +8,9 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     const [isHovered, setIsHovered] = useState(false);
     const { getRootProps, getInputProps, isDragActive, isDragAccept } = useDropzone({
         accept: {
-            'image/png': ['.png'],
-            'image/jpg': ['.jpg'],
-            'image/jpeg': ['.jpeg'],
+            'image/png': ['.png', '.jpg', '.jpeg'],
+            // 'image/jpg': ['.jpg'],
+            // 'image/jpeg': ['.jpeg'],
         },
         maxFiles: 1,
         onDrop: acceptedFiles => {

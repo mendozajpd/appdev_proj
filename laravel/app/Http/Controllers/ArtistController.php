@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Song;
 use App\Models\User;
 use App\Models\Album;
+use App\Jobs\CreateAlbumAndUploadSongsJob;
+use App\Jobs\CreateAlbumJob;
+use App\Jobs\UploadSongJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -154,6 +157,33 @@ class ArtistController extends Controller
 
     public function createAlbumAndUploadSongs(Request $request)
     {
-        CreateAlbumAndUploadSongsJob::dispatch($request);
+        $validatedData = $request->validate([
+            'album_name' => 'required',
+            'album_description' => 'required',
+            'album_photo' => 'required|file|mimes:jpeg,png,jpg,gif',
+            'songs' => 'required|array',
+            'songs.*' => 'file|mimes:mp3,wav,ogg|max:40000',
+        ]);
+    
+        // Store the album photo in a temporary location
+        $albumPhotoPath = $request->file('album_photo')->store('temp');
+    
+        // Dispatch a job to create an album
+        // $albumId = CreateAlbumJob::dispatchNow($validatedData['album_name'], $validatedData['album_description'], $albumPhotoPath);
+    
+        $album = new Album;
+        $album->album_name = $validatedData['album_name'];
+        $album->album_description = $validatedData['album_description'];
+        $album->cover_photo_path = Storage::url($albumPhotoPath);
+        $album->save();
+
+        // Store the songs in temporary locations and dispatch jobs to upload them
+        foreach ($request->file('songs') as $song) {
+            $songPath = $song->store('temp');
+            $displayName = $song->getClientOriginalName();
+            UploadSongJob::dispatch($songPath, $albumId, $displayName);
+        }
+    
+        return response()->json(['message' => 'Requests placed into the job queue'], 200);
     }
 }
