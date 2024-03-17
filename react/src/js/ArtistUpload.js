@@ -43,6 +43,7 @@ const ArtistPage = () => {
   const [albumPhoto, setAlbumPhoto] = useState(null);
   const [songTitle, setSongTitle] = useState('');
   const [songFile, setSongFile] = useState(null);
+  const [mediaFiles, setMediaFiles] = useState([]);
 
   // TOASTIFY 
   const upload_success = (message) => {
@@ -131,6 +132,7 @@ const ArtistPage = () => {
     e.target.style.color = "#ff3535";
     e.target.style.borderColor = "#8d4b4b";
   };
+
 
 
 
@@ -247,6 +249,19 @@ const ArtistPage = () => {
     setUploadStep(uploadStep - 1); // Add this function
   };
 
+  // Dropzone
+  const handleAlbumCoverDrop = (acceptedFiles) => {
+    setAlbumPhoto(acceptedFiles[0]);
+    console.log(acceptedFiles[0].name);
+  };
+
+  const handleMediaDrop = (acceptedFiles) => {
+    setMediaFiles(acceptedFiles);
+    acceptedFiles.forEach(file => {
+      console.log(file.name);
+    });
+  };
+
   return (
     <>
       <div className="home-page d-flex vh-100">
@@ -260,8 +275,8 @@ const ArtistPage = () => {
           <Modal.Body>
             {uploadStep === 0 ? (
               <>
-                <Row className='py-3' style={{ borderBottom: '1px solid var(--bs-border-color-translucent)' }}>
-                  <Col>
+                <Row className='py-3 d-flex' style={{ borderBottom: '1px solid var(--bs-border-color-translucent)' }}>
+                  <Col xs={7}>
                     <Form onSubmit={handleSubmit}>
                       <Stack direction="vertical" className="px-3" gap={1}>
                         <Form.Group controlId="songTitle">
@@ -275,15 +290,15 @@ const ArtistPage = () => {
                       </Stack>
                     </Form>
                   </Col>
-                  <Col xs={5} className="d-flex align-items-center" style={{minWidth: '280px'}}>
-                    <Row className="px-4">
-                      <AlbumCoverDropzone iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                  <Col className="d-flex align-items-center px-5 py-2" style={{ width: 'auto' }}>
+                    <Row className="album-cover-preview">
+                      <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
                     </Row>
                   </Col>
                 </Row>
                 <Row className="d-flex justify-content-center py-3">
                   <Col className="d-flex justify-content-center">
-                    <MediaDropzone iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                    <MediaDropzone onDrop={handleMediaDrop} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
                   </Col>
                 </Row>
               </>
@@ -292,11 +307,6 @@ const ArtistPage = () => {
             ) : uploadStep === 2 ? (
               <div>Page 2 (prevButton)</div>
             ) : ''}
-
-
-
-
-
           </Modal.Body>
           <Modal.Footer>
             {uploadStep > 0 && (
@@ -369,72 +379,6 @@ const ArtistPage = () => {
               </Form>
 
             </Col>
-            {/* <Col xs={4} className="right-sidebar">
-              <Row className="p-5">
-                <Col>
-                  <div className="text-center text-white">
-                    <h1 style={{ marginTop: "30px" }}>
-                      Welcome to
-                      <span
-                        style={{
-                          marginLeft: "10px",
-                          color: "red",
-                          transition: "color 0.3s",
-                          cursor: "text"
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.color = "red";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.color = "white";
-                        }}
-                      >
-                        MEDIAHARBOR
-                      </span>
-                    </h1>
-                  </div>
-
-                  {!isVerified ? (
-                    <>
-                      <Button
-                        variant="primary"
-                        className="login-button btn-block"
-                        style={buttonStyle}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={handleSendVerify}
-                        disabled={isButtonDisabled}
-                      >
-                        Send Verification Email
-                      </Button>
-                      {isButtonDisabled && <p>Next email can be sent in {remainingTime} seconds</p>}
-                    </>
-                  ) : (
-                    <div className="text-center text-white">
-                      <h1 style={{ marginTop: "30px" }}>
-                        <span
-                          style={{
-                            marginLeft: "10px",
-                            color: "red",
-                            transition: "color 0.3s",
-                            cursor: "text"
-                          }}
-                          onMouseEnter={(e) => {
-                            e.target.style.color = "red";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.color = "white";
-                          }}
-                        >
-                          YOU'RE VERIFIED!
-                        </span>
-                      </h1>
-                    </div>
-                  )}
-                  <div className="line"></div>
-                </Col>
-              </Row>
-            </Col> */}
           </Row>
 
           <div className="position-relative flex-grow-1 d-flex">

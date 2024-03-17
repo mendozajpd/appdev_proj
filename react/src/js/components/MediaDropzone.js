@@ -4,15 +4,18 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
-function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle }) {
+function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop }) {
     const [files, setFiles] = useState([]);
     const { getRootProps, getInputProps, isDragActive, isDragAccept } = useDropzone({
-        accept: 'audio/*',
+        accept: {
+            'audio/mp3': ['.mp3'],
+        },
         onDrop: acceptedFiles => {
             setFiles(prev => [...prev, ...acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file),
                 formattedSize: (file.size / 1048576).toFixed(2)
             }))]);
+            onDrop(acceptedFiles);
         }
     });
 
@@ -23,9 +26,9 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         setFiles(newFiles);
     };
 
-    const filesView = files.map(file => (
-        <>
-            <Row key={file.path} className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
+    const filesView = files.map((file, index) => (
+        <React.Fragment key={`${file.path}-${index}`}>
+            <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
                 <Col className='d-flex flex-column justify-content-start'>
                     <Row className='d-flex flex-nowrap'>
                         <Col className='d-flex justify-content-start align-items-center'>
@@ -43,7 +46,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
                     </Row>
                 </Col>
             </Row>
-        </>
+        </React.Fragment>
     ));
 
     const style = useMemo(() => ({
@@ -82,8 +85,8 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     );
 }
 
-const MediaDropzone = ({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle }) => (
-    <Basic uploadText={uploadText} uploadTextClass={uploadTextClass} iconClass={iconClass} iconSize={iconSize} activeStyle={activeStyle} acceptStyle={acceptStyle} />
+const MediaDropzone = ({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop }) => (
+    <Basic uploadText={uploadText} uploadTextClass={uploadTextClass} iconClass={iconClass} iconSize={iconSize} activeStyle={activeStyle} acceptStyle={acceptStyle} onDrop={onDrop} />
 );
 
 export default MediaDropzone;

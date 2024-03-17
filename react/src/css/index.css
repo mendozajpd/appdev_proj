@@ -860,6 +860,7 @@ h1 span:hover {
   font-size: 12px;
   padding: 20px;
   justify-content: center;
+  width: 200px;
 }
 
 /* Custom Dropzone */
@@ -924,12 +925,18 @@ h1 span:hover {
   box-shadow: none !important;
 }
 
-
 .files-view {
   cursor: default;
   background-color: white;
   padding: 20px;
   border-radius: 10px;
+}
+
+.album-cover-preview {
+  height: 250px;
+  width: 250px;
+  object-fit:contain;
+  color: rgb(240, 240, 240);
 }
 
 
