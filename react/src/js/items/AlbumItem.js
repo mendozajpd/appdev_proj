@@ -1,7 +1,7 @@
 import { Row, Col, Image, Form } from 'react-bootstrap';
 
 const AlbumItem = ({ album }) => (
-    <Row className="p-2">
+    <Row className="p-2 album-item">
         <Col className="justify-content-center d-flex align-items-center" xs={1}>
             <Form.Check />
         </Col>
@@ -12,10 +12,14 @@ const AlbumItem = ({ album }) => (
             />
         </Col>
         <Col className="d-flex align-items-center justify-content-start">
-            {album.album_name}
+            <a href=''>
+                {album.album_name}
+            </a>
         </Col>
-        <Col className='d-flex align-items-center'>
-            {album.album_description}
+        <Col xs={3} className='d-flex align-items-center'>
+            <p className='album-item-description'>
+                {album.album_description}
+            </p>
         </Col>
         <Col className="d-flex align-items-center">
             {
@@ -30,12 +34,10 @@ const AlbumItem = ({ album }) => (
             {album.is_published ? "Published" : "Draft"}
         </Col>
         <Col className="d-flex align-items-center">
-            {/* {album.listens} */}
-            listens
+            {Math.floor(Math.random() * 1000)} {/* Random number between 0 and 999 */}
         </Col>
         <Col className="d-flex align-items-center">
-            {/* {album.likes} */}
-            likes
+            {Math.floor(Math.random() * 2000)} {/* Random number between 0 and 1999 */}
         </Col>
     </Row>
 );

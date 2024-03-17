@@ -1,11 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, FormControl } from 'react-bootstrap';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 
 function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop }) {
     const [files, setFiles] = useState([]);
+    const [editing, setEditing] = useState(null);
+    const [fileName, setFileName] = useState('');
+
     const { getRootProps, getInputProps, isDragActive, isDragAccept } = useDropzone({
         accept: {
             'audio/mp3': ['.mp3'],
@@ -13,7 +16,8 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         onDrop: acceptedFiles => {
             setFiles(prev => [...prev, ...acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file),
-                formattedSize: (file.size / 1048576).toFixed(2)
+                formattedSize: (file.size / 1048576).toFixed(2),
+                displayName: file.name.split('.').slice(0, -1).join('.')  // Add display name
             }))]);
             onDrop(acceptedFiles);
         }
@@ -26,13 +30,44 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         setFiles(newFiles);
     };
 
+    const handleDoubleClick = (file, index) => {
+        setEditing(index);
+        setFileName(file.displayName);  // Edit display name
+    };
+
+    const handleFileNameChange = (event) => {
+        setFileName(event.target.value);
+    };
+
+    const handleBlur = (file) => {
+        file.displayName = fileName;  // Update display name
+        setFiles([...files]);
+        setEditing(null);
+    };
+
+    const handleKeyDown = (event, file, index) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleBlur(file, index);
+        }
+    };
+
     const filesView = files.map((file, index) => (
         <React.Fragment key={`${file.path}-${index}`}>
             <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
                 <Col className='d-flex flex-column justify-content-start'>
                     <Row className='d-flex flex-nowrap'>
                         <Col className='d-flex justify-content-start align-items-center'>
-                            <h5 className='upload-preview'>{file.path}</h5>
+                            {editing === index ? (
+                                <FormControl
+                                    value={fileName}
+                                    onChange={handleFileNameChange}
+                                    onBlur={() => handleBlur(file, index)}
+                                    onKeyDown={(event) => handleKeyDown(event, file, index)} 
+                                />
+                            ) : (
+                                <h5 className='upload-preview' onDoubleClick={() => handleDoubleClick(file, index)}>{file.displayName}</h5>
+                            )}
                         </Col>
                         <Col xs={2} className='d-flex justify-content-start align-items-center'>
                             <h5> {file.formattedSize} MB </h5>

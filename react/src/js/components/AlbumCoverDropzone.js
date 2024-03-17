@@ -7,7 +7,11 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     const [backgroundImage, setBackgroundImage] = useState(null);
     const [isHovered, setIsHovered] = useState(false);
     const { getRootProps, getInputProps, isDragActive, isDragAccept } = useDropzone({
-        accept: 'image/jpeg, image/png, image/jpg', 
+        accept: {
+            'image/png': ['.png'],
+            'image/jpg': ['.jpg'],
+            'image/jpeg': ['.jpeg'],
+        },
         maxFiles: 1,
         onDrop: acceptedFiles => {
             if (!acceptedFiles[0].type.startsWith('image/')) {

@@ -265,26 +265,61 @@ const ArtistPage = () => {
   };
 
   // Create Album
+  // const handleCreateAlbum = async (e) => {
+  //   e.preventDefault();
+
+  //   const formData = new FormData();
+  //   formData.append('album_name', albumTitle);
+  //   formData.append('album_description', albumDescription);
+  //   formData.append('album_photo', albumPhoto);
+  //   formData.append('is_published', 0); // or false, depending on your requirements
+  //   // formData.append('release_date', releaseDate); // if you have a release date field
+
+  //   const token = localStorage.getItem("jwt_token");
+
+  //   try {
+  //     const response = await axios.post(`${BACKEND_URL}/create/album`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     console.log(response.data);
+  //     upload_success(response.data.message);
+  //     handleClose();
+  //     resetUpload();
+  //   } catch (error) {
+  //     upload_failed(error.response.data.message);
+  //     console.error('There was an error!', error);
+  //   }
+  // };
+  
   const handleCreateAlbum = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
     formData.append('album_name', albumTitle);
     formData.append('album_description', albumDescription);
     formData.append('album_photo', albumPhoto);
     formData.append('is_published', 0); // or false, depending on your requirements
     // formData.append('release_date', releaseDate); // if you have a release date field
-
+  
+    // Add each song file to the form data
+    mediaFiles.forEach((file, index) => {
+      formData.append(`songs[${index}]`, file);
+    });
+  
     const token = localStorage.getItem("jwt_token");
-
+  
     try {
-      const response = await axios.post(`${BACKEND_URL}/create/album`, formData, {
+      const response = await axios.post(`${BACKEND_URL}/create/album/upload-songs`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       console.log(response.data);
       upload_success(response.data.message);
       handleClose();
@@ -388,39 +423,44 @@ const ArtistPage = () => {
                 </h1>
               </Row>
               <Row>
+                <h3 className="home-page-text mb-3">
+                  Albums
+                </h3>
+              </Row>
+              <Row className="p-2 album-container-header">
+                <Col className="justify-content-center d-flex align-items-center" xs={1}>
+                  <Form.Check />
+                </Col>
+                <Col>
+                  Album Cover
+                </Col>
+                <Col className="d-flex align-items-center justify-content-start">
+                  Title
+                </Col>
+                <Col xs={3} className='d-flex align-items-center'>
+                  Description
+                </Col>
+                <Col className="d-flex align-items-center">
+                  Date
+                </Col>
+                <Col className="d-flex align-items-center">
+                  Status
+                </Col>
+                <Col className="d-flex align-items-center">
+                  {/* {album.listens} */}
+                  Listens
+                </Col>
+                <Col className="d-flex align-items-center">
+                  {/* {album.likes} */}
+                  Likes
+                </Col>
+              </Row>
+              <Row>
                 <Col className="album-item-container">
-                  {albums.map((album,index) => (
+                  {albums.map((album, index) => (
                     <AlbumItem key={index} album={album} />
                   ))}
                 </Col>
-                {/* <Form onSubmit={handleSubmit}>
-                  <Stack direction="vertical" className="song-item-container p-3" gap={1}>
-                    <Form.Group controlId="songTitle">
-                      <Form.Label className="home-page-text">Song Title</Form.Label>
-                      <Form.Control type="text" placeholder="Enter song title" value={songTitle} onChange={e => setSongTitle(e.target.value)} />
-                    </Form.Group>
-
-                    <Form.Group controlId="songFile" className="mb-4">
-                      <Form.Label className="home-page-text">Song File</Form.Label>
-                      <Form.Control type="file" onChange={e => setSongFile(e.target.files[0])} />
-                    </Form.Group>
-
-                    <Form.Group controlId="album">
-                      <Form.Label>Album</Form.Label>
-                      <Form.Control as="select" onChange={e => setSelectedAlbum(e.target.value)}>
-                        <option>Choose an existing album</option>
-                        {albums.map(album => (
-                          <option key={album.album_id} value={album.album_id}>{album.album_name}</option>
-                        ))}
-                      </Form.Control>
-
-                    </Form.Group>
-
-                    <Button variant="danger" type="submit">
-                      Upload
-                    </Button>
-                  </Stack>
-                </Form> */}
               </Row>
             </Col>
           </Row>

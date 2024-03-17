@@ -56,7 +56,7 @@ class ArtistController extends Controller
         $request->validate([
             'display_name' => 'required',
             'song' => 'required|file|mimes:mp3,wav,ogg|max:40000',
-            'album_id' => 'required|exists:albums,album_id', // validate that the album exists
+            'album_id' => 'required|exists:albums,album_id',
         ]);
     
         $currentTime = time();
@@ -69,7 +69,7 @@ class ArtistController extends Controller
         $song->display_name = $request->display_name;
         $song->hashed_name = $hashedSongName;
         $song->user_id = auth()->id();
-        $song->album_id = $request->album_id; // assign the song to the existing album
+        $song->album_id = $request->album_id; 
     
         $song->save();
     
@@ -150,5 +150,10 @@ class ArtistController extends Controller
         }
 
         return response()->json($song);
+    }
+
+    public function createAlbumAndUploadSongs(Request $request)
+    {
+        CreateAlbumAndUploadSongsJob::dispatch($request);
     }
 }

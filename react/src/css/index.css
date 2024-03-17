@@ -802,33 +802,42 @@ h1 span:hover {
   color: #fff;
 }
 
+.album-container-header {
+  color: #fff;
+  font-weight: 600;
+}
+
 .album-item-container {
   border-top: 1px solid #ffffff9f;
   border-bottom: 1px solid #ffffff9f;
   overflow: auto;
   height: 60vh;
   color: #fff;
+  background: #1f1f1f;
 }
 
 .album-item-container::-webkit-scrollbar {
-  width: 5px; /* Width of the scrollbar */
+  width: 5px;
+  /* Width of the scrollbar */
   border-radius: 10px;
 }
 
 .album-item-container::-webkit-scrollbar-track {
   background: rgb(206, 206, 206);
   border-radius: 10px;
-   /* Color of the track */
+  /* Color of the track */
 }
 
 .album-item-container::-webkit-scrollbar-thumb {
-  background: #888; /* Color of the scroll thumb */
+  background: #888;
+  /* Color of the scroll thumb */
   border-radius: 10px;
 
 }
 
 .album-item-container::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Color of the scroll thumb on hover */
+  background: #555;
+  /* Color of the scroll thumb on hover */
   border-radius: 10px;
 
 }
@@ -836,12 +845,31 @@ h1 span:hover {
 .album-item {
   border-top: 1px solid #ffffff9f;
   border-bottom: 1px solid #ffffff9f;
-  /* height: 100vh; */
   color: #fff;
 }
 
+.album-item-description {
+  color: #fff;
+  /* font-size: 12px; */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  align-items: center;
+}
+
+.album-item a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.album-item a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
 .song-item {
-  color: #fff; /* should be redundant and to be removed*/
+  color: #fff;
+  /* should be redundant and to be removed*/
 }
 
 .song-item:hover {
@@ -970,7 +998,7 @@ h1 span:hover {
 .album-cover-preview {
   height: 250px;
   width: 250px;
-  object-fit:contain;
+  object-fit: contain;
   color: rgb(240, 240, 240);
 }
 

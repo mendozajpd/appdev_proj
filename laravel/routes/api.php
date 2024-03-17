@@ -40,9 +40,10 @@ Route::get('/artists/{id}', [ArtistController::class, 'getArtist']);
 Route::get('/play/{filename}', [SongController::class, 'getSong']);
 Route::get('/songs/{id}', [ArtistController::class, 'getArtistSongs']);
 Route::post('upload-song', [ArtistController::class, 'uploadSong']);
+Route::post('create/album', [ArtistController::class, 'createAlbum']);
+Route::post('create/album/upload-songs', [ArtistController::class, 'createAlbumAndUploadSongs']);
 Route::delete('songs/{id}', [ArtistController::class, 'deleteSong']);
 Route::put('albums/{id}', [ArtistController::class, 'editAlbum']);
-Route::post('create/album', [ArtistController::class, 'createAlbum']);
 Route::put('songs/{id}', [ArtistController::class, 'editSong']);
 
 Route::group([
