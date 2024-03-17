@@ -42,6 +42,7 @@ Route::get('/songs/{id}', [ArtistController::class, 'getArtistSongs']);
 Route::post('upload-song', [ArtistController::class, 'uploadSong']);
 Route::delete('songs/{id}', [ArtistController::class, 'deleteSong']);
 Route::put('albums/{id}', [ArtistController::class, 'editAlbum']);
+Route::post('create/album', [ArtistController::class, 'createAlbum']);
 Route::put('songs/{id}', [ArtistController::class, 'editSong']);
 
 Route::group([

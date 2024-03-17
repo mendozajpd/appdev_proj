@@ -49,57 +49,27 @@ class ArtistController extends Controller
 
     public function uploadSong(Request $request)
     {
-        // if (!$request->hasFile('image')) {
-        //     return response()->json(['message' => 'Image file is empty'], 400);
-        // }
-        
         if (!$request->hasFile('song')) {
             return response()->json(['message' => 'Song file is empty'], 400);
         }
-
+    
         $request->validate([
             'display_name' => 'required',
             'song' => 'required|file|mimes:mp3,wav,ogg|max:40000',
-            // 'image' => 'required|file|mimes:jpeg,png,jpg,gif', // validate the image file
-            'new_album_name' => 'sometimes|required',
-            'new_album_description' => 'sometimes|required',
-            // 'new_album_photo' => 'sometimes|required|file|mimes:jpeg,png,jpg,gif',
+            'album_id' => 'required|exists:albums,album_id', // validate that the album exists
         ]);
-
+    
         $currentTime = time();
         $hashedTime = hash('sha256', $currentTime);
-    
         $songExtension = $request->file('song')->getClientOriginalExtension();
-        // $imageExtension = $request->file('image')->getClientOriginalExtension();
-    
         $hashedSongName = $hashedTime . '.' . $songExtension;
-        // $hashedImageName = $hashedTime . '.' . $imageExtension;
-    
         $request->file('song')->storeAs('songs', $hashedSongName, 'public');
-        // $request->file('image')->storeAs('images', $hashedImageName, 'public');
     
         $song = new Song;
         $song->display_name = $request->display_name;
         $song->hashed_name = $hashedSongName;
-        $song->photo_hashed_name = 'tempnone';
         $song->user_id = auth()->id();
-        
-
-        if ($request->has('new_album_name')) {
-            $album = new Album;
-            $album->album_name = $request->new_album_name;
-            $album->album_description = $request->new_album_description;
-            $album->photo_hashed_name = $request->file('new_album_photo')->hashName();
-            $album->user_id = auth()->id();
-    
-            $request->file('new_album_photo')->storeAs('album_images', $album->photo_hashed_name);
-    
-            $album->save();
-    
-            $song->album_id = $album->id;
-        } else {
-            $song->album_id = $request->album_id;
-        }
+        $song->album_id = $request->album_id; // assign the song to the existing album
     
         $song->save();
     
@@ -120,23 +90,32 @@ class ArtistController extends Controller
 
     public function createAlbum(Request $request)
     {
-    $request->validate([
-        'album_name' => 'required',
-        'album_description' => 'required',
-        'album_photo' => 'required|file|mimes:jpeg,png,jpg,gif',
-    ]);
-
-    $album = new Album;
-    $album->album_name = $request->album_name;
-    $album->album_description = $request->album_description;
-    $album->photo_hashed_name = $request->file('album_photo')->hashName();
-    $album->user_id = auth()->id();
-
-    $request->file('album_photo')->storeAs('album_images', $album->photo_hashed_name);
-
-    $album->save();
-
-    return response()->json(['message' => 'Album Created Successfully'], 201);
+        $request->validate([
+            'album_name' => 'required',
+            'album_description' => 'required',
+            'album_photo' => 'required|file|mimes:jpeg,png,jpg,gif',
+            // 'is_published' => 'required|boolean',
+            'release_date' => 'nullable|date',
+        ]);
+    
+        $currentTime = time();
+        $hashedTime = hash('sha256', $currentTime);
+        $photoExtension = $request->file('album_photo')->getClientOriginalExtension();
+        $hashedPhotoName = $hashedTime . '.' . $photoExtension;
+    
+        $album = new Album;
+        $album->album_name = $request->album_name;
+        $album->album_description = $request->album_description;
+        $album->cover_photo_hash = $hashedPhotoName;
+        $album->user_id = auth()->id();
+        $album->is_published = $request->is_published;
+        $album->release_date = $request->release_date;
+    
+        $request->file('album_photo')->storeAs('album_images', $hashedPhotoName, 'public');
+    
+        $album->save();
+    
+        return response()->json(['message' => 'Album Created Successfully'], 201);
     }
 
     public function editAlbum(Request $request, $id)

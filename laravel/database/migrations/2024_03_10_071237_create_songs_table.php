@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('display_name');
             $table->string('hashed_name');
-            $table->string('photo_hashed_name'); 
+            // $table->string('photo_hashed_name'); 
             $table->unsignedBigInteger('album_id');
             $table->foreign('album_id')->references('album_id')->on('albums')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');

@@ -11,6 +11,7 @@ import AlbumCoverDropzone from './components/AlbumCoverDropzone';
 import MediaDropzone from './components/MediaDropzone';
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AlbumItem from './items/AlbumItem';
 
 const ArtistPage = () => {
   const [isVerified, setIsVerified] = useState(false);
@@ -98,6 +99,7 @@ const ArtistPage = () => {
     })
       .then(response => {
         setAlbums(response.data);
+        console.log(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -262,6 +264,37 @@ const ArtistPage = () => {
     });
   };
 
+  // Create Album
+  const handleCreateAlbum = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('album_name', albumTitle);
+    formData.append('album_description', albumDescription);
+    formData.append('album_photo', albumPhoto);
+    formData.append('is_published', 0); // or false, depending on your requirements
+    // formData.append('release_date', releaseDate); // if you have a release date field
+
+    const token = localStorage.getItem("jwt_token");
+
+    try {
+      const response = await axios.post(`${BACKEND_URL}/create/album`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log(response.data);
+      upload_success(response.data.message);
+      handleClose();
+      resetUpload();
+    } catch (error) {
+      upload_failed(error.response.data.message);
+      console.error('There was an error!', error);
+    }
+  };
+
   return (
     <>
       <div className="home-page d-flex vh-100">
@@ -277,13 +310,13 @@ const ArtistPage = () => {
               <>
                 <Row className='py-3 d-flex' style={{ borderBottom: '1px solid var(--bs-border-color-translucent)' }}>
                   <Col xs={7}>
-                    <Form onSubmit={handleSubmit}>
+                    <Form onSubmit={handleCreateAlbum}>
                       <Stack direction="vertical" className="px-3" gap={1}>
-                        <Form.Group controlId="songTitle">
+                        <Form.Group controlId="album_name">
                           <Form.Label>Album Title</Form.Label>
                           <Form.Control type="text" placeholder="Enter album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
                         </Form.Group>
-                        <Form.Group controlId="songTitle">
+                        <Form.Group controlId="album_description">
                           <Form.Label>Album Description</Form.Label>
                           <Form.Control as="textarea" rows={3} placeholder="Enter album description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} style={{ resize: 'none' }} />
                         </Form.Group>
@@ -315,9 +348,14 @@ const ArtistPage = () => {
               </Button>
             )}
             {uploadStep < 2 ? (
-              <Button variant="secondary" onClick={handleContinue}>
-                Continue
-              </Button>
+              <>
+                <Button variant="secondary" onClick={handleContinue}>
+                  Continue
+                </Button>
+                <Button variant="secondary" onClick={handleCreateAlbum}>
+                  Create Album
+                </Button>
+              </>
             ) : (
               <Button variant="secondary" onClick={handleClose}>
                 Ok
@@ -326,8 +364,8 @@ const ArtistPage = () => {
           </Modal.Footer>
         </Modal>
         <Container className="home-page-content" fluid>
-          <Row className="h-100">
-            <Col className="p-5">
+          <Row className="">
+            <Col className="p-5 ">
               <Row className="mb-5">
                 <Col xs={4}>
                   <Row>
@@ -344,40 +382,46 @@ const ArtistPage = () => {
                   </Button>
                 </Col>
               </Row>
-              <h1 className="home-page-text mb-5">
-                This should show ALBUMS of the artist
-              </h1>
+              <Row>
+                <h1 className="home-page-text mb-5">
+                  Artist content
+                </h1>
+              </Row>
+              <Row>
+                <Col className="album-item-container">
+                  {albums.map((album,index) => (
+                    <AlbumItem key={index} album={album} />
+                  ))}
+                </Col>
+                {/* <Form onSubmit={handleSubmit}>
+                  <Stack direction="vertical" className="song-item-container p-3" gap={1}>
+                    <Form.Group controlId="songTitle">
+                      <Form.Label className="home-page-text">Song Title</Form.Label>
+                      <Form.Control type="text" placeholder="Enter song title" value={songTitle} onChange={e => setSongTitle(e.target.value)} />
+                    </Form.Group>
 
+                    <Form.Group controlId="songFile" className="mb-4">
+                      <Form.Label className="home-page-text">Song File</Form.Label>
+                      <Form.Control type="file" onChange={e => setSongFile(e.target.files[0])} />
+                    </Form.Group>
 
-              <Form onSubmit={handleSubmit}>
-                <Stack direction="vertical" className="song-item-container p-3" gap={1}>
-                  <Form.Group controlId="songTitle">
-                    <Form.Label className="home-page-text">Song Title</Form.Label>
-                    <Form.Control type="text" placeholder="Enter song title" value={songTitle} onChange={e => setSongTitle(e.target.value)} />
-                  </Form.Group>
+                    <Form.Group controlId="album">
+                      <Form.Label>Album</Form.Label>
+                      <Form.Control as="select" onChange={e => setSelectedAlbum(e.target.value)}>
+                        <option>Choose an existing album</option>
+                        {albums.map(album => (
+                          <option key={album.album_id} value={album.album_id}>{album.album_name}</option>
+                        ))}
+                      </Form.Control>
 
-                  <Form.Group controlId="songFile" className="mb-4">
-                    <Form.Label className="home-page-text">Song File</Form.Label>
-                    <Form.Control type="file" onChange={e => setSongFile(e.target.files[0])} />
-                  </Form.Group>
+                    </Form.Group>
 
-                  <Form.Group controlId="album">
-                    <Form.Label>Album</Form.Label>
-                    <Form.Control as="select" onChange={e => setSelectedAlbum(e.target.value)}>
-                      <option>Choose an existing album</option>
-                      {albums.map(album => (
-                        <option key={album.album_id} value={album.album_id}>{album.album_name}</option>
-                      ))}
-                    </Form.Control>
-
-                  </Form.Group>
-
-                  <Button variant="danger" type="submit">
-                    Upload
-                  </Button>
-                </Stack>
-              </Form>
-
+                    <Button variant="danger" type="submit">
+                      Upload
+                    </Button>
+                  </Stack>
+                </Form> */}
+              </Row>
             </Col>
           </Row>
 

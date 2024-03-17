@@ -19,6 +19,9 @@ return new class extends Migration
             $table->text('album_description')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('cover_photo_hash')->nullable();
+            $table->boolean('is_published')->default(false); // New column for the published status
+            $table->timestamp('release_date')->nullable(); // New column for the release date
             $table->timestamps();
         });
     }
