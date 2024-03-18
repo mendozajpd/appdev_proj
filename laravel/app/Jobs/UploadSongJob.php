@@ -15,27 +15,24 @@ class UploadSongJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     
+    protected $songPath;
     protected $albumId;
+    protected $displayName;
+    protected $hashedSongName;
 
-    public function __construct($songPath, $albumId)
+    public function __construct($songPath, $albumId, $displayName, $hashedSongName)
     {
         $this->songPath = $songPath;
         $this->albumId = $albumId;
+        $this->displayName = $displayName;
+        $this->hashedSongName = $hashedSongName;
     }
 
     public function handle()
     {
-        $currentTime = time();
-        $hashedTime = hash('sha256', $currentTime);
-        $songExtension = pathinfo(Storage::url($this->songPath), PATHINFO_EXTENSION);
-        $hashedSongName = $hashedTime . '.' . $songExtension;
-
-        // Move the song from the temporary location to the final location
-        Storage::move($this->songPath, 'songs/' . $hashedSongName);
-
         $song = new Song;
         $song->display_name = $this->displayName;
-        $song->song_hashed_name = $hashedSongName;
+        $song->hashed_name = $this->hashedSongName;
         $song->user_id = auth()->id();
         $song->album_id = $this->albumId;
         $song->save();

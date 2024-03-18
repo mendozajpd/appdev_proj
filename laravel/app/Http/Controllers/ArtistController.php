@@ -165,25 +165,35 @@ class ArtistController extends Controller
             'songs.*' => 'file|mimes:mp3,wav,ogg|max:40000',
         ]);
     
-        // Store the album photo in a temporary location
-        $albumPhotoPath = $request->file('album_photo')->store('temp');
+        $currentTime = time();
+        $hashedTime = hash('sha256', $currentTime);
+        $photoExtension = $request->file('album_photo')->getClientOriginalExtension();
+        $hashedPhotoName = $hashedTime . '.' . $photoExtension;
     
-        // Dispatch a job to create an album
-        // $albumId = CreateAlbumJob::dispatchNow($validatedData['album_name'], $validatedData['album_description'], $albumPhotoPath);
+        $request->file('album_photo')->storeAs('album_images', $hashedPhotoName, 'public');
     
         $album = new Album;
         $album->album_name = $validatedData['album_name'];
         $album->album_description = $validatedData['album_description'];
-        $album->cover_photo_path = Storage::url($albumPhotoPath);
+        $album->cover_photo_hash = $hashedPhotoName;
+        $album->user_id = auth()->id();
         $album->save();
+    
+        $displayNames = $request->input('displayNames');
 
-        // Store the songs in temporary locations and dispatch jobs to upload them
-        foreach ($request->file('songs') as $song) {
-            $songPath = $song->store('temp');
-            $displayName = $song->getClientOriginalName();
-            UploadSongJob::dispatch($songPath, $albumId, $displayName);
+        foreach ($request->file('songs') as $index => $song) {
+            $currentTime = time();
+            $hashedTime = hash('sha256', $song->getClientOriginalName() . $currentTime);
+            $songExtension = $song->getClientOriginalExtension();
+            $hashedSongName = $hashedTime . '.' . $songExtension;
+        
+            $songPath = $song->storeAs('songs', $hashedSongName, 'public');
+        
+            $displayName = $displayNames[$index];
+        
+            UploadSongJob::dispatch($songPath, $album->album_id, $displayName, $hashedSongName);
         }
     
-        return response()->json(['message' => 'Requests placed into the job queue'], 200);
+        return response()->json(['message' => 'Album created and songs upload requested'], 200);
     }
 }

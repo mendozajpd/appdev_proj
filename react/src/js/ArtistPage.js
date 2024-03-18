@@ -42,7 +42,6 @@ const ArtistPage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const song = 'http://localhost:8000/storage/songs/3b0758c3129702d71a2b379c73fa142e05c8e3733cee52d958128810c98d5317.mp3';
 
 
   useEffect(() => {
@@ -193,8 +192,8 @@ const ArtistPage = () => {
           </Modal.Footer>
         </Modal>
         <Container className="home-page-content" fluid>
-          <Row className="h-100">
-            <Col className="p-5">
+          <Row className="vh-100 overflow-hidden">
+            <Col className="p-5 vh-100 overflow-auto mb-5 custom-scrollbar">
               <Row className="mb-5">
                 <Form.Control className="search-bar" placeholder="Search" />
               </Row>
@@ -206,7 +205,7 @@ const ArtistPage = () => {
               </p>
 
 
-              <Stack direction="vertical" className="song-item-container p-3" gap={1}>
+              <Stack direction="vertical" className="song-item-container p-3 mb-5" gap={1}>
                 {songs.length === 0 ? (
                   <div className="home-page-text">This artist doesn't have songs yet :((</div>
                 ) : (

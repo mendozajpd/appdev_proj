@@ -1,13 +1,29 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Container, Row, Col, Button, FormControl } from 'react-bootstrap';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+import Select from 'react-select';
+import BACKEND_URL from "../../config";
+import axios from 'axios';
+
+
 
 function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop }) {
     const [files, setFiles] = useState([]);
     const [editing, setEditing] = useState(null);
     const [fileName, setFileName] = useState('');
+    const [options, setOptions] = useState([]);
+    const [selectedGenres, setSelectedGenres] = useState({});
+
+    useEffect(() => {
+        axios.get(`${BACKEND_URL}/genres`)
+            .then(response => {
+                const genres = response.data;
+                const options = genres.map(genre => ({ value: genre.id, label: genre.name }));
+                setOptions(options);
+            });
+    }, []);
 
     const { getRootProps, getInputProps, isDragActive, isDragAccept } = useDropzone({
         accept: {
@@ -52,27 +68,41 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         }
     };
 
+    const handleGenreChange = (file) => (selectedOptions) => {
+        setSelectedGenres(prev => ({ ...prev, [file.path]: selectedOptions }));
+    };
+
     const filesView = files.map((file, index) => (
         <React.Fragment key={`${file.path}-${index}`}>
             <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
                 <Col className='d-flex flex-column justify-content-start'>
                     <Row className='d-flex flex-nowrap'>
-                        <Col className='d-flex justify-content-start align-items-center'>
+                        <Col xs={5} className='d-flex justify-content-start align-items-center'>
                             {editing === index ? (
                                 <FormControl
                                     value={fileName}
                                     onChange={handleFileNameChange}
                                     onBlur={() => handleBlur(file, index)}
-                                    onKeyDown={(event) => handleKeyDown(event, file, index)} 
+                                    onKeyDown={(event) => handleKeyDown(event, file, index)}
                                 />
                             ) : (
                                 <h5 className='upload-preview' onDoubleClick={() => handleDoubleClick(file, index)}>{file.displayName}</h5>
                             )}
                         </Col>
-                        <Col xs={2} className='d-flex justify-content-start align-items-center'>
-                            <h5> {file.formattedSize} MB </h5>
+                        <Col xs={4} className='d-flex align-items-center' >
+                            <Select
+                                isMulti
+                                options={options}
+                                placeholder='Genre'
+                                value={selectedGenres[file.path]}
+                                onChange={handleGenreChange(file)}
+                            />
+                            {/* <Select isMulti options={options} placeholder='Genre' className='d-flex overflow-auto' /> */}
                         </Col>
-                        <Col xs={1}>
+                        <Col className='d-flex justify-content-start align-items-center'>
+                            {file.formattedSize} MB
+                        </Col>
+                        <Col>
                             <Button className='fa fa-times p-2 btn-preview-delete' variant='danger' onClick={removeFile(file)} />
                         </Col>
                     </Row>

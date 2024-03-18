@@ -59,7 +59,7 @@ const ArtistPage = () => {
       theme: "dark",
       transition: Bounce,
       onClose: () => {
-        window.location.reload();
+        // window.location.reload();
       }
     });
   }
@@ -264,54 +264,26 @@ const ArtistPage = () => {
     });
   };
 
-  // Create Album
-  // const handleCreateAlbum = async (e) => {
-  //   e.preventDefault();
 
-  //   const formData = new FormData();
-  //   formData.append('album_name', albumTitle);
-  //   formData.append('album_description', albumDescription);
-  //   formData.append('album_photo', albumPhoto);
-  //   formData.append('is_published', 0); // or false, depending on your requirements
-  //   // formData.append('release_date', releaseDate); // if you have a release date field
-
-  //   const token = localStorage.getItem("jwt_token");
-
-  //   try {
-  //     const response = await axios.post(`${BACKEND_URL}/create/album`, formData, {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     console.log(response.data);
-  //     upload_success(response.data.message);
-  //     handleClose();
-  //     resetUpload();
-  //   } catch (error) {
-  //     upload_failed(error.response.data.message);
-  //     console.error('There was an error!', error);
-  //   }
-  // };
-  
   const handleCreateAlbum = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append('album_name', albumTitle);
     formData.append('album_description', albumDescription);
     formData.append('album_photo', albumPhoto);
     formData.append('is_published', 0); // or false, depending on your requirements
     // formData.append('release_date', releaseDate); // if you have a release date field
-  
+
     // Add each song file to the form data
     mediaFiles.forEach((file, index) => {
       formData.append(`songs[${index}]`, file);
+      formData.append(`displayNames[${index}]`, file.displayName);
     });
-  
+
+    console.log(mediaFiles);
     const token = localStorage.getItem("jwt_token");
-  
+
     try {
       const response = await axios.post(`${BACKEND_URL}/create/album/upload-songs`, formData, {
         headers: {
@@ -319,7 +291,7 @@ const ArtistPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       console.log(response.data);
       upload_success(response.data.message);
       handleClose();

@@ -884,6 +884,8 @@ h1 span:hover {
   background: #101011;
 }
 
+/* ARTIST PAGE */
+
 /* PLAYER */
 .user-player-bar {
   background: #130f10 !important;
@@ -1002,6 +1004,27 @@ h1 span:hover {
   color: rgb(240, 240, 240);
 }
 
+/* CUSTOM SCROLLBAR */
+/* Width */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.custom-scrollbar::-webkit-scrollbar-track {
+  /* background: #f1f1f1;  */
+}
+ 
+/* Handle */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #55555578; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
 
 @keyframes bounce {
 
