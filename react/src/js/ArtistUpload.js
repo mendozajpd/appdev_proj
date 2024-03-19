@@ -45,6 +45,7 @@ const ArtistPage = () => {
   const [songTitle, setSongTitle] = useState('');
   const [songFile, setSongFile] = useState(null);
   const [mediaFiles, setMediaFiles] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState({});
 
   // TOASTIFY 
   const upload_success = (message) => {
@@ -241,6 +242,7 @@ const ArtistPage = () => {
     setSongTitle('');
     setSongFile(null);
     setSelectedAlbum('');
+    setSelectedGenres({});
   };
 
   const handleContinue = () => {
@@ -264,9 +266,15 @@ const ArtistPage = () => {
     });
   };
 
+  const handleGenreChange = (selectedGenres) => {
+    setSelectedGenres(selectedGenres);
+  };
+
 
   const handleCreateAlbum = async (e) => {
     e.preventDefault();
+
+    console.log(selectedGenres);
 
     const formData = new FormData();
     formData.append('album_name', albumTitle);
@@ -275,10 +283,19 @@ const ArtistPage = () => {
     formData.append('is_published', 0); // or false, depending on your requirements
     // formData.append('release_date', releaseDate); // if you have a release date field
 
+
     // Add each song file to the form data
     mediaFiles.forEach((file, index) => {
+      const genres = selectedGenres[file.path] || [];
+      if (genres.length === 0) {
+        upload_failed(`The song ${file.name} does not have a genre.`);
+        return;
+      }
       formData.append(`songs[${index}]`, file);
       formData.append(`displayNames[${index}]`, file.displayName);
+      genres.forEach((genre, genreIndex) => {
+        formData.append(`genres[${index}][${genreIndex}]`, genre.value);
+      });
     });
 
     console.log(mediaFiles);
@@ -338,7 +355,7 @@ const ArtistPage = () => {
                 </Row>
                 <Row className="d-flex justify-content-center py-3">
                   <Col className="d-flex justify-content-center">
-                    <MediaDropzone onDrop={handleMediaDrop} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                    <MediaDropzone onDrop={handleMediaDrop} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
                   </Col>
                 </Row>
               </>
@@ -356,9 +373,9 @@ const ArtistPage = () => {
             )}
             {uploadStep < 2 ? (
               <>
-                <Button variant="secondary" onClick={handleContinue}>
+                {/* <Button variant="secondary" onClick={handleContinue}>
                   Continue
-                </Button>
+                </Button> */}
                 <Button variant="secondary" onClick={handleCreateAlbum}>
                   Create Album
                 </Button>

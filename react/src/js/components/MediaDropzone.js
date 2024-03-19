@@ -9,7 +9,7 @@ import axios from 'axios';
 
 
 
-function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop }) {
+function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange}) {
     const [files, setFiles] = useState([]);
     const [editing, setEditing] = useState(null);
     const [fileName, setFileName] = useState('');
@@ -69,7 +69,11 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     };
 
     const handleGenreChange = (file) => (selectedOptions) => {
-        setSelectedGenres(prev => ({ ...prev, [file.path]: selectedOptions }));
+        setSelectedGenres(prev => {
+            const newGenres = { ...prev, [file.path]: selectedOptions };
+            onGenreChange(newGenres); 
+            return newGenres;
+        });
     };
 
     const filesView = files.map((file, index) => (
@@ -150,8 +154,8 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     );
 }
 
-const MediaDropzone = ({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop }) => (
-    <Basic uploadText={uploadText} uploadTextClass={uploadTextClass} iconClass={iconClass} iconSize={iconSize} activeStyle={activeStyle} acceptStyle={acceptStyle} onDrop={onDrop} />
+const MediaDropzone = ({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange }) => (
+    <Basic uploadText={uploadText} uploadTextClass={uploadTextClass} iconClass={iconClass} iconSize={iconSize} activeStyle={activeStyle} acceptStyle={acceptStyle} onDrop={onDrop} onGenreChange={onGenreChange} />
 );
 
 export default MediaDropzone;

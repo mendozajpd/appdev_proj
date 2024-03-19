@@ -163,6 +163,8 @@ class ArtistController extends Controller
             'album_photo' => 'required|file|mimes:jpeg,png,jpg,gif',
             'songs' => 'required|array',
             'songs.*' => 'file|mimes:mp3,wav,ogg|max:40000',
+            'genres' => 'required|array',
+            'genres.*' => 'required|exists:genres,id',
         ]);
     
         $currentTime = time();
@@ -190,8 +192,9 @@ class ArtistController extends Controller
             $songPath = $song->storeAs('songs', $hashedSongName, 'public');
         
             $displayName = $displayNames[$index];
-        
-            UploadSongJob::dispatch($songPath, $album->album_id, $displayName, $hashedSongName);
+            $genres = $request->input('genres')[$index];
+            
+            UploadSongJob::dispatch($songPath, $album->album_id, $displayName, $hashedSongName, $genres);
         }
     
         return response()->json(['message' => 'Album created and songs upload requested'], 200);

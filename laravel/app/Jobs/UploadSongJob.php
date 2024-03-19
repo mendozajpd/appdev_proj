@@ -19,13 +19,15 @@ class UploadSongJob implements ShouldQueue
     protected $albumId;
     protected $displayName;
     protected $hashedSongName;
+    protected $genres;
 
-    public function __construct($songPath, $albumId, $displayName, $hashedSongName)
+    public function __construct($songPath, $albumId, $displayName, $hashedSongName, $genres)
     {
         $this->songPath = $songPath;
         $this->albumId = $albumId;
         $this->displayName = $displayName;
         $this->hashedSongName = $hashedSongName;
+        $this->genres = $genres;
     }
 
     public function handle()
@@ -36,5 +38,7 @@ class UploadSongJob implements ShouldQueue
         $song->user_id = auth()->id();
         $song->album_id = $this->albumId;
         $song->save();
+
+        $song->genres()->sync($this->genres);
     }
 }
