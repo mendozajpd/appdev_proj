@@ -321,7 +321,7 @@ const ArtistPage = () => {
                 {currentSongName && (
                   <>
                     <Image src="https://via.placeholder.com/50" rounded />
-                    <p className="home-page-text d-flex align-items-center p-2">{currentSongName}</p>
+                    <p className="home-page-text d-flex align-items-center p-2 text-truncate">{currentSongName}</p>
                   </>
                 )}
               </Col>
