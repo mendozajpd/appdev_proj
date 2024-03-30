@@ -699,7 +699,7 @@ h1 span:hover {
 
 /* User Side Bar */
 .user-sidebar {
-  border-right: 1px solid #800000;
+  /* border-right: 1px solid #800000; */
 }
 
 .sub-header {
@@ -920,8 +920,26 @@ h1 span:hover {
 
 /* UPLOAD MODAL */
 
+.upload-modal .modal-content {
+  background: #252527;
+  color: #fff;
+  border: solid 1px #655F5F;
+}
+
+.upload-modal .btn-close {
+  filter: #fff !important;
+}
+
+.upload-modal .modal-header {
+  border-bottom: 1px solid #B93B3B;
+}
+
+.upload-modal .modal-footer {
+  border-top: 1px solid #B93B3B;
+}
+
 .custom-dropzone-text {
-  color: #0000006c;
+  /* color: #0000006c; */
   font-size: 12px;
   padding: 20px;
   justify-content: center;
@@ -930,9 +948,9 @@ h1 span:hover {
 
 /* Custom Dropzone */
 .custom-dropzone {
-  border: 2px solid #e0e0e0;
+  border: 2px solid #655F5F;
   border-radius: 10px;
-  background-color: #eaeaea;
+  background-color: #3E3031;
   text-align: center;
   cursor: pointer;
   display: flex;
@@ -942,34 +960,59 @@ h1 span:hover {
 
 .media-dropzone {
   height: 300px;
-  /* Adjust as needed */
   overflow-y: auto;
-  border: 2px solid #e0e0e0;
-  border-radius: 10px;
-  padding: 20px;
-  background-color: #eaeaea;
+  overflow-x: hidden;
+  /* border: 2px solid #655F5F; */
+  /* border-radius: 10px; */
+  /* background-color: #353535 !important; */
   text-align: center;
   cursor: pointer;
 }
 
+
+/* MODAL FORM */
+.textarea-style {
+  resize: none;
+}
+
+.input-style {
+  background-color: #3E3031 !important;
+  color: white !important;
+  border: 2px solid #655F5F !important;
+}
+
+.input-style::placeholder {
+  color: #888 !important; 
+}
+
 .media-dropzone::-webkit-scrollbar {
-  width: 8px;
+  width: 2px;
+  scrollbar-color: #ff0000 #e60000;
 }
 
 .media-dropzone::-webkit-scrollbar-track {
-  background: #f4f4f4;
+  background: #9a9a9a;
 }
 
 .media-dropzone::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 20px;
-  border: 2px solid #f4f4f4;
+  background-color: #f60d0d;
+  /* border-radius: 20px; */
+  /* border: 2px solid #f4f4f4; */
 }
 
 .btn-preview-delete {
   border-radius: 25px !important;
   width: 3.5vh;
   height: 3.5vh;
+  color: #fff !important;
+}
+
+.btn-preview-delete:hover {
+  color: red !important;
+}
+
+.btn-preview-delete:active {
+  border: 0px solid #000000;
 }
 
 .upload-preview {
@@ -980,6 +1023,7 @@ h1 span:hover {
   white-space: nowrap;
   padding-left: 5px;
   padding-right: 5px;
+  color: #000000;
 }
 
 .upload-preview:hover {
@@ -988,13 +1032,39 @@ h1 span:hover {
 
 .player-borderless {
   box-shadow: none !important;
+  background-color: transparent !important;
 }
+
+.player-borderless .rhap_controls-section {
+  flex: none;
+}
+
+.player-borderless .rhap_progress-filled {
+  background-color: #FF0303;
+}
+
+.player-borderless .rhap_progress-indicator {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.player-borderless .rhap_main-controls-button {
+  font-size: 35px;
+  color: #fff;
+}
+
+.player-borderless .rhap_button-clear {
+  padding: 0 !important;
+}
+
 
 .files-view {
   cursor: default;
-  background-color: white;
+  background-color: rgb(39, 39, 39);
   padding: 20px;
-  border-radius: 10px;
+  border-top: 1px solid #655F5F;
+  border-bottom: 1px solid #655F5F;
+  /* border-radius: 10px; */
 }
 
 .album-cover-preview {
@@ -1024,6 +1094,25 @@ h1 span:hover {
 /* Handle on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #555; 
+}
+
+/* REACT- SELECT */
+/* The container that has the scrollbar */
+.css-46gnuy-ValueContainer {
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #888 #333; /* For Firefox */
+}
+
+.css-46gnuy-ValueContainer::-webkit-scrollbar {
+  width: 8px; /* For Chrome, Safari, and Opera */
+}
+
+.css-46gnuy-ValueContainer::-webkit-scrollbar-thumb {
+  background: #888; /* For Chrome, Safari, and Opera */
+}
+
+.css-46gnuy-ValueContainer::-webkit-scrollbar-thumb:hover {
+  background: #555; /* For Chrome, Safari, and Opera */
 }
 
 @keyframes bounce {

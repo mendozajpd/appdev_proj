@@ -9,12 +9,14 @@ import axios from 'axios';
 
 
 
-function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange}) {
+function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange }) {
     const [files, setFiles] = useState([]);
     const [editing, setEditing] = useState(null);
     const [fileName, setFileName] = useState('');
     const [options, setOptions] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState({});
+    const [isNameEmpty, setIsNameEmpty] = useState(false);
+
 
     useEffect(() => {
         axios.get(`${BACKEND_URL}/genres`)
@@ -51,13 +53,18 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         setFileName(file.displayName);  // Edit display name
     };
 
-    const handleFileNameChange = (event) => {
-        setFileName(event.target.value);
+    const handleFileNameChange = (file) => (event) => {
+        const name = event.target.value;
+        const newFiles = files.map((f) => {
+            if (f === file) {
+                return { ...f, displayName: name, isNameEmpty: name.trim() === '' };
+            }
+            return f;
+        });
+        setFiles(newFiles);
     };
 
-    const handleBlur = (file) => {
-        file.displayName = fileName;  // Update display name
-        setFiles([...files]);
+    const handleBlur = () => {
         setEditing(null);
     };
 
@@ -69,57 +76,148 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     };
 
     const handleGenreChange = (file) => (selectedOptions) => {
-        setSelectedGenres(prev => {
-            const newGenres = { ...prev, [file.path]: selectedOptions };
-            onGenreChange(newGenres); 
-            return newGenres;
-        });
+        setFiles(prevFiles => prevFiles.map(f => {
+            if (f === file) {
+                return { ...f, genres: selectedOptions };
+            }
+            return f;
+        }));
+    };
+
+    const styles = {
+        valueContainer: (base) => ({
+            ...base,
+            maxHeight: 80,
+            overflowY: "auto",
+            scrollbarWidth: "thin",
+            scrollbarColor: "#888 #333",
+            "::webkit-scrollbar": {
+                width: "8px"
+            },
+            "::webkit-scrollbar-thumb": {
+                background: "#888"
+            },
+            "::webkit-scrollbar-thumb:hover": {
+                background: "#555"
+            }
+        }),
+
+        multiValue: (base, state) => {
+            return state.data.isFixed ? { ...base, backgroundColor: "gray" } : base;
+        },
+        multiValueLabel: (base, state) => {
+            return state.data.isFixed
+                ? { ...base, fontWeight: "bold", color: "white", paddingRight: 6 }
+                : base;
+        },
+        multiValueRemove: (base, state) => {
+            return state.data.isFixed ? { ...base, display: "none" } : base;
+        },
+        control: base => ({
+            ...base,
+            backgroundColor: '#333',
+            color: 'white'
+        }),
+        menu: base => ({
+            ...base,
+            backgroundColor: '#333',
+            color: 'white',
+            scrollbarWidth: "thin",
+            scrollbarColor: "#888 #333",
+            "::webkit-scrollbar": {
+                width: "8px"
+            },
+            "::webkit-scrollbar-thumb": {
+                background: "#888"
+            },
+            "::webkit-scrollbar-thumb:hover": {
+                background: "#555"
+            }
+        }),
+        option: (provided, state) => ({
+            ...provided,
+            color: state.isSelected ? 'black' : 'white',
+            backgroundColor: state.isSelected ? 'gray' : '#333',
+            "&:hover": {
+                backgroundColor: '#555'
+            }
+        }),
+        input: (provided, state) => ({
+            ...provided,
+            color: 'white',
+        }),
     };
 
     const filesView = files.map((file, index) => (
-        <React.Fragment key={`${file.path}-${index}`}>
-            <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
-                <Col className='d-flex flex-column justify-content-start'>
-                    <Row className='d-flex flex-nowrap'>
-                        <Col xs={5} className='d-flex justify-content-start align-items-center'>
-                            {editing === index ? (
-                                <FormControl
-                                    value={fileName}
-                                    onChange={handleFileNameChange}
-                                    onBlur={() => handleBlur(file, index)}
-                                    onKeyDown={(event) => handleKeyDown(event, file, index)}
-                                />
-                            ) : (
-                                <h5 className='upload-preview' onDoubleClick={() => handleDoubleClick(file, index)}>{file.displayName}</h5>
-                            )}
-                        </Col>
-                        <Col xs={4} className='d-flex align-items-center' >
-                            <Select
-                                isMulti
-                                options={options}
-                                placeholder='Genre'
-                                value={selectedGenres[file.path]}
-                                onChange={handleGenreChange(file)}
-                            />
-                            {/* <Select isMulti options={options} placeholder='Genre' className='d-flex overflow-auto' /> */}
-                        </Col>
-                        <Col className='d-flex justify-content-start align-items-center'>
-                            {file.formattedSize} MB
-                        </Col>
-                        <Col>
-                            <Button className='fa fa-times p-2 btn-preview-delete' variant='danger' onClick={removeFile(file)} />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <AudioPlayer src={file.preview} layout="horizontal" className='player-borderless' />
-                    </Row>
-                </Col>
-            </Row>
-        </React.Fragment>
+        <>
+            <React.Fragment key={`${file.path}-${index}`}>
+                <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
+                    <Col className='d-flex flex-column justify-content-start'>
+                        <Row className='d-flex flex-nowrap'>
+                            <Col xs={1} className='d-flex justify-content-start mb-2 align-items-center'>
+                                {index + 1}
+                            </Col>
+                            <Col xs={6} className='d-flex align-items-end flex-column'>
+                                <Row className='w-100'>
+                                    <FormControl
+                                        value={file.displayName}
+                                        onChange={handleFileNameChange(file)}
+                                        onBlur={handleBlur}
+                                        onKeyDown={(event) => handleKeyDown(event, file, index)}
+                                        className='input-style'
+                                        placeholder="Song name"
+                                    />
+                                    {file.isNameEmpty && <div>Song name can't be empty</div>}
+                                </Row>
+                                <Row className='w-100'>
+                                    <AudioPlayer src={file.preview} layout="horizontal" className='player-borderless' customAdditionalControls={[]} customVolumeControls={[]} showJumpControls={false} />
+                                </Row>
+                            </Col>
+                            <Col xs={4} className='d-flex align-items-center' >
+                                <Row className='w-100'>
+                                    <Select
+                                        isMulti
+                                        styles={styles}
+                                        closeMenuOnSelect={false}
+                                        options={options}
+                                        placeholder='Genre'
+                                        value={file.genres}
+                                        onChange={handleGenreChange(file)}
+                                        maxMenuHeight={125}
+                                    />
+                                </Row>
+                            </Col>
+
+                            <Col xs={1} className='d-flex justify-content-center align-items-center'>
+                                <Button className='fa fa-times p-2 btn-preview-delete' variant='transparent outline-danger' onClick={removeFile(file)} />
+                            </Col>
+                        </Row>
+                        <Row>
+                        </Row>
+                    </Col>
+                </Row>
+            </React.Fragment>
+        </>
+
     ));
 
+    const filesAddMore = (
+        <Row className="mb-2 files-view" style={{ cursor: 'pointer', color: 'gray' }}>
+            <Col className='d-flex flex-column justify-content-start'>
+                <Row className='d-flex flex-nowrap'>
+                    <Col xs={12} className='d-flex justify-content-center align-items-center'>
+                        <i class="fa fa-plus-square px-2" aria-hidden="true" />
+
+                        Add more songs here
+                    </Col>
+                </Row>
+            </Col>
+        </Row>
+    );
+
+
     const style = useMemo(() => ({
-        ...(isDragActive ? activeStyle : {}),
+        ...(isDragActive ? { ...activeStyle, backgroundColor: 'lightgray' } : {}),
         ...(isDragAccept ? acceptStyle : {}),
     }), [isDragActive, isDragAccept, activeStyle, acceptStyle]);
 
@@ -143,9 +241,10 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
                         </Row>
                     </Col>
                 ) : (
-                    <Col className='p-3'>
+                    <Col className='px-3 py-1'>
                         <Row className='justify-content-center align-items-center d-flex flex-grow-1'>
                             {filesView}
+                            {filesAddMore}
                         </Row>
                     </Col>
                 )}

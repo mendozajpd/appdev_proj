@@ -38,6 +38,7 @@ function App() {
           <Route path="/admin/banned" element={<Banned />} />
           <Route path="*" element={<EmptyPage />} />
         </Routes>
+        {/* Player */}
       </div>
       {/* </div> */}
     </Router >

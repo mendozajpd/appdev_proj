@@ -40,7 +40,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     const hoveredStyle = useMemo(() => ({
         ...(isDragActive ? activeStyle : {}),
         ...(isDragAccept ? acceptStyle : {}),
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${backgroundImage})`,
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
     }), [isDragActive, isDragAccept, activeStyle, acceptStyle, backgroundImage]);

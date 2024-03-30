@@ -40,6 +40,7 @@ const ArtistPage = () => {
 
   // FILES
   const [albumTitle, setAlbumTitle] = useState('');
+  const [artistNames, setArtistNames] = useState('');
   const [albumDescription, setAlbumDescription] = useState('');
   const [albumPhoto, setAlbumPhoto] = useState(null);
   const [songTitle, setSongTitle] = useState('');
@@ -237,6 +238,7 @@ const ArtistPage = () => {
   const resetUpload = () => {
     setUploadStep(0);
     setAlbumTitle('');
+    setArtistNames('');
     setAlbumDescription('');
     setAlbumPhoto(null);
     setSongTitle('');
@@ -326,66 +328,77 @@ const ArtistPage = () => {
         <Modal className="upload-modal" show={show} size='lg' onHide={handleClose} backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Create Album</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {uploadStep === 0 ? (
-              <>
-                <Row className='py-3 d-flex' style={{ borderBottom: '1px solid var(--bs-border-color-translucent)' }}>
-                  <Col xs={7}>
-                    <Form onSubmit={handleCreateAlbum}>
-                      <Stack direction="vertical" className="px-3" gap={1}>
-                        <Form.Group controlId="album_name">
-                          <Form.Label>Album Title</Form.Label>
-                          <Form.Control type="text" placeholder="Enter album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
-                        </Form.Group>
-                        <Form.Group controlId="album_description">
-                          <Form.Label>Album Description</Form.Label>
-                          <Form.Control as="textarea" rows={3} placeholder="Enter album description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} style={{ resize: 'none' }} />
-                        </Form.Group>
-                      </Stack>
-                    </Form>
-                  </Col>
-                  <Col className="d-flex align-items-center px-5 py-2" style={{ width: 'auto' }}>
-                    <Row className="album-cover-preview">
-                      <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
-                    </Row>
-                  </Col>
-                </Row>
-                <Row className="d-flex justify-content-center py-3">
-                  <Col className="d-flex justify-content-center">
-                    <MediaDropzone onDrop={handleMediaDrop} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
-                  </Col>
-                </Row>
-              </>
-            ) : uploadStep === 1 ? (
-              <div>Page 1 (prevButton, nextButton)</div>
-            ) : uploadStep === 2 ? (
-              <div>Page 2 (prevButton)</div>
-            ) : ''}
-          </Modal.Body>
-          <Modal.Footer>
-            {uploadStep > 0 && (
-              <Button variant="secondary" onClick={handleBack}>
-                Back
-              </Button>
-            )}
-            {uploadStep < 2 ? (
-              <>
-                {/* <Button variant="secondary" onClick={handleContinue}>
-                  Continue
-                </Button> */}
-                <Button variant="secondary" onClick={handleCreateAlbum}>
-                  Create Album
+          <div className="p-3">
+            <Modal.Header closeButton>
+              <Modal.Title>Create Album</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              {uploadStep === 0 ? (
+                <>
+                  <Row className='py-3 d-flex px-3' style={{ borderBottom: '1px solid #B93B3B' }}>
+                    <Col className="d-flex align-items-center justify-content-center py-2">
+                      <Row className="album-cover-preview d-flex justify-content-center">
+                        <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                      </Row>
+                    </Col>
+                    <Col xs={12} sm={12} xl={7}>
+                      <Form onSubmit={handleCreateAlbum}>
+                        <Stack direction="vertical" className="px-3" gap={1}>
+                          <Form.Group controlId="album_name">
+                            {/* <Form.Label>Album Title</Form.Label> */}
+                            <Form.Control className="input-style" type="text" placeholder="Album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
+                          </Form.Group>
+                          <Form.Group controlId="album_description">
+                            {/* <Form.Label>Album Description</Form.Label> */}
+                            <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} />
+                          </Form.Group>
+                          <Form.Group controlId="collaborator_names">
+                            <Form.Label>Collaborators</Form.Label>
+                            <Form.Control className="input-style" type="text" placeholder="Artist names" value={artistNames} onChange={e => setArtistNames(e.target.value)} />
+                          </Form.Group>
+                        </Stack>
+                      </Form>
+                    </Col>
+                  </Row>
+                  <Row className="d-flex justify-content-center py-3">
+                    {/* <Col>
+                      nice
+                    </Col> */}
+                    <Col className="d-flex justify-content-center flex-column">
+                      {/* <Row>
+                        ADD SONGS
+                      </Row> */}
+                      <Row>
+                        <MediaDropzone onDrop={handleMediaDrop} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                      </Row>
+                    </Col>
+                  </Row>
+                </>
+              ) : uploadStep === 1 ? (
+                <div>Page 1 (prevButton, nextButton)</div>
+              ) : uploadStep === 2 ? (
+                <div>Page 2 (prevButton)</div>
+              ) : ''}
+            </Modal.Body>
+            <Modal.Footer>
+              {uploadStep > 0 && (
+                <Button variant="secondary" onClick={handleBack}>
+                  Back
                 </Button>
-              </>
-            ) : (
-              <Button variant="secondary" onClick={handleClose}>
-                Ok
-              </Button>
-            )}
-          </Modal.Footer>
+              )}
+              {uploadStep < 2 ? (
+                <>
+                  <Button variant="danger" onClick={handleCreateAlbum}>
+                    Create Album
+                  </Button>
+                </>
+              ) : (
+                <Button variant="secondary" onClick={handleClose}>
+                  Ok
+                </Button>
+              )}
+            </Modal.Footer>
+          </div>
         </Modal>
         <Container className="home-page-content" fluid>
           <Row className="">
