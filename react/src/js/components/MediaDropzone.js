@@ -19,6 +19,18 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
 
 
     useEffect(() => {
+
+        // Load the files from localStorage
+        const savedFiles = JSON.parse(localStorage.getItem('files')) || [];
+        setFiles(savedFiles);
+
+        // Load the genres from the files
+        const savedGenres = savedFiles.reduce((acc, file) => {
+            acc[file.path] = file.genres;
+            return acc;
+        }, {});
+        setSelectedGenres(savedGenres);
+
         axios.get(`${BACKEND_URL}/genres`)
             .then(response => {
                 const genres = response.data;
@@ -32,12 +44,16 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
             'audio/mp3': ['.mp3'],
         },
         onDrop: acceptedFiles => {
-            setFiles(prev => [...prev, ...acceptedFiles.map(file => Object.assign(file, {
+            const newFiles = [...files, ...acceptedFiles.map(file => Object.assign(file, {
                 preview: URL.createObjectURL(file),
                 formattedSize: (file.size / 1048576).toFixed(2),
-                displayName: file.name.split('.').slice(0, -1).join('.')  // Add display name
-            }))]);
-            onDrop(acceptedFiles);
+                displayName: file.name.split('.').slice(0, -1).join('.'),  // Add display name
+                genres: []
+            }))];
+            setFiles(newFiles);
+            onDrop(newFiles);
+
+            localStorage.setItem('files', JSON.stringify(newFiles));
         }
     });
 
@@ -48,40 +64,31 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         setFiles(newFiles);
     };
 
-    const handleDoubleClick = (file, index) => {
-        setEditing(index);
-        setFileName(file.displayName);  // Edit display name
-    };
-
-    const handleFileNameChange = (file) => (event) => {
-        const name = event.target.value;
-        const newFiles = files.map((f) => {
-            if (f === file) {
-                return { ...f, displayName: name, isNameEmpty: name.trim() === '' };
-            }
-            return f;
-        });
-        setFiles(newFiles);
+    const handleFileNameChange = (e, index) => {
+        const newDisplayName = e.target.value;
+        if (newDisplayName !== '') {
+            let newFiles = [...files];
+            newFiles[index].displayName = newDisplayName;
+            setFiles(newFiles);
+        }
     };
 
     const handleBlur = () => {
         setEditing(null);
     };
 
-    const handleKeyDown = (event, file, index) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            handleBlur(file, index);
-        }
-    };
-
     const handleGenreChange = (file) => (selectedOptions) => {
-        setFiles(prevFiles => prevFiles.map(f => {
-            if (f === file) {
-                return { ...f, genres: selectedOptions };
-            }
-            return f;
-        }));
+        setSelectedGenres(prev => {
+            const newGenres = { ...prev, [file.path]: selectedOptions };
+            console.log(newGenres);  // Log the new genres
+            onGenreChange(newGenres);
+            return newGenres;
+        });
+    
+        // Update the genres in the file
+        const newFiles = files.map(f => f.path === file.path ? { ...f, genres: selectedOptions } : f);
+        setFiles(newFiles);
+        localStorage.setItem('files', JSON.stringify(newFiles));
     };
 
     const styles = {
@@ -161,9 +168,8 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
                                 <Row className='w-100'>
                                     <FormControl
                                         value={file.displayName}
-                                        onChange={handleFileNameChange(file)}
+                                        onChange={(event) => handleFileNameChange(event, index)}
                                         onBlur={handleBlur}
-                                        onKeyDown={(event) => handleKeyDown(event, file, index)}
                                         className='input-style'
                                         placeholder="Song name"
                                     />
@@ -206,8 +212,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
             <Col className='d-flex flex-column justify-content-start'>
                 <Row className='d-flex flex-nowrap'>
                     <Col xs={12} className='d-flex justify-content-center align-items-center'>
-                        <i class="fa fa-plus-square px-2" aria-hidden="true" />
-
+                        <i className="fa fa-plus-square px-2" aria-hidden="true" />
                         Add more songs here
                     </Col>
                 </Row>

@@ -277,7 +277,8 @@ const ArtistPage = () => {
     e.preventDefault();
 
     console.log(selectedGenres);
-
+    console.log(mediaFiles);
+    
     const formData = new FormData();
     formData.append('album_name', albumTitle);
     formData.append('album_description', albumDescription);
@@ -288,13 +289,13 @@ const ArtistPage = () => {
 
     // Add each song file to the form data
     mediaFiles.forEach((file, index) => {
+      formData.append(`songs[${index}]`, file);
+      formData.append(`displayNames[${index}]`, file.displayName);
       const genres = selectedGenres[file.path] || [];
       if (genres.length === 0) {
         upload_failed(`The song ${file.name} does not have a genre.`);
         return;
       }
-      formData.append(`songs[${index}]`, file);
-      formData.append(`displayNames[${index}]`, file.displayName);
       genres.forEach((genre, genreIndex) => {
         formData.append(`genres[${index}][${genreIndex}]`, genre.value);
       });
@@ -414,7 +415,7 @@ const ArtistPage = () => {
                 </Col>
                 <Col className="d-flex justify-content-end">
                   <Button className="btn-danger" onClick={() => { handleShow(); resetUpload(); }}>
-                    <i class="fa fa-plus-square px-2" aria-hidden="true" />
+                    <i className="fa fa-plus-square px-2" aria-hidden="true" />
                     CREATE
                   </Button>
                 </Col>
