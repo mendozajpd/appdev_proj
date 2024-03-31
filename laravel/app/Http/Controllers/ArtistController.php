@@ -38,6 +38,18 @@ class ArtistController extends Controller
 
         return response()->json($albums);
     }
+
+    public function getArtistAlbums($id)
+    {
+        $user = User::find($id);
+        
+        if($user) {
+            $albums = $user->albums;
+            return response()->json($albums);
+        } else {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+    }
     
     public function getArtistSongs($id)
     {

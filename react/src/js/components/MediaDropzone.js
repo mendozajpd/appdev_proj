@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Container, Row, Col, Button, FormControl } from 'react-bootstrap';
 import AudioPlayer from 'react-h5-audio-player';
@@ -16,7 +16,8 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     const [options, setOptions] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState({});
     const [isNameEmpty, setIsNameEmpty] = useState(false);
-
+    const [playingFile, setPlayingFile] = useState(null);
+    const playerRefs = useRef({});
 
     useEffect(() => {
 
@@ -84,7 +85,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
             onGenreChange(newGenres);
             return newGenres;
         });
-    
+
         // Update the genres in the file
         const newFiles = files.map(f => f.path === file.path ? { ...f, genres: selectedOptions } : f);
         setFiles(newFiles);
@@ -176,7 +177,23 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
                                     {file.isNameEmpty && <div>Song name can't be empty</div>}
                                 </Row>
                                 <Row className='w-100'>
-                                    <AudioPlayer src={file.preview} layout="horizontal" className='player-borderless' customAdditionalControls={[]} customVolumeControls={[]} showJumpControls={false} />
+                                    <AudioPlayer
+                                        ref={c => playerRefs.current[file.path] = c}
+                                        src={file.preview}
+                                        layout="horizontal"
+                                        className='player-borderless'
+                                        customAdditionalControls={[]}
+                                        customVolumeControls={[]}
+                                        showJumpControls={false}
+                                        onPlay={() => {
+                                            // Pause the previously playing audio
+                                            if (playingFile && playingFile !== file.path && playerRefs.current[playingFile]) {
+                                                playerRefs.current[playingFile].audio.current.pause();
+                                            }
+                                            // Set the currently playing audio
+                                            setPlayingFile(file.path);
+                                        }}
+                                    />
                                 </Row>
                             </Col>
                             <Col xs={4} className='d-flex align-items-center' >

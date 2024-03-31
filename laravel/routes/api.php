@@ -40,6 +40,7 @@ Route::get('/artists/{id}', [ArtistController::class, 'getArtist']);
 Route::get('/play/{filename}', [SongController::class, 'getSong']);
 Route::get('genres', [SongController::class, 'getGenres']);
 Route::get('/songs/{id}', [ArtistController::class, 'getArtistSongs']);
+Route::get('/albums/{id}', [ArtistController::class, 'getArtistAlbums']);
 Route::post('upload-song', [ArtistController::class, 'uploadSong']);
 Route::post('create/album', [ArtistController::class, 'createAlbum']);
 Route::post('create/album/upload-songs', [ArtistController::class, 'createAlbumAndUploadSongs']);

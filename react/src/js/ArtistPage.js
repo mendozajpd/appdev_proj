@@ -10,6 +10,7 @@ import 'react-h5-audio-player/lib/styles.css';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SyncLoader } from "react-spinners"
+import ArtistAlbumItem from "./items/ArtistAlbumItem";
 
 const override = {
   display: "block",
@@ -42,6 +43,9 @@ const ArtistPage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  // ALBUMS
+  const [albums, setAlbums] = useState([]);
+
 
 
   useEffect(() => {
@@ -63,6 +67,16 @@ const ArtistPage = () => {
     axios.get(`${BACKEND_URL}/songs/${id}`)
       .then(response => {
         setSongs(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error!', error);
+      });
+
+    axios.get(`${BACKEND_URL}/albums/${id}`, {
+    })
+      .then(response => {
+        setAlbums(response.data);
+        console.log(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -192,47 +206,63 @@ const ArtistPage = () => {
           </Modal.Footer>
         </Modal>
         <Container className="home-page-content" fluid>
-          <Row className="vh-100 overflow-hidden">
-            <Col className="p-5 vh-100 overflow-auto mb-5 custom-scrollbar">
-              <Row className="mb-5">
-                <Form.Control className="search-bar" placeholder="Search" />
+          <Row className="h-100 overflow-hidden">
+            <Col className="vh-100 overflow-auto mb-5 custom-scrollbar">
+              <Row className="artist-banner p-5">
+                {/* <Form.Control className="search-bar" placeholder="Search" /> */}
+                <h1 className="home-page-text h-100 mb-5 d-flex align-items-end">
+                  <Image src="https://via.placeholder.com/100" style={{ width: '100px', height: '100px', marginRight: '15px' }} />
+                  {artist ? artist.name : 'Loading...'}
+                </h1>
               </Row>
-              <h1 className="home-page-text mb-5">
-                {artist ? artist.name : 'Loading...'}
-              </h1>
-              <p className="home-page-text">
-                NEW RELEASES
-              </p>
+              <Row className="p-5">
+                <p className="home-page-text">
+                  ARTIST ALBUMS
+                </p>
+                <div className="artist-album-list ">
+                  {albums.map((album, index) => (
+                    <ArtistAlbumItem key={index} album={album} />
+                  ))}
+                </div>
 
-
-              <Stack direction="vertical" className="song-item-container p-3 mb-5" gap={1}>
-                {songs.length === 0 ? (
-                  <div className="home-page-text">This artist doesn't have songs yet :((</div>
-                ) : (
-                  songs.map((song, index) => (
-                    <Row key={index} className="song-item p-3" onClick={() => {
-                      const songUrl = `${BACKEND_URL}/play/${song.hashed_name}`;
-                      fetch(songUrl)
-                        .then(response => response.blob())
-                        .then(blob => {
-                          const audioBlobURL = URL.createObjectURL(blob);
-                          setCurrentSong(audioBlobURL);
-                          setCurrentSongName(song.display_name);
-                        });
-                    }}>
-                      <Col xs={1}>
-                        {index + 1}
-                      </Col>
-                      <Col>
-                        {song.display_name}
-                      </Col>
-                    </Row>
-                  ))
-                )}
-              </Stack>
-
+                <p className="home-page-text mt-3">
+                  ARITST SONGS
+                </p>
+                <Stack direction="vertical" className="song-item-container p-3 mb-5" gap={1}>
+                  {songs.length === 0 ? (
+                    <SyncLoader
+                      color={color}
+                      loading={loading}
+                      cssOverride={override}
+                      size={20}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                  ) : (
+                    songs.map((song, index) => (
+                      <Row key={index} className="song-item p-3" onClick={() => {
+                        const songUrl = `${BACKEND_URL}/play/${song.hashed_name}`;
+                        fetch(songUrl)
+                          .then(response => response.blob())
+                          .then(blob => {
+                            const audioBlobURL = URL.createObjectURL(blob);
+                            setCurrentSong(audioBlobURL);
+                            setCurrentSongName(song.display_name);
+                          });
+                      }}>
+                        <Col xs={1}>
+                          {index + 1}
+                        </Col>
+                        <Col>
+                          {song.display_name}
+                        </Col>
+                      </Row>
+                    ))
+                  )}
+                </Stack>
+              </Row>
             </Col>
-            <Col xs={4} className="right-sidebar">
+            {/* <Col xs={4} className="right-sidebar">
               <Row className="p-5">
                 <Col>
                   <div className="text-center text-white">
@@ -257,7 +287,6 @@ const ArtistPage = () => {
                     </h1>
                   </div>
 
-                  {/* IF NOT VERIFIED */}
                   {!isVerified ? (
                     <>
                       <Button
@@ -300,19 +329,12 @@ const ArtistPage = () => {
                     <input value={color} onChange={(input) => setColor(input.target.value)} placeholder="Color of the loader" />
                     <p className="user-white-text">Testing out the Loader</p>
                     <a></a>
-                    <SyncLoader
-                      color={color}
-                      loading={loading}
-                      cssOverride={override}
-                      size={20}
-                      aria-label="Loading Spinner"
-                      data-testid="loader"
-                    />
+
                   </div>
                   <div className="line"></div>
                 </Col>
               </Row>
-            </Col>
+            </Col> */}
           </Row>
 
           <div className="position-relative flex-grow-1 d-flex">
@@ -326,7 +348,7 @@ const ArtistPage = () => {
                 )}
               </Col>
               <Col xs={6}>
-                <AudioPlayer src={currentSong} showSkipControls={true} showJumpControls={false} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
+                <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
               </Col>
               <Col xs={2}>
                 {/* <h1>Settings</h1> */}

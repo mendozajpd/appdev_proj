@@ -702,6 +702,18 @@ h1 span:hover {
   /* border-right: 1px solid #800000; */
 }
 
+.user-sidebar .pfp {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.user-sidebar .icon-suffix {
+  display: flex;
+  align-items: center;
+}
+
 .sub-header {
   color: #dd0000;
   cursor: default !important;
@@ -734,6 +746,7 @@ h1 span:hover {
 
 .home-page-content {
   padding-left: 0 !important;
+  overflow-x: hidden;
 }
 
 .home-page-text {
@@ -886,6 +899,66 @@ h1 span:hover {
 
 /* ARTIST PAGE */
 
+.artist-banner {
+  height: 30%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 1) 100%) no-repeat center fixed,
+    url("../../public/1280x400.png") no-repeat center;
+  background-size: cover, cover;
+}
+
+.artist-album-list {
+  display: flex;
+  overflow-x: auto;
+  width: 100vw !important;
+}
+
+.artist-album-item {
+  flex: 0 0 auto;
+  width: 150px;
+  height: 180px;
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  padding-top: 5px;
+  justify-content: center;
+  color: #fff;
+  background: #151515;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.artist-album-list {
+  display: flex;
+  overflow-x: auto;
+  width: 100vw !important;
+}
+
+/* For Webkit browsers like Chrome, Safari */
+.artist-album-list::-webkit-scrollbar {
+  background-color: transparent;
+  scrollbar-width: thin;
+}
+
+
+.artist-album-list::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.228);
+  border-radius: 15px;
+}
+
+.artist-album-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(128, 128, 128);
+}
+
+.artist-album-item:hover {
+  background: #2c2c2c9e;
+}
+
+.artist-album-photo {
+  width: 125px;
+  height: 125px;
+}
+
 /* PLAYER */
 .user-player-bar {
   background: #130f10 !important;
@@ -900,6 +973,30 @@ h1 span:hover {
 
 .user-player .rhap_main-controls-button {
   color: #fff !important;
+}
+
+.user-player .rhap_progress-indicator {
+  background: transparent !important;
+  box-shadow: none !important;
+  transition: 0.2s;
+  height: 15px;
+  width: 15px;
+  top: -10;
+}
+
+/* .user-player .rhap_progress-indicator:hover {
+  background: #fff !important;
+  box-shadow: rgba(134, 134, 134, 0.5) 0 0 5px !important;
+} */
+
+.user-player .rhap_progress-bar {
+  background-color: #868686 !important;
+  height: 1px;
+}
+
+.user-player .rhap_progress-filled {
+  background-color: #ffffff !important;
+  height: 2px;
 }
 
 .rhap_main {
@@ -982,7 +1079,7 @@ h1 span:hover {
 }
 
 .input-style::placeholder {
-  color: #888 !important; 
+  color: #888 !important;
 }
 
 .media-dropzone::-webkit-scrollbar {
@@ -1084,35 +1181,40 @@ h1 span:hover {
 .custom-scrollbar::-webkit-scrollbar-track {
   /* background: #f1f1f1;  */
 }
- 
+
 /* Handle */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #55555578; 
+  background: #55555578;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
 
 /* REACT- SELECT */
 /* The container that has the scrollbar */
 .css-46gnuy-ValueContainer {
-  scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: #888 #333; /* For Firefox */
+  scrollbar-width: thin;
+  /* For Firefox */
+  scrollbar-color: #888 #333;
+  /* For Firefox */
 }
 
 .css-46gnuy-ValueContainer::-webkit-scrollbar {
-  width: 8px; /* For Chrome, Safari, and Opera */
+  width: 8px;
+  /* For Chrome, Safari, and Opera */
 }
 
 .css-46gnuy-ValueContainer::-webkit-scrollbar-thumb {
-  background: #888; /* For Chrome, Safari, and Opera */
+  background: #888;
+  /* For Chrome, Safari, and Opera */
 }
 
 .css-46gnuy-ValueContainer::-webkit-scrollbar-thumb:hover {
-  background: #555; /* For Chrome, Safari, and Opera */
+  background: #555;
+  /* For Chrome, Safari, and Opera */
 }
 
 @keyframes bounce {

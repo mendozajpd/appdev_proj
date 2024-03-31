@@ -13,7 +13,8 @@ import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AlbumItem from './items/AlbumItem';
 
-const ArtistPage = () => {
+
+const ArtistUpload = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -35,7 +36,16 @@ const ArtistPage = () => {
 
   // MODAL
   const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const handleClose = () => {
+    const files = localStorage.getItem('files');
+    if (files) {
+      setShowConfirm(true);
+    } else {
+      setShow(false);
+    }
+  };
   const handleShow = () => setShow(true);
 
   // FILES
@@ -88,6 +98,15 @@ const ArtistPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
+    const handleBeforeUnload = (e) => {
+      const files = localStorage.getItem('files');
+      if (files) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     if (!token) {
       navigate('/login');
     } else {
@@ -107,8 +126,12 @@ const ArtistPage = () => {
         console.error('There was an error!', error);
       });
 
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
 
   }, [id, isVerified]);
+  
 
   const navigate = useNavigate();
 
@@ -278,7 +301,7 @@ const ArtistPage = () => {
 
     console.log(selectedGenres);
     console.log(mediaFiles);
-    
+
     const formData = new FormData();
     formData.append('album_name', albumTitle);
     formData.append('album_description', albumDescription);
@@ -326,6 +349,26 @@ const ArtistPage = () => {
     <>
       <div className="home-page d-flex vh-100">
         <UserSidebar />
+        {showConfirm && (
+          <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Confirm</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>You have unsaved changes. Are you sure you want to close?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={() => setShowConfirm(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" onClick={() => { localStorage.removeItem('files'); setShow(false); setShowConfirm(false); }}>
+                Discard
+              </Button>
+              <Button variant="primary" onClick={() => { /* Save as draft logic here */ setShow(false); setShowConfirm(false); }}>
+                Save as Draft
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+        
         <Modal className="upload-modal" show={show} size='lg' onHide={handleClose} backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered>
@@ -491,4 +534,4 @@ const ArtistPage = () => {
   );
 };
 
-export default ArtistPage;
+export default ArtistUpload;
