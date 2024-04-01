@@ -12,6 +12,12 @@ import MediaDropzone from './components/MediaDropzone';
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AlbumItem from './items/AlbumItem';
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
+// TEMP DATATABLE
+import { AlbumsTable } from './tables/AlbumsTable';
+
 
 
 const ArtistUpload = () => {
@@ -113,25 +119,14 @@ const ArtistUpload = () => {
       fetchUserDetails();
     }
 
-    axios.get(`${BACKEND_URL}/api/albums`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(response => {
-        setAlbums(response.data);
-        console.log(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
 
   }, [id, isVerified]);
-  
+
 
   const navigate = useNavigate();
 
@@ -148,20 +143,6 @@ const ArtistUpload = () => {
     transition: "background-color 0.3s, color 0.3s, transform 0.3",
   };
 
-  const handleMouseEnter = (e) => {
-    e.target.style.backgroundColor = "red";
-    e.target.style.color = "white";
-    e.target.style.borderColor = "#8d4b4b";
-  };
-
-  const handleMouseLeave = (e) => {
-    e.target.style.backgroundColor = "transparent";
-    e.target.style.color = "#ff3535";
-    e.target.style.borderColor = "#8d4b4b";
-  };
-
-
-
 
   const fetchUserDetails = async () => {
     try {
@@ -172,7 +153,7 @@ const ArtistUpload = () => {
         },
       });
       const userData = response.data; // Assuming user details are directly in response.data
-      console.log(userData);
+      //console.log(userData);
       setIsVerified(userData.email_verified_at !== null);
       if (userData.email_verified_at === null) {
         handleShow();
@@ -189,73 +170,6 @@ const ArtistUpload = () => {
       localStorage.removeItem("jwt_token");
     }
   };
-
-  const handleSendVerify = async (e) => {
-    e.preventDefault();
-    setIsButtonDisabled(true); // disable the button
-    setRemainingTime(180); // set remaining time to 3 minutes
-    const timerId = setInterval(() => {
-      setRemainingTime((time) => time - 1);
-    }, 1000);
-    setTimeout(() => {
-      setIsButtonDisabled(false); // enable the button after 3 minutes
-      clearInterval(timerId); // clear the interval
-    }, 3 * 60 * 1000);
-    try {
-      const token = localStorage.getItem("jwt_token");
-      const userDetailsResponse = await axios.get(`${BACKEND_URL}/api/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const user = userDetailsResponse.data;
-      const response = await axios.post(
-        `${BACKEND_URL}/api/resend-verification-email`,
-        {
-          name: user.name, // use the name from the user's details
-          email: user.email, // use the email from the user's details
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (setShow) {
-        handleClose();
-      }
-      console.log(response.data);
-    } catch (error) {
-      console.error("Email sending failed:", error);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('display_name', songTitle);
-    formData.append('song', songFile);
-    formData.append('album_id', selectedAlbum);
-
-    const token = localStorage.getItem("jwt_token");
-
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/upload-song`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      console.log(response.data);
-      upload_success(response.data.message);
-    } catch (error) {
-      upload_failed(error.response.data.message);
-      console.error('There was an error!', error);
-    }
-  };
-
 
   // Modal page handlers
   const resetUpload = () => {
@@ -281,13 +195,13 @@ const ArtistUpload = () => {
   // Dropzone
   const handleAlbumCoverDrop = (acceptedFiles) => {
     setAlbumPhoto(acceptedFiles[0]);
-    console.log(acceptedFiles[0].name);
+    //console.log(acceptedFiles[0].name);
   };
 
   const handleMediaDrop = (acceptedFiles) => {
     setMediaFiles(acceptedFiles);
     acceptedFiles.forEach(file => {
-      console.log(file.name);
+      //console.log(file.name);
     });
   };
 
@@ -295,12 +209,42 @@ const ArtistUpload = () => {
     setSelectedGenres(selectedGenres);
   };
 
+  const handleFileDelete = (fileToDelete) => {
+    const newMediaFiles = mediaFiles.filter(file => file !== fileToDelete);
+    setMediaFiles(newMediaFiles);
+  };
 
   const handleCreateAlbum = async (e) => {
     e.preventDefault();
 
-    console.log(selectedGenres);
-    console.log(mediaFiles);
+    // Check if all required fields are filled
+    if (!albumTitle) {
+      upload_failed('Album title is missing.');
+      return;
+    }
+    if (!albumDescription) {
+      upload_failed('Album description is missing.');
+      return;
+    }
+    if (!albumPhoto) {
+      upload_failed('Album photo is missing.');
+      return;
+    }
+
+    if (mediaFiles.length === 0) {
+      upload_failed('No songs uploaded. Please upload at least one song.');
+      return;
+    }
+
+    for (let file of mediaFiles) {
+      if (!file.displayName) {
+        upload_failed('Song title is missing.');
+        return;
+      }
+    }
+
+    //console.log(mediaFiles);
+    //console.log(selectedGenres);
 
     const formData = new FormData();
     formData.append('album_name', albumTitle);
@@ -324,7 +268,7 @@ const ArtistUpload = () => {
       });
     });
 
-    console.log(mediaFiles);
+    //console.log(mediaFiles);
     const token = localStorage.getItem("jwt_token");
 
     try {
@@ -335,8 +279,9 @@ const ArtistUpload = () => {
         },
       });
 
-      console.log(response.data);
+      //console.log(response.data);
       upload_success(response.data.message);
+      localStorage.removeItem('files');
       handleClose();
       resetUpload();
     } catch (error) {
@@ -347,7 +292,7 @@ const ArtistUpload = () => {
 
   return (
     <>
-      <div className="home-page d-flex vh-100">
+      <div className="home-page d-flex vh-100 artist-studio">
         <UserSidebar />
         {showConfirm && (
           <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
@@ -356,19 +301,24 @@ const ArtistUpload = () => {
             </Modal.Header>
             <Modal.Body>You have unsaved changes. Are you sure you want to close?</Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={() => setShowConfirm(false)}>
+              <Button variant="light" onClick={() => setShowConfirm(false)}>
                 Cancel
               </Button>
-              <Button variant="primary" onClick={() => { localStorage.removeItem('files'); setShow(false); setShowConfirm(false); }}>
+              <Button variant="secondary" onClick={() => {
+                localStorage.removeItem('files');
+                setMediaFiles([]);
+                setShow(false);
+                setShowConfirm(false);
+              }}>
                 Discard
               </Button>
-              <Button variant="primary" onClick={() => { /* Save as draft logic here */ setShow(false); setShowConfirm(false); }}>
+              <Button variant="danger" onClick={() => { /* Save as draft logic here */ setShow(false); setShowConfirm(false); }}>
                 Save as Draft
               </Button>
             </Modal.Footer>
           </Modal>
         )}
-        
+
         <Modal className="upload-modal" show={show} size='lg' onHide={handleClose} backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered>
@@ -379,7 +329,7 @@ const ArtistUpload = () => {
             <Modal.Body>
               {uploadStep === 0 ? (
                 <>
-                  <Row className='py-3 d-flex px-3' style={{ borderBottom: '1px solid #B93B3B' }}>
+                  <Row className='py-3 d-flex px-3 bot-line' >
                     <Col className="d-flex align-items-center justify-content-center py-2">
                       <Row className="album-cover-preview d-flex justify-content-center">
                         <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
@@ -389,11 +339,9 @@ const ArtistUpload = () => {
                       <Form onSubmit={handleCreateAlbum}>
                         <Stack direction="vertical" className="px-3" gap={1}>
                           <Form.Group controlId="album_name">
-                            {/* <Form.Label>Album Title</Form.Label> */}
                             <Form.Control className="input-style" type="text" placeholder="Album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
                           </Form.Group>
                           <Form.Group controlId="album_description">
-                            {/* <Form.Label>Album Description</Form.Label> */}
                             <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} />
                           </Form.Group>
                           <Form.Group controlId="collaborator_names">
@@ -405,15 +353,9 @@ const ArtistUpload = () => {
                     </Col>
                   </Row>
                   <Row className="d-flex justify-content-center py-3">
-                    {/* <Col>
-                      nice
-                    </Col> */}
                     <Col className="d-flex justify-content-center flex-column">
-                      {/* <Row>
-                        ADD SONGS
-                      </Row> */}
                       <Row>
-                        <MediaDropzone onDrop={handleMediaDrop} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                        <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
                       </Row>
                     </Col>
                   </Row>
@@ -424,7 +366,8 @@ const ArtistUpload = () => {
                 <div>Page 2 (prevButton)</div>
               ) : ''}
             </Modal.Body>
-            <Modal.Footer>
+            <Modal.Footer className="justify-content-between">
+              {mediaFiles.length} Songs uploaded
               {uploadStep > 0 && (
                 <Button variant="secondary" onClick={handleBack}>
                   Back
@@ -446,87 +389,54 @@ const ArtistUpload = () => {
         </Modal>
         <Container className="home-page-content" fluid>
           <Row className="">
-            <Col className="p-5 ">
-              <Row className="mb-5">
-                <Col xs={4}>
-                  <Row>
-                    <div className="search-bar d-flex align-items-center">
-                      <i className="fa fa-search" aria-hidden="true" />
-                      <Form.Control className="search-bar-input" placeholder="Search" />
-                    </div>
-                  </Row>
-                </Col>
-                <Col className="d-flex justify-content-end">
-                  <Button className="btn-danger" onClick={() => { handleShow(); resetUpload(); }}>
+            <Row className="px-5 py-3 top-nav">
+              <div className="d-flex justify-content-between">
+                <div>
+                  <h1>Studio</h1>
+                </div>
+                <div className="d-flex align-items-center">
+                  <Button className="btn btn-outline-danger" onClick={() => { handleShow(); resetUpload(); }}>
                     <i className="fa fa-plus-square px-2" aria-hidden="true" />
                     CREATE
                   </Button>
-                </Col>
-              </Row>
+                </div>
+              </div>
+            </Row>
+            <Col className="px-5 py-3">
               <Row>
-                <h1 className="home-page-text mb-5">
+                <h4 className="home-page-text px-3">
                   Artist content
-                </h1>
+                </h4>
               </Row>
-              <Row>
-                <h3 className="home-page-text mb-3">
-                  Albums
-                </h3>
-              </Row>
-              <Row className="p-2 album-container-header">
-                <Col className="justify-content-center d-flex align-items-center" xs={1}>
-                  <Form.Check />
-                </Col>
-                <Col>
-                  Album Cover
-                </Col>
-                <Col className="d-flex align-items-center justify-content-start">
-                  Title
-                </Col>
-                <Col xs={3} className='d-flex align-items-center'>
-                  Description
-                </Col>
-                <Col className="d-flex align-items-center">
-                  Date
-                </Col>
-                <Col className="d-flex align-items-center">
-                  Status
-                </Col>
-                <Col className="d-flex align-items-center">
-                  {/* {album.listens} */}
-                  Listens
-                </Col>
-                <Col className="d-flex align-items-center">
-                  {/* {album.likes} */}
-                  Likes
-                </Col>
-              </Row>
-              <Row>
-                <Col className="album-item-container">
-                  {albums.map((album, index) => (
-                    <AlbumItem key={index} album={album} />
-                  ))}
-                </Col>
-              </Row>
+              <Tabs
+                defaultActiveKey="albums"
+                id="uncontrolled-tab-example"
+                className="mb-3 artist sticky-tab"
+              >
+                <Tab eventKey="albums" title="Albums">
+                  <AlbumsTable />
+                </Tab>
+                <Tab eventKey="songs" title="Songs">
+                  Tab content for Profile
+                </Tab>
+              </Tabs>
             </Col>
           </Row>
 
-          <div className="position-relative flex-grow-1 d-flex">
+          {/* <div className="position-relative flex-grow-1 d-flex">
             <div className="user-player-bar d-flex position-fixed bottom-0 w-100 flex-grow-1">
               <Col xs={2}>
-                {/* <h1>Now Playing</h1> */}
               </Col>
               <Col xs={6}>
-                <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
+                <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => //console.log("onPlay")} className='user-player h-100' />
               </Col>
               <Col xs={2}>
-                {/* <h1>Settings</h1> */}
               </Col>
               <Col xs={2} className="invisible-text">
                 extra space (bad practice, but it works for now)
               </Col>
             </div>
-          </div>
+          </div> */}
         </Container>
       </div>
       <ToastContainer />

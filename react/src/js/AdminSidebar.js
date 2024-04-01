@@ -40,7 +40,7 @@ const Sidebar = props => {
                 },
             });
             const userData = response.data; // Assuming user details are directly in response.data
-            console.log(userData);
+            //console.log(userData);
             setIsVerified(userData.email_verified_at !== null);
             // Check if the user has admin or superadmin role
         } catch (error) {

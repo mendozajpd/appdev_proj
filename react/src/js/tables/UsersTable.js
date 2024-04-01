@@ -1,25 +1,43 @@
 import '../../css/dataTables.css'
 import '../../css/index.css';
-import React, { Component, useEffect, useRef } from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
+import BACKEND_URL from '../../config';
+import axios from 'axios';
 
 
-export function UsersTable (props) {
+export function UsersTable() {
+
+    const [users, setUsers] = useState([]);
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/api/users`);
+            setUsers(response.data);
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+        }
+    };
+
     const $ = require('jquery')
     $.DataTable = require('datatables.net')
     const tableRef = useRef();
 
     useEffect(() => {
-        if (!props.data) {
+        fetchUsers();
+    }, []);
+
+
+    useEffect(() => {
+        if (!users) {
             return;
         }
 
-        console.log(tableRef.current)
+        // //console.log(tableRef.current)
         const $table = $(tableRef.current);
         const table = $(tableRef.current).
             DataTable({
-                data: props.data,
+                data: users,
                 columns: [
                     { data: 'id', title: "ID" },
                     { data: 'name', title: "Username" },
@@ -45,38 +63,33 @@ export function UsersTable (props) {
                         orderable: false
                     }
                 ],
-                // rowCallback: function (row, data, index) {
-                //     $(row).addClass('clickable-row').on('click', function () {
-                //         console.log('Row clicked:', data);
-                //     });
-                // }
                 destroy: true,
             });
 
-            $table.on('click', 'button.view-button', function () {
-                const data = table.row($(this).parents('tr')).data();
-            });
-            
-            $table.on('click', 'button.edit-button', function () {
-                const data = table.row($(this).parents('tr')).data();
-                console.log(data);
-            });
-            
-            $table.on('click', 'button.deactivate-button', function () {
-                const data = table.row($(this).parents('tr')).data();
-                console.log(data);
-            });
-            
-            $table.on('click', 'button.delete-button', function () {
-                const data = table.row($(this).parents('tr')).data();
-                console.log(data);
-            });
-        
+        $table.on('click', 'button.view-button', function () {
+            const data = table.row($(this).parents('tr')).data();
+        });
+
+        $table.on('click', 'button.edit-button', function () {
+            const data = table.row($(this).parents('tr')).data();
+            // //console.log(data);
+        });
+
+        $table.on('click', 'button.deactivate-button', function () {
+            const data = table.row($(this).parents('tr')).data();
+            // //console.log(data);
+        });
+
+        $table.on('click', 'button.delete-button', function () {
+            const data = table.row($(this).parents('tr')).data();
+            //console.log(data);
+        });
+
         return function () {
-            console.log("Table destroyed")
+            //console.log("Table destroyed")
             table.destroy()
         }
-    }, [props.data]);
+    }, [users]);
 
     return (<Container className='table-background' fluid>
         <div className='table'>

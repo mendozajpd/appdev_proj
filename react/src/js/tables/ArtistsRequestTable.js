@@ -16,7 +16,7 @@ export function ArtistRequestTable(props) {
             return;
         }
 
-        console.log(tableRef.current)
+        //console.log(tableRef.current)
         const $table = $(tableRef.current);
         const table = $(tableRef.current).
             DataTable({
@@ -36,19 +36,19 @@ export function ArtistRequestTable(props) {
 
             $table.on('click', 'button.accept-button', function (event) {
                 event.stopPropagation();
-                console.log('Accepted');
+                //console.log('Accepted');
             });
             $table.on('click', 'button.reject-button', function (event) {
                 event.stopPropagation();
-                console.log('Rejected');
+                //console.log('Rejected');
             });
             $table.on('click', 'button.delete-button', function (event) {
                 event.stopPropagation();
-                console.log('Deleted');
+                //console.log('Deleted');
             });
         
         return function () {
-            console.log("Table destroyed")
+            //console.log("Table destroyed")
             table.destroy()
         }
     }, [props.data]);

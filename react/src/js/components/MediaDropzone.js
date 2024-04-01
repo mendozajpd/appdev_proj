@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Container, Row, Col, Button, FormControl } from 'react-bootstrap';
+import { v4 as uuidv4 } from 'uuid';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import Select from 'react-select';
@@ -9,7 +10,7 @@ import axios from 'axios';
 
 
 
-function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange }) {
+function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange, onFileDelete }) {
     const [files, setFiles] = useState([]);
     const [editing, setEditing] = useState(null);
     const [fileName, setFileName] = useState('');
@@ -46,6 +47,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         },
         onDrop: acceptedFiles => {
             const newFiles = [...files, ...acceptedFiles.map(file => Object.assign(file, {
+                id: uuidv4(),
                 preview: URL.createObjectURL(file),
                 formattedSize: (file.size / 1048576).toFixed(2),
                 displayName: file.name.split('.').slice(0, -1).join('.'),  // Add display name
@@ -60,18 +62,24 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
 
     const removeFile = file => (event) => {
         event.stopPropagation();
-        const newFiles = [...files];
-        newFiles.splice(newFiles.indexOf(file), 1);
-        setFiles(newFiles);
+        setFiles(prevFiles => {
+            const newFiles = prevFiles.filter(f => f.id !== file.id);
+            if (newFiles.length === 0) {
+                localStorage.removeItem('files');
+            } else {
+                localStorage.setItem('files', JSON.stringify(newFiles));
+            }
+            return newFiles;
+        });
+    
+        onFileDelete(file);
     };
 
     const handleFileNameChange = (e, index) => {
         const newDisplayName = e.target.value;
-        if (newDisplayName !== '') {
-            let newFiles = [...files];
-            newFiles[index].displayName = newDisplayName;
-            setFiles(newFiles);
-        }
+        let newFiles = [...files];
+        newFiles[index].displayName = newDisplayName;
+        setFiles(newFiles);
     };
 
     const handleBlur = () => {
@@ -81,7 +89,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     const handleGenreChange = (file) => (selectedOptions) => {
         setSelectedGenres(prev => {
             const newGenres = { ...prev, [file.path]: selectedOptions };
-            console.log(newGenres);  // Log the new genres
+            //console.log(newGenres);  // Log the new genres
             onGenreChange(newGenres);
             return newGenres;
         });
@@ -157,8 +165,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     };
 
     const filesView = files.map((file, index) => (
-        <>
-            <React.Fragment key={`${file.path}-${index}`}>
+            <React.Fragment key={file.id} >
                 <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
                     <Col className='d-flex flex-column justify-content-start'>
                         <Row className='d-flex flex-nowrap'>
@@ -220,8 +227,6 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
                     </Col>
                 </Row>
             </React.Fragment>
-        </>
-
     ));
 
     const filesAddMore = (
@@ -275,8 +280,8 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     );
 }
 
-const MediaDropzone = ({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange }) => (
-    <Basic uploadText={uploadText} uploadTextClass={uploadTextClass} iconClass={iconClass} iconSize={iconSize} activeStyle={activeStyle} acceptStyle={acceptStyle} onDrop={onDrop} onGenreChange={onGenreChange} />
+const MediaDropzone = ({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, acceptStyle, onDrop, onGenreChange, onFileDelete }) => (
+    <Basic uploadText={uploadText} uploadTextClass={uploadTextClass} iconClass={iconClass} iconSize={iconSize} activeStyle={activeStyle} acceptStyle={acceptStyle} onDrop={onDrop} onGenreChange={onGenreChange} onFileDelete={onFileDelete} />
 );
 
 export default MediaDropzone;

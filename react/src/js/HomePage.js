@@ -89,7 +89,7 @@ const HomePage = () => {
         },
       });
       const userData = response.data; // Assuming user details are directly in response.data
-      console.log(userData);
+      //console.log(userData);
       setIsVerified(userData.email_verified_at !== null);
       if (userData.email_verified_at === null) {
         handleShow();
@@ -141,7 +141,7 @@ const HomePage = () => {
       if (setShow) {
         handleClose();
       }
-      console.log(response.data);
+      //console.log(response.data);
     } catch (error) {
       console.error("Email sending failed:", error);
     }
@@ -196,7 +196,7 @@ const HomePage = () => {
                 }
               </Stack>
             </Col>
-            <Col xs={4} className="right-sidebar">
+            {/* <Col xs={4} className="right-sidebar">
               <Row className="p-5">
                 <Col>
                   <div className="text-center text-white">
@@ -221,7 +221,6 @@ const HomePage = () => {
                     </h1>
                   </div>
 
-                  {/* IF NOT VERIFIED */}
                   {!isVerified ? (
                     <>
                       <Button
@@ -262,7 +261,7 @@ const HomePage = () => {
                   <div className="line"></div>
                 </Col>
               </Row>
-            </Col>
+            </Col> */}
           </Row>
 
           <div className="position-relative flex-grow-1 d-flex">
@@ -271,7 +270,7 @@ const HomePage = () => {
                 {/* <h1>Now Playing</h1> */}
               </Col>
               <Col xs={6}>
-                <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
+                <AudioPlayer ref={playerRef} src={currentSong} autoPlay className='user-player h-100' />
               </Col>
               <Col xs={2}>
                 {/* <h1>Settings</h1> */}

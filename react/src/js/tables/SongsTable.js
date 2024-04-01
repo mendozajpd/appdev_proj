@@ -14,7 +14,7 @@ export function SongsTable(props) {
             return;
         }
 
-        console.log(tableRef.current)
+        //console.log(tableRef.current)
         const $table = $(tableRef.current);
         const table = $(tableRef.current).
             DataTable({
@@ -39,7 +39,7 @@ export function SongsTable(props) {
                 ],
                 // rowCallback: function (row, data, index) {
                 //     $(row).addClass('clickable-row').on('click', function () {
-                //         console.log('Row clicked:', data);
+                //         //console.log('Row clicked:', data);
                 //     });
                 // }
                 destroy: true,
@@ -51,21 +51,21 @@ export function SongsTable(props) {
 
         $table.on('click', 'button.edit-button', function () {
             const data = table.row($(this).parents('tr')).data();
-            console.log(data);
+            //console.log(data);
         });
 
         $table.on('click', 'button.deactivate-button', function () {
             const data = table.row($(this).parents('tr')).data();
-            console.log(data);
+            //console.log(data);
         });
 
         $table.on('click', 'button.delete-button', function () {
             const data = table.row($(this).parents('tr')).data();
-            console.log(data);
+            //console.log(data);
         });
 
         return function () {
-            console.log("Table destroyed")
+            //console.log("Table destroyed")
             table.destroy()
         }
     }, [props.data]);

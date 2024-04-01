@@ -18,7 +18,7 @@ export class DataTbl extends Component {
             this.table.clear();
             this.table.rows.add(this.props.data);
             this.table.draw();
-            console.log('DataTbl update');
+            //console.log('DataTbl update');
         }
     }
 
@@ -58,7 +58,7 @@ export class DataTbl extends Component {
                 ],
                 rowCallback: function (row, data, index) {
                     $(row).addClass('clickable-row').on('click', function () {
-                        console.log('Row clicked:', data);
+                        //console.log('Row clicked:', data);
                     });
                 }
             });
@@ -67,7 +67,7 @@ export class DataTbl extends Component {
 
         this.$el.on('click', 'button.alert-button', function () {
             alert('Hello, World');
-            console.log('Hello, World');
+            //console.log('Hello, World');
         });
 
     }

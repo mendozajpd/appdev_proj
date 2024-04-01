@@ -17,7 +17,7 @@ const AdminManageUsers = () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/api/users`);
             setUsers(response.data);
-            console.log("ran");
+            //console.log("ran");
         } catch (error) {
             console.error('Failed to fetch users:', error);
         }
@@ -25,9 +25,6 @@ const AdminManageUsers = () => {
 
     useEffect(() => {
         fetchUsers();
-        // const intervalId = setInterval(() => {
-        // }, 2500);
-        // return () => clearInterval(intervalId);
     }, []);
 
     return (

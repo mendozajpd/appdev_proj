@@ -209,6 +209,6 @@ class ArtistController extends Controller
             UploadSongJob::dispatch($songPath, $album->album_id, $displayName, $hashedSongName, $genres);
         }
     
-        return response()->json(['message' => 'Album created and songs upload requested'], 200);
+        return response()->json(['message' => 'Album created and songs uploaded'], 200);
     }
 }

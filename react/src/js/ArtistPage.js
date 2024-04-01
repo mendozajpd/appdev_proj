@@ -76,7 +76,7 @@ const ArtistPage = () => {
     })
       .then(response => {
         setAlbums(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch(error => {
         console.error('There was an error!', error);
@@ -122,7 +122,7 @@ const ArtistPage = () => {
         },
       });
       const userData = response.data; // Assuming user details are directly in response.data
-      console.log(userData);
+      //console.log(userData);
       setIsVerified(userData.email_verified_at !== null);
       if (userData.email_verified_at === null) {
         handleShow();
@@ -174,7 +174,7 @@ const ArtistPage = () => {
       if (setShow) {
         handleClose();
       }
-      console.log(response.data);
+      //console.log(response.data);
     } catch (error) {
       console.error("Email sending failed:", error);
     }
@@ -348,7 +348,7 @@ const ArtistPage = () => {
                 )}
               </Col>
               <Col xs={6}>
-                <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay onPlay={e => console.log("onPlay")} className='user-player h-100' />
+                <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100' />
               </Col>
               <Col xs={2}>
                 {/* <h1>Settings</h1> */}

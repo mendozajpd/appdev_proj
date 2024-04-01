@@ -45,7 +45,7 @@ const UserSidebar = props => {
                 },
             });
             const userData = response.data; // Assuming user details are directly in response.data
-            console.log(userData);
+            //console.log(userData);
             setUser(userData);
             setIsArtist(userData.role === 'artist');
             setIsVerified(userData.email_verified_at !== null);
