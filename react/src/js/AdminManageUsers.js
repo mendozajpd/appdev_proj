@@ -15,7 +15,7 @@ const AdminManageUsers = () => {
     const [users, setUsers] = useState([]);
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/users`);
+            const response = await axios.get(`${BACKEND_URL}/api/users`);
             setUsers(response.data);
             console.log("ran");
         } catch (error) {

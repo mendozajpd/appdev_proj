@@ -34,7 +34,7 @@ const Sidebar = props => {
     const fetchUserDetails = async () => {
         try {
             const token = localStorage.getItem("jwt_token");
-            const response = await axios.get(`${BACKEND_URL}/auth/me`, {
+            const response = await axios.get(`${BACKEND_URL}/api/auth/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -54,7 +54,7 @@ const Sidebar = props => {
         try {
             const token = localStorage.getItem("jwt_token");
             const response = await axios.post(
-                `${BACKEND_URL}/auth/logout`,
+                `${BACKEND_URL}/api/auth/logout`,
                 null,
                 {
                     headers: {

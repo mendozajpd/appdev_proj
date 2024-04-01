@@ -1,4 +1,5 @@
 import { Row, Col, Image, Form } from 'react-bootstrap';
+import BACKEND_URL from '../../config';
 
 const AlbumItem = ({ album }) => (
     <Row className="p-2 album-item">
@@ -7,7 +8,7 @@ const AlbumItem = ({ album }) => (
         </Col>
         <Col>
             <Image
-                src={`http://127.0.0.1:8000/storage/album_images/${album.cover_photo_hash}`}
+                src={`${BACKEND_URL}/storage/album_images/${album.cover_photo_hash}`}
                 style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '2%' }}
             />
         </Col>

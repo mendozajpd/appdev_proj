@@ -14,7 +14,7 @@ const PendingRequests = () => {
     const [artistRequests, setArtistRequests] = useState([]);
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/artist-requests`);
+            const response = await axios.get(`${BACKEND_URL}/api/artist-requests`);
             setArtistRequests(response.data);
             console.log("ran");
         } catch (error) {

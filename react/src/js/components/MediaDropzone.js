@@ -32,7 +32,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
         }, {});
         setSelectedGenres(savedGenres);
 
-        axios.get(`${BACKEND_URL}/genres`)
+        axios.get(`${BACKEND_URL}/api/genres`)
             .then(response => {
                 const genres = response.data;
                 const options = genres.map(genre => ({ value: genre.id, label: genre.name }));

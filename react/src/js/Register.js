@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Modal from 'react-bootstrap/Modal';
 import { Spinner } from "react-bootstrap";
 import mediaharbor_api from "../config";
+import BACKEND_URL from "../config";
 
 function Register() {
 
@@ -112,7 +113,7 @@ function Register() {
       }
 
       await axios.post(
-        `http://127.0.0.1:8000/api/register-${registerAs === 'artist' ? 'artist' : 'listener'}`,
+        `${BACKEND_URL}/api/register-${registerAs === 'artist' ? 'artist' : 'listener'}`,
         formData
       );
 

@@ -56,7 +56,7 @@ const ArtistPage = () => {
       fetchUserDetails();
     }
 
-    axios.get(`${BACKEND_URL}/artists/${id}`)
+    axios.get(`${BACKEND_URL}/api/artists/${id}`)
       .then(response => {
         setArtist(response.data);
       }).catch(error => {
@@ -64,7 +64,7 @@ const ArtistPage = () => {
       });
 
 
-    axios.get(`${BACKEND_URL}/songs/${id}`)
+    axios.get(`${BACKEND_URL}/api/songs/${id}`)
       .then(response => {
         setSongs(response.data);
       })
@@ -72,7 +72,7 @@ const ArtistPage = () => {
         console.error('There was an error!', error);
       });
 
-    axios.get(`${BACKEND_URL}/albums/${id}`, {
+    axios.get(`${BACKEND_URL}/api/albums/${id}`, {
     })
       .then(response => {
         setAlbums(response.data);
@@ -116,7 +116,7 @@ const ArtistPage = () => {
   const fetchUserDetails = async () => {
     try {
       const token = localStorage.getItem("jwt_token");
-      const response = await axios.get(`${BACKEND_URL}/auth/me`, {
+      const response = await axios.get(`${BACKEND_URL}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -153,14 +153,14 @@ const ArtistPage = () => {
     }, 3 * 60 * 1000);
     try {
       const token = localStorage.getItem("jwt_token");
-      const userDetailsResponse = await axios.get(`${BACKEND_URL}/auth/me`, {
+      const userDetailsResponse = await axios.get(`${BACKEND_URL}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const user = userDetailsResponse.data;
       const response = await axios.post(
-        `${BACKEND_URL}/resend-verification-email`,
+        `${BACKEND_URL}/api/resend-verification-email`,
         {
           name: user.name, // use the name from the user's details
           email: user.email, // use the email from the user's details
@@ -241,7 +241,7 @@ const ArtistPage = () => {
                   ) : (
                     songs.map((song, index) => (
                       <Row key={index} className="song-item p-3" onClick={() => {
-                        const songUrl = `${BACKEND_URL}/play/${song.hashed_name}`;
+                        const songUrl = `${BACKEND_URL}/api/play/${song.hashed_name}`;
                         fetch(songUrl)
                           .then(response => response.blob())
                           .then(blob => {
