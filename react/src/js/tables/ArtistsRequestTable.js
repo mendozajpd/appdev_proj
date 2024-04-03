@@ -1,7 +1,7 @@
 import '../../css/dataTables.css'
 import '../../css/index.css';
 import React, { Component, useEffect, useRef } from "react";
-import { Container, Row, Col, Table, Form} from 'react-bootstrap';
+import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from 'react-router-dom';
 
@@ -34,26 +34,26 @@ export function ArtistRequestTable(props) {
                 destroy: true,
             });
 
-            $table.on('click', 'button.accept-button', function (event) {
-                event.stopPropagation();
-                //console.log('Accepted');
-            });
-            $table.on('click', 'button.reject-button', function (event) {
-                event.stopPropagation();
-                //console.log('Rejected');
-            });
-            $table.on('click', 'button.delete-button', function (event) {
-                event.stopPropagation();
-                //console.log('Deleted');
-            });
-        
+        $table.on('click', 'button.accept-button', function (event) {
+            event.stopPropagation();
+            //console.log('Accepted');
+        });
+        $table.on('click', 'button.reject-button', function (event) {
+            event.stopPropagation();
+            //console.log('Rejected');
+        });
+        $table.on('click', 'button.delete-button', function (event) {
+            event.stopPropagation();
+            //console.log('Deleted');
+        });
+
         return function () {
             //console.log("Table destroyed")
             table.destroy()
         }
     }, [props.data]);
 
-    return (<Container className='table-background' fluid>
+    return (<Container className='table-background' fluid={true}>
         <div className='table'>
             <table className='display' width="100%" ref={tableRef}>
             </table>

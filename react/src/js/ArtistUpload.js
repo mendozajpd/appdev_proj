@@ -367,7 +367,24 @@ const ArtistUpload = () => {
               ) : ''}
             </Modal.Body>
             <Modal.Footer className="justify-content-between">
-              {mediaFiles.length} Songs uploaded
+              {mediaFiles.length > 0 ? (
+                <>
+                  {mediaFiles.length == 1 ? (
+                    <>
+                      {mediaFiles.length} Song uploaded
+                    </>
+                  ) :
+                    (
+                      <>
+                        {mediaFiles.length} Songs uploaded
+                      </>
+                    )}
+                </>
+              ) : (
+                <>
+                  No Songs uploaded
+                </>
+              )}
               {uploadStep > 0 && (
                 <Button variant="secondary" onClick={handleBack}>
                   Back

@@ -96,16 +96,16 @@ const Sidebar = props => {
                         <CDBSidebarContent className="sidebar-content">
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
-                                    <NavLink exact to="/admin" activeClassName="activeClicked">
+                                    <NavLink to="/admin" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="home">Dashboard</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="/admin/manage-users" activeClassName="activeClicked">
+                                    <NavLink to="/admin/manage-users" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="user">Manage Users</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="/tickets" activeClassName="activeClicked">
+                                    <NavLink to="/tickets" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="table">Subscription Settings</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="/revenue" activeClassName="activeClicked">
+                                    <NavLink to="/revenue" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="columns">Revenue</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink onClick={handleSubmit} activeClassName="activeClicked">

@@ -164,21 +164,21 @@ const UserSidebar = props => {
                         {user ? user.name : 'Loading...'}
                     </a>
                 </CDBSidebarHeader>
-                <Col className="flex-grow-1 d-flex flex-column vh-100" fluid={true}>
+                <Col className="flex-grow-1 d-flex flex-column vh-100" fluid>
                     <Row className="align-items-start">
                         <CDBSidebarContent className="sidebar-content">
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
-                                    <NavLink exact to="/home" activeClassName="activeClicked">
+                                    <NavLink to="/home" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="">Home</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="" activeClassName="activeClicked">
+                                    <NavLink to="" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="">Podcast</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="" activeClassName="activeClicked">
+                                    <NavLink to="" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="">Videocasts</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink exact to="" activeClassName="activeClicked">
+                                    <NavLink to="" activeClassName="activeClicked">
                                         <CDBSidebarMenuItem icon="">Subscription Settings</CDBSidebarMenuItem>
                                     </NavLink>
                                     {isArtist && (
@@ -186,7 +186,7 @@ const UserSidebar = props => {
                                             <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
                                             <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem>
                                             {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
-                                            <NavLink exact to="/upload" activeClassName="activeClicked">
+                                            <NavLink to="/upload" activeClassName="activeClicked">
                                                 <CDBSidebarMenuItem icon="">Content</CDBSidebarMenuItem>
                                             </NavLink>
                                         </>
