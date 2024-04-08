@@ -15,12 +15,11 @@ import BACKEND_URL from "../config";
 const UserSidebar = props => {
     useEffect(() => {
         const token = localStorage.getItem("jwt_token");
-        if (!token) {
-            // navigate('/login');
-
-        } else {
+        if (token) {
             fetchUserDetails();
         }
+
+        
     }, []);
 
     const [isVerified, setIsVerified] = useState(false);
@@ -170,8 +169,6 @@ const UserSidebar = props => {
                             </Dropdown>
                         ) : 'Loading...'}
                     </div>
-                    {/* <a onClick={handleShow} className="text-decoration-none" style={{ color: 'inherit', cursor: 'pointer' }}>
-                    </a> */}
                 </CDBSidebarHeader>
                 <Col className="flex-grow-1 d-flex flex-column vh-100" fluid>
                     <Row className="align-items-start">
