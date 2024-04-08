@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Image from "react-bootstrap/Image";
-import Form from "react-bootstrap/Form";
+import { Container, Row, Col, Image, Button, Form } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Modal from 'react-bootstrap/Modal';
 import { Spinner } from "react-bootstrap";
-import mediaharbor_api from "../config";
-import BACKEND_URL from "../config";
+import BACKEND_URL from "../../../config";
 
 function Register() {
 
@@ -19,12 +16,12 @@ function Register() {
     setRegisterAs(type);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    if (token) {
-      navigate('/login');
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("jwt_token");
+  //   if (token) {
+  //     navigate('/login');
+  //   }
+  // }, []);
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -268,35 +265,36 @@ function Register() {
 
   return (
     <>
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <Modal show={show} onHide={handleClose} backdrop="static"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Terms and Conditions</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
-              commodi aspernatur enim, consectetur. Cumque deleniti temporibus
-              ipsam atque a dolores quisquam quisquam adipisci possimus
-              laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
-              accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
-              reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
-              deleniti rem!
-            </p></Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="danger" onClick={handleAccept}>
-              Accept
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <div className="Register-container">
-          <div className="Register-social-container">
-            <div>
+      {/* <div className="d-flex justify-content-center align-items-center vh-100"> */}
+      <Modal show={show} onHide={handleClose} backdrop="static"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Terms and Conditions</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Ipsum molestiae natus adipisci modi eligendi? Debitis amet quae unde
+            commodi aspernatur enim, consectetur. Cumque deleniti temporibus
+            ipsam atque a dolores quisquam quisquam adipisci possimus
+            laboriosam. Quibusdam facilis doloribus debitis! Sit quasi quod
+            accusamus eos quod. Ab quos consequuntur eaque quo rem! Mollitia
+            reiciendis porro quo magni incidunt dolore amet atque facilis ipsum
+            deleniti rem!
+          </p></Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="danger" onClick={handleAccept}>
+            Accept
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Container className="Register-container">
+        <Row>
+          <Col className="Register-social-container d-flex">
+            <Row>
               <h1 style={{ marginTop: "30px" }}>
                 Sign up to start
                 <span
@@ -323,183 +321,56 @@ function Register() {
                   )}
                 </span>
               </h1>
-            </div>
+            </Row>
+            <Row>
 
-            {/* google */}
 
-            <Button
-              className="Register-social-button rounded-pill"
-              variant="light"
-              style={{
-                width: "100%",
-                height: "50px",
-                marginTop: "30px",
-                marginBottom: "10px",
-                backgroundColor: "transparent",
-                borderColor: "rgba(185, 128, 128, 0.3)",
-                color: "white",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-                position: "relative",
-                overflow: "hidden",
-              }}
-              onMouseEnter={handleSocialButtonMouseEnter}
-              onMouseLeave={handleSocialButtonMouseLeave}
-            >
-              <div
-                className="buttonContent"
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
+
+
+              <Button
+                variant="outline-danger"
+                className="social-button mr-2 btn-sm rounded-pill"
               >
-                <Image
-                  src="/register/google.png"
-                  roundedCircle
-                  className="Register-google"
+                <img
+                  src={process.env.PUBLIC_URL + "/register/google.png"}
+                  alt="Google Logo"
+                  className="mr-2"
+                />
+                Login with Google
+              </Button>
+
+              <Button
+                variant="outline-danger"
+                className="social-button mr-2 btn-sm rounded-pill login-facebook"
+              >
+                <img
+                  src={process.env.PUBLIC_URL + "/register/facebook.png"}
+                  alt="Facebook Logo"
+                  className="mr-2"
                   style={{
                     marginRight: "20px",
                     width: "30px",
                     margin: "flex",
                   }}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation();
-                  }}
-                  onMouseLeave={(e) => {
-                    e.stopPropagation();
-                  }}
                 />
-                <p
-                  style={{ fontSize: "20px", fontWeight: "500" }}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation();
-                  }}
-                  onMouseLeave={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  Login with Google
-                </p>
-              </div>
-            </Button>
+                Login with Facebook
+              </Button>
 
-            {/* facebook */}
-            <Button
-              className="Register-social-button rounded-pill"
-              variant="light"
-              style={{
-                width: "100%",
-                height: "50px",
-                marginTop: "10px",
-                marginBottom: "10px",
-                backgroundColor: "transparent",
-                borderColor: "rgba(185, 128, 128, 0.3)",
-                color: "#333333",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-                position: "relative",
-                overflow: "hidden",
-              }}
-              onMouseEnter={handleSocialButtonMouseEnter}
-              onMouseLeave={handleSocialButtonMouseLeave}
-            >
-              <div
-                className="buttonContent"
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
+              <Button
+                variant="outline-danger"
+                className="social-button mr-2 btn-sm rounded-pill button"
               >
-                <Image
-                  src="/register/facebook.png"
-                  roundedCircle
-                  className="Register-facebook"
-                  style={{
-                    marginRight: "20px",
-                    width: "30px",
-                    margin: "flex",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation();
-                  }}
-                  onMouseLeave={(e) => {
-                    e.stopPropagation();
-                  }}
+                <img
+                  src={process.env.PUBLIC_URL + "/register/apple.png"}
+                  alt="Apple Logo"
+                  className="mr-2"
                 />
-                <p
-                  style={{ fontSize: "20px", fontWeight: "500" }}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation();
-                  }}
-                  onMouseLeave={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  Login with Facebook
-                </p>
-              </div>
-            </Button>
+                Continue with Apple
+              </Button>
+              <div className="line"></div>
+            </Row>
 
-            {/* apple */}
 
-            <Button
-              className="Register-social-button rounded-pill"
-              variant="light"
-              style={{
-                width: "100%",
-                height: "50px",
-                marginTop: "10px",
-                marginBottom: "10px",
-                backgroundColor: "transparent",
-                borderColor: "rgba(185, 128, 128, 0.3)",
-                color: "white",
-                transition: "background-color 0.3s, color 0.3s, transform 0.3s",
-                position: "relative",
-                overflow: "hidden",
-              }}
-              onMouseEnter={handleSocialButtonMouseEnter}
-              onMouseLeave={handleSocialButtonMouseLeave}
-            >
-              <div
-                className="buttonContent"
-                onMouseEnter={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseLeave={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <Image
-                  src="/register/apple.png"
-                  roundedCircle
-                  className="Register-apple"
-                  style={{
-                    marginRight: "20px",
-                    width: "30px",
-                    margin: "flex",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation();
-                  }}
-                  onMouseLeave={(e) => {
-                    e.stopPropagation();
-                  }}
-                />
-                <p
-                  style={{ fontSize: "20px", fontWeight: "500" }}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation();
-                  }}
-                  onMouseLeave={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  Continue with Apple
-                </p>
-              </div>
-            </Button>
 
             <div>
               {registerAs === 'listener' ? (
@@ -509,16 +380,11 @@ function Register() {
               )}
             </div>
 
-          </div>
+          </Col>
 
-          <div className="Register-signup-form">
+          <Col className="Register-signup-form">
             <div className="Register-textbox">
               <Form onSubmit={handleSubmit}>
-                {/* {registerAs === 'listener' ? (
-                <p>Sign up</p>
-              ) : (
-                <p>Sign up</p>
-              )} */}
                 <div className="line"></div>
 
                 <Form.Group
@@ -658,10 +524,12 @@ function Register() {
               <Link to={"/login"} style={{ textDecoration: "none" }}></Link>
               <Link to={"/login"}> Log in here</Link>
             </div>
-          </div>
+          </Col>
           <ToastContainer />
-        </div >
-      </div>
+        </Row>
+
+      </Container >
+      {/* </div> */}
     </>
   );
 }

@@ -4,7 +4,7 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import BACKEND_URL from "../config";
+import BACKEND_URL from "../../../config";
 
 function Login() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -50,7 +50,7 @@ function Login() {
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
     if (token) {
-      navigate('/home');
+      navigate('/');
     }
 
     if (localStorage.getItem('justRegistered') === 'true') {
@@ -79,7 +79,7 @@ function Login() {
 
       const token = response.data.access_token;
       localStorage.setItem("jwt_token", token); // change this in the future
-      navigate("/home");
+      window.location.reload();
 
     } catch (error) {
       console.error("Login failed:", error);
@@ -194,7 +194,7 @@ function Login() {
               <div className="text-center">
                 <p>
                   Don't have an account?{" "}
-                  <Link to="/" className="signup">
+                  <Link to="/register" className="signup">
                     Sign up here
                   </Link>
                 </p>

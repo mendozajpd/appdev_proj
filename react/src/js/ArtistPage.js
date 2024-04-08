@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, CSSProperties } from "react";
+import React, { useState, useEffect, useRef, CSSProperties, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
 import axios from "axios";
@@ -11,6 +11,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { SyncLoader } from "react-spinners"
 import ArtistAlbumItem from "./items/ArtistAlbumItem";
+
+// Context
+import PlayerContext from "./context/PlayerContext";
 
 const override = {
   display: "block",
@@ -31,9 +34,16 @@ const ArtistPage = () => {
   const { id } = useParams();
 
   // Player
-  const [currentSong, setCurrentSong] = useState(null);
-  const [currentSongName, setCurrentSongName] = useState(null);
+  const { currentSong, setCurrentSong, currentSongName, setCurrentSongName } = useContext(PlayerContext);
   const playerRef = useRef();
+
+  const handlePlayerSongChange = (song) => {
+    setCurrentSong(song);
+  }
+
+  const handlePlayerSongNameChange = (song) => {
+    setCurrentSongName(song);
+  }
 
   // SONGS
   const [songs, setSongs] = useState([]);
@@ -185,7 +195,7 @@ const ArtistPage = () => {
   return (
     <>
       <div className="home-page d-flex vh-100">
-        <UserSidebar />
+        {/* <UserSidebar /> */}
         <Modal show={show} onHide={handleClose} backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered>
@@ -246,8 +256,10 @@ const ArtistPage = () => {
                           .then(response => response.blob())
                           .then(blob => {
                             const audioBlobURL = URL.createObjectURL(blob);
-                            setCurrentSong(audioBlobURL);
-                            setCurrentSongName(song.display_name);
+                            handlePlayerSongChange(audioBlobURL);
+                            handlePlayerSongNameChange(song.display_name);
+                            // setCurrentSong(audioBlobURL);
+                            // setCurrentSongName(song.display_name);
                           });
                       }}>
                         <Col xs={1}>
@@ -262,102 +274,7 @@ const ArtistPage = () => {
                 </Stack>
               </Row>
             </Col>
-            {/* <Col xs={4} className="right-sidebar">
-              <Row className="p-5">
-                <Col>
-                  <div className="text-center text-white">
-                    <h1 style={{ marginTop: "30px" }}>
-                      Welcome to
-                      <span
-                        style={{
-                          marginLeft: "10px",
-                          color: "red",
-                          transition: "color 0.3s",
-                          cursor: "text"
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.color = "red";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.color = "white";
-                        }}
-                      >
-                        MEDIAHARBOR
-                      </span>
-                    </h1>
-                  </div>
-
-                  {!isVerified ? (
-                    <>
-                      <Button
-                        variant="primary"
-                        className="login-button btn-block"
-                        style={buttonStyle}
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        onClick={handleSendVerify}
-                        disabled={isButtonDisabled}
-                      >
-                        Send Verification Email
-                      </Button>
-                      {isButtonDisabled && <p>Next email can be sent in {remainingTime} seconds</p>}
-                    </>
-                  ) : (
-                    <div className="text-center text-white">
-                      <h1 style={{ marginTop: "30px" }}>
-                        <span
-                          style={{
-                            marginLeft: "10px",
-                            color: "red",
-                            transition: "color 0.3s",
-                            cursor: "text"
-                          }}
-                          onMouseEnter={(e) => {
-                            e.target.style.color = "red";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.target.style.color = "white";
-                          }}
-                        >
-                          YOU'RE VERIFIED!
-                        </span>
-                      </h1>
-                    </div>
-                  )}
-                  <div className="sweet-loading">
-                    <button onClick={() => setLoading(!loading)}>Toggle Loader</button>
-                    <input value={color} onChange={(input) => setColor(input.target.value)} placeholder="Color of the loader" />
-                    <p className="user-white-text">Testing out the Loader</p>
-                    <a></a>
-
-                  </div>
-                  <div className="line"></div>
-                </Col>
-              </Row>
-            </Col> */}
           </Row>
-
-          <div className="position-relative flex-grow-1 d-flex">
-            <div className="user-player-bar d-flex position-fixed bottom-0 w-100 flex-grow-1">
-              <Col xs={2} className="d-flex align-items-center p-3 flex-direction-column">
-                {currentSongName && (
-                  <>
-                    <Image src="https://via.placeholder.com/50" rounded />
-                    <p className="home-page-text d-flex align-items-center p-2 text-truncate">{currentSongName}</p>
-                  </>
-                )}
-              </Col>
-              <Col xs={6}>
-                <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100' />
-              </Col>
-              <Col xs={2}>
-                {/* <h1>Settings</h1> */}
-              </Col>
-              <Col xs={2} className="invisible-text">
-                extra space (bad practice, but it works for now)
-              </Col>
-            </div>
-          </div>
         </Container>
       </div>
       <ToastContainer />

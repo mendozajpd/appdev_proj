@@ -699,12 +699,41 @@ h1 span:hover {
 
 /* User Side Bar */
 .user-sidebar {
-  /* border-right: 1px solid #800000; */
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent; /* make scrollbar transparent by default */
+  z-index: 0;
+}
+
+.user-sidebar:hover {
+  scrollbar-color: #a7a7a7 #272729; /* change scrollbar color on hover */
+}
+
+.user-sidebar .head-div {
+  overflow:visible !important;
+}
+
+.user-sidebar::-webkit-scrollbar {
+  width: 5px; 
+}
+
+.user-sidebar::-webkit-scrollbar-track {
+  background: #272729; /* match Firefox track color */
+}
+
+.user-sidebar::-webkit-scrollbar-thumb {
+  background-color: transparent; /* make scrollbar transparent by default */
+  border-radius: 20px; 
+  border: 3px solid transparent; /* creates padding around scroll thumb with the same color as track */
+}
+
+.user-sidebar:hover::-webkit-scrollbar-thumb {
+  background-color: #a7a7a7; /* change scrollbar color on hover */
+  border: 3px solid #272729;
 }
 
 .user-sidebar .pfp {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   margin-right: 10px;
   cursor: pointer;
 }
@@ -718,6 +747,7 @@ h1 span:hover {
   color: #dd0000;
   cursor: default !important;
 }
+
 
 /* HOMEPAGE */
 .home-page {
@@ -907,12 +937,6 @@ h1 span:hover {
   background-size: cover, cover;
 }
 
-.artist-album-list {
-  display: flex;
-  overflow-x: auto;
-  width: 100vw !important;
-}
-
 .artist-album-item {
   flex: 0 0 auto;
   width: 150px;
@@ -932,7 +956,7 @@ h1 span:hover {
 .artist-album-list {
   display: flex;
   overflow-x: auto;
-  width: 100vw !important;
+  width: 100% !important;
 }
 
 /* For Webkit browsers like Chrome, Safari */
@@ -1205,13 +1229,13 @@ h1 span:hover {
 
 /* Handle */
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #55555578;
+  background: #e6e6e678;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: #868686;
 }
 
 /* REACT- SELECT */
@@ -1248,6 +1272,31 @@ h1 span:hover {
 .icon-gray {
   color: rgb(51, 51, 51) !important;
 }
+
+/* Profile */
+
+.profile-dropdown .dropdown-toggle {
+  color: #fff !important;
+  background-color: transparent !important;
+  border: none !important;
+}
+
+.profile-dropdown .dropdown-toggle:hover {
+  font-weight: 500 !important;
+}
+
+.profile-dropdown .dropdown-toggle:focus {
+  border-color: none !important;
+}
+
+.profile-dropdown .dropdown-toggle::after {
+  display: none;
+}
+
+.profile-dropdown .dropdown-menu {
+  --bs-dropdown-link-active-bg: #6f0d0d !important;
+}
+
 
 @keyframes bounce {
 

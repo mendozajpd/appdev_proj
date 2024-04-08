@@ -2,17 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import '../css/index.css'
-import {
-    CDBSidebar,
-    CDBSidebarContent,
-    CDBSidebarMenuItem,
-    CDBSidebarMenu,
-    CDBSidebarHeader
-} from 'cdbreact';
+import { CDBSidebar, CDBSidebarContent, CDBSidebarMenuItem, CDBSidebarMenu, CDBSidebarHeader } from 'cdbreact';
 import { Image, Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { NavLink } from 'react-router-dom';
-import { Form, Container, Row, Col, Table, Stack } from 'react-bootstrap';
+import { Form, Row, Col, Stack, Dropdown } from 'react-bootstrap';
 import axios from "axios";
 import BACKEND_URL from "../config";
 
@@ -22,7 +16,8 @@ const UserSidebar = props => {
     useEffect(() => {
         const token = localStorage.getItem("jwt_token");
         if (!token) {
-            navigate('/login');
+            // navigate('/login');
+
         } else {
             fetchUserDetails();
         }
@@ -55,7 +50,7 @@ const UserSidebar = props => {
         }
     };
 
-    const handleSubmit = async (e) => {
+    const handleLogout = async (e) => {
         e.preventDefault();
         setLogoutDisabled(true);
         try {
@@ -80,6 +75,7 @@ const UserSidebar = props => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     return (
         <>
@@ -158,27 +154,40 @@ const UserSidebar = props => {
                         marginTop: "10px",
                     }}
                 />
-                <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-                    <Image onClick={handleShow} src="https://via.placeholder.com/50" roundedCircle className="pfp" />
-                    <a onClick={handleShow} className="text-decoration-none" style={{ color: 'inherit', cursor: 'pointer' }}>
-                        {user ? user.name : 'Loading...'}
-                    </a>
+                <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large "></i>}>
+                    <div className="d-flex align-items-center" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                        {user ? (
+                            <Dropdown show={dropdownOpen} className="profile-dropdown">
+                                <Dropdown.Toggle id="dropdown-basic">
+                                    <Image src="https://via.placeholder.com/50" roundedCircle className="pfp" />
+                                    {user.name}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu variant="dark">
+                                    <Dropdown.Item href="/profile">Profile</Dropdown.Item>
+                                    <Dropdown.Item href="/settings">Settings</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        ) : 'Loading...'}
+                    </div>
+                    {/* <a onClick={handleShow} className="text-decoration-none" style={{ color: 'inherit', cursor: 'pointer' }}>
+                    </a> */}
                 </CDBSidebarHeader>
                 <Col className="flex-grow-1 d-flex flex-column vh-100" fluid>
                     <Row className="align-items-start">
                         <CDBSidebarContent className="sidebar-content">
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
-                                    <NavLink to="/home" activeClassName="activeClicked">
+                                    <NavLink to="/" activeclassname="activeClicked">
                                         <CDBSidebarMenuItem icon="">Home</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink to="" activeClassName="activeClicked">
+                                    <NavLink to="" activeclassname="activeClicked">
                                         <CDBSidebarMenuItem icon="">Podcast</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink to="" activeClassName="activeClicked">
+                                    <NavLink to="" activeclassname="activeClicked">
                                         <CDBSidebarMenuItem icon="">Videocasts</CDBSidebarMenuItem>
                                     </NavLink>
-                                    <NavLink to="" activeClassName="activeClicked">
+                                    <NavLink to="" activeclassname="activeClicked">
                                         <CDBSidebarMenuItem icon="">Subscription Settings</CDBSidebarMenuItem>
                                     </NavLink>
                                     {isArtist && (
@@ -186,15 +195,32 @@ const UserSidebar = props => {
                                             <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
                                             <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem>
                                             {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
-                                            <NavLink to="/upload" activeClassName="activeClicked">
+                                            <NavLink to="/upload" activeclassname="activeClicked">
                                                 <CDBSidebarMenuItem icon="">Content</CDBSidebarMenuItem>
                                             </NavLink>
                                         </>
                                     )}
                                     <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
-                                    <NavLink onClick={handleSubmit} activeClassName="activeClicked">
-                                        <CDBSidebarMenuItem icon="">Logout</CDBSidebarMenuItem>
+                                    <CDBSidebarMenuItem icon="" className="sub-header">PLAYLISTS</CDBSidebarMenuItem>
+                                    <NavLink to="/" activeclassname="activeClicked">
+                                        <CDBSidebarMenuItem icon="">Playlist #1</CDBSidebarMenuItem>
                                     </NavLink>
+                                    <NavLink to="/" activeclassname="activeClicked">
+                                        <CDBSidebarMenuItem icon="">Playlist #2</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink to="/" activeclassname="activeClicked">
+                                        <CDBSidebarMenuItem icon="">Playlist #3</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink to="/" activeclassname="activeClicked">
+                                        <CDBSidebarMenuItem icon="">Playlist #4</CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <NavLink to="/">
+                                        <CDBSidebarMenuItem icon="">
+                                            <i className="fa fa-plus-square mx-3"></i>
+                                            Create Playlist
+                                        </CDBSidebarMenuItem>
+                                    </NavLink>
+                                    <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
                                 </nav>
                             </CDBSidebarMenu>
                         </CDBSidebarContent>

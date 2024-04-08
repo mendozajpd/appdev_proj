@@ -293,7 +293,7 @@ const ArtistUpload = () => {
   return (
     <>
       <div className="home-page d-flex vh-100 artist-studio">
-        <UserSidebar />
+        {/* <UserSidebar /> */}
         {showConfirm && (
           <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
             <Modal.Header closeButton>
@@ -439,21 +439,6 @@ const ArtistUpload = () => {
               </Tabs>
             </Col>
           </Row>
-
-          {/* <div className="position-relative flex-grow-1 d-flex">
-            <div className="user-player-bar d-flex position-fixed bottom-0 w-100 flex-grow-1">
-              <Col xs={2}>
-              </Col>
-              <Col xs={6}>
-                <AudioPlayer ref={playerRef} src={currentSong} autoPlay onPlay={e => //console.log("onPlay")} className='user-player h-100' />
-              </Col>
-              <Col xs={2}>
-              </Col>
-              <Col xs={2} className="invisible-text">
-                extra space (bad practice, but it works for now)
-              </Col>
-            </div>
-          </div> */}
         </Container>
       </div>
       <ToastContainer />

@@ -23,6 +23,7 @@ Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('role', [AuthController::class, 'getRole']);
 Route::post('login', [AuthController::class, 'login']); // Check role, then redirect accordingly
 Route::post('register-listener', [AuthController::class, 'registerListener']);
 Route::post('register-artist', [AuthController::class, 'registerArtist']);

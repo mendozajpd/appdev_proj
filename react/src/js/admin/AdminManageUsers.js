@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { UsersTable } from './tables/UsersTable';
-import { Breadcrumbs } from "./components/Breadcrumbs";
+import { UsersTable } from '../tables/UsersTable';
+import { Breadcrumbs } from "../components/Breadcrumbs";
 import axios from "axios";
 import Sidebar from './AdminSidebar';
-import '../css/index.css';
-import BACKEND_URL from "../config";
+import BACKEND_URL from "../../config";
 
 
 

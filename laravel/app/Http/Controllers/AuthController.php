@@ -35,9 +35,9 @@ class AuthController extends Controller
         $user = auth()->user();
     
         // Check if the user is an admin or superadmin
-        $isAdmin = $user->role === 'admin' || $user->role === 'superadmin';
+        // $isAdmin = $user->role === 'admin' || $user->role === 'superadmin';
     
-        return $this->respondWithToken($token, $isAdmin);
+        return $this->respondWithToken($token);
     }
 
     public function registerListener(Request $request)
@@ -149,6 +149,17 @@ class AuthController extends Controller
         return response()->json($user);
     }
 
+    public function getRole () {
+        
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return response()->json(['role' => $user->role]);
+    }
+
     /**
      * Log the user out (Invalidate the token).
      *
@@ -178,13 +189,13 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token, $isAdmin)
+    protected function respondWithToken($token)
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'is_admin' => $isAdmin
+            // 'is_admin' => $isAdmin
         ]);
     }
 }

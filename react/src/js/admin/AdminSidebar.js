@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-import '../css/index.css'
 import {
     CDBSidebar,
     CDBSidebarContent,
@@ -13,7 +12,7 @@ import { Image } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import axios from "axios";
-import BACKEND_URL from "../config";
+import BACKEND_URL from "../../config";
 
 
 

@@ -1,13 +1,13 @@
+import { Navbar, Button, Container, Row, Col } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Navbar, Button, Container, Row, Col } from "react-bootstrap";
-import axios from "axios";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 import { Chart } from 'react-chartjs-2';
+import axios from "axios";
 import 'chart.js/auto';
 import AdminManageUsers from "./AdminManageUsers";
 import Sidebar from './AdminSidebar';
-import { Breadcrumbs } from "./components/Breadcrumbs";
-import BACKEND_URL from "../config";
+import BACKEND_URL from "../../config";
 
 
 const HomePage = () => {

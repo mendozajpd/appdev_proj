@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Table, Form } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import Sidebar from './AdminSidebar';
-import '../css/index.css'; // Import CSS file
 
 const Banned = () => {
     const [bannedUsers, setBannedUsers] = useState([
