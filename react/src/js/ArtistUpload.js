@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Image, Stack, CloseButton } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -294,11 +294,11 @@ const ArtistUpload = () => {
   return (
     <>
       <div className="home-page d-flex vh-100 artist-studio">
-        {/* <UserSidebar /> */}
         {showConfirm && (
-          <Modal show={showConfirm} onHide={() => setShowConfirm(false)}>
-            <Modal.Header closeButton>
+          <Modal className="upload-modal" show={showConfirm}>
+            <Modal.Header>
               <Modal.Title>Confirm</Modal.Title>
+              <CloseButton onClick={() => setShowConfirm(false)} variant="white" />
             </Modal.Header>
             <Modal.Body>You have unsaved changes. Are you sure you want to close?</Modal.Body>
             <Modal.Footer>
@@ -324,8 +324,9 @@ const ArtistUpload = () => {
           aria-labelledby="contained-modal-title-vcenter"
           centered>
           <div className="p-3">
-            <Modal.Header closeButton>
+            <Modal.Header>
               <Modal.Title>Create Album</Modal.Title>
+              <CloseButton onClick={handleClose} variant="white" />
             </Modal.Header>
             <Modal.Body>
               {uploadStep === 0 ? (

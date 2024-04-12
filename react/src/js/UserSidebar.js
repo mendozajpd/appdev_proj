@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CDBSidebar, CDBSidebarContent, CDBSidebarMenuItem, CDBSidebarMenu, CDBSidebarHeader } from 'cdbreact';
-import { Image, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Image, Button, CloseButton } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { NavLink } from 'react-router-dom';
 import { Form, Row, Col, Stack, Dropdown } from 'react-bootstrap';
@@ -134,8 +134,9 @@ const UserSidebar = () => {
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <div className="p-3">
-                    <Modal.Header closeButton>
+                    <Modal.Header>
                         <Modal.Title>Create New Playlist</Modal.Title>
+                        <CloseButton onClick={handleClose} variant="white" />
                     </Modal.Header>
                     <Modal.Body>
                         <>
@@ -192,6 +193,7 @@ const UserSidebar = () => {
                                 <Dropdown.Menu variant="dark">
                                     <Dropdown.Item href="/profile">Profile</Dropdown.Item>
                                     <Dropdown.Item href="/settings">Settings</Dropdown.Item>
+                                    <Dropdown.Divider />
                                     <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
@@ -218,8 +220,6 @@ const UserSidebar = () => {
                                     {isArtist && (
                                         <>
                                             <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
-                                            {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
-                                            {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
                                             <div className="mx-4 my-3">
                                             </div>
                                             <NavLink to="/upload" activeclassname="activeClicked">

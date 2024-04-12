@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, CSSProperties, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack, Dropdown } from "react-bootstrap";
+import { CloseButton, Button, Container, Row, Col, Image, Stack, Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -35,10 +35,15 @@ const PlaylistPage = () => {
   // SONGS
   const [songs, setSongs] = useState([]);
 
-  // MODAL
+  // MODAL FOR EMAIL VERIFICATION
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  // MODAL FOR ADDING SONGS TO PLAYLIST
+  const [showAddSongs, setShowSongs] = useState(false);
+  const handleCloseSongs = () => setShowSongs(false);
+  const handleShowSongs = () => setShowSongs(true);
 
   // PLAYLIST
 
@@ -126,7 +131,6 @@ const PlaylistPage = () => {
   return (
     <>
       <div className="home-page d-flex vh-100">
-        {/* <UserSidebar /> */}
         <Modal show={show} onHide={handleClose} backdrop="static"
           aria-labelledby="contained-modal-title-vcenter"
           centered>
@@ -146,6 +150,27 @@ const PlaylistPage = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <Modal className="upload-modal" show={showAddSongs} backdrop="static"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered size="lg">
+          <Modal.Header>
+            <Modal.Title>Add Songs to Playlist</Modal.Title>
+            <CloseButton onClick={handleCloseSongs} variant="white"/>
+          </Modal.Header>
+          <Modal.Body>
+            <Container>
+              okay
+            </Container>
+            </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseSongs}>
+              Ok
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+
         <Container className="home-page-content" fluid>
           <Row className="h-100 overflow-hidden">
             <Col className="vh-100 overflow-auto mb-5 custom-scrollbar">
@@ -172,7 +197,7 @@ const PlaylistPage = () => {
                   <div className="mx-3">
                     <i className="fa fa-random text-white p-3 display-6" />
                   </div>
-                  <Button variant="outline-light">
+                  <Button variant="outline-light" onClick={handleShowSongs}>
                     <i className="fa fa-plus p-1" />
                     Add Songs
                   </Button>
