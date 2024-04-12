@@ -56,6 +56,7 @@ Route::put('songs/{id}', [ArtistController::class, 'editSong']);
 
 // SongController Routes
 Route::get('/play/{filename}', [SongController::class, 'getSong']);
+Route::get('song-details/{id}', [SongController::class, 'getSongDetails']);
 Route::get('genres', [SongController::class, 'getGenres']);
 
 // PlaylistController Routes

@@ -16,15 +16,7 @@ export function PlaylistSongsTable() {
 
     const navigate = useNavigate();
 
-    const { setCurrentSong, setCurrentSongName } = useContext(PlayerContext);
-
-    const handlePlayerSongChange = (song) => {
-        setCurrentSong(song);
-    }
-
-    const handlePlayerSongNameChange = (song) => {
-        setCurrentSongName(song);
-    }
+    const { setSongID } = useContext(PlayerContext);
 
     const fetchSongs = async () => {
         try {
@@ -161,14 +153,7 @@ export function PlaylistSongsTable() {
                             prepareRow(row);
                             return (
                                 <tr onClick={() => {
-                                    const songUrl = `${BACKEND_URL}/api/play/${row.original.hashed_name}`;
-                                    fetch(songUrl)
-                                        .then(response => response.blob())
-                                        .then(blob => {
-                                            const audioBlobURL = URL.createObjectURL(blob);
-                                            handlePlayerSongChange(audioBlobURL);
-                                            handlePlayerSongNameChange(row.original.display_name);
-                                        });
+                                    setSongID(row.original.id);
                                 }} {...row.getRowProps()}>
                                     {row.cells.map(cell => (
                                         <td {...cell.getCellProps()}

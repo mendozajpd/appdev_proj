@@ -16,7 +16,7 @@ const UserLayout = () => {
 
     const navigate = useNavigate();
 
-    const { currentSong, currentSongName } = useContext(PlayerContext);
+    const { songID } = useContext(PlayerContext);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('jwt_token');
@@ -53,7 +53,7 @@ const UserLayout = () => {
             <Container className="g-0" fluid>
                 <div className="home-page-content">
                     <Outlet />
-                    <MusicPlayer currentSong={currentSong} currentSongName={currentSongName}  />
+                    <MusicPlayer songID={songID}  />
                 </div>
             </Container>
         </div>

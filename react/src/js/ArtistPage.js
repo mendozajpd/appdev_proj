@@ -34,16 +34,8 @@ const ArtistPage = () => {
   const { id } = useParams();
 
   // Player
-  const {setCurrentSong, setCurrentSongName } = useContext(PlayerContext);
+  const {setSongID } = useContext(PlayerContext);
   const playerRef = useRef();
-
-  const handlePlayerSongChange = (song) => {
-    setCurrentSong(song);
-  }
-
-  const handlePlayerSongNameChange = (song) => {
-    setCurrentSongName(song);
-  }
 
   // SONGS
   const [songs, setSongs] = useState([]);
@@ -238,14 +230,7 @@ const ArtistPage = () => {
                   ) : (
                     songs.map((song, index) => (
                       <Row key={index} className="song-item p-3" onClick={() => {
-                        const songUrl = `${BACKEND_URL}/api/play/${song.hashed_name}`;
-                        fetch(songUrl)
-                          .then(response => response.blob())
-                          .then(blob => {
-                            const audioBlobURL = URL.createObjectURL(blob);
-                            handlePlayerSongChange(audioBlobURL);
-                            handlePlayerSongNameChange(song.display_name);
-                          });
+                        setSongID(song.id);
                       }}>
                         <Col xs={1}>
                           {index + 1}

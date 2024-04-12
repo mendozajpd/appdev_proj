@@ -31,11 +31,12 @@ function App() {
 
   const [currentSongName, setCurrentSongName] = useState(null);
   const [currentSongUrl, setCurrentSongUrl] = useState(null);
+  const [songID, setSongID] = useState(null);
 
   return (
     <Router>
       <ToastContainer />
-      <PlayerContext.Provider value={{ currentSongName, setCurrentSongName, currentSong: currentSongUrl, setCurrentSong: setCurrentSongUrl }}>
+      <PlayerContext.Provider value={{ currentSongName, setCurrentSongName, currentSong: currentSongUrl, setCurrentSong: setCurrentSongUrl, songID, setSongID }}>
         <Routes>
           <Route path="/" element={<UserLayout />}>
             <Route index element={<HomePage />} />
