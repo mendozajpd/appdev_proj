@@ -117,6 +117,7 @@ const UserSidebar = () => {
                     console.log('Playlist created:', response.data);
                     handleClose();
                     navigate(`/playlist/${response.data.id}`);
+                    setPlaylistName('');
                     fetchPlaylists();
                 })
                 .catch(error => {
