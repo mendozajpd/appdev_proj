@@ -154,7 +154,7 @@ h1 span:hover {
 }
 
 .btn-outline-danger {
-  background-color: transparent !important; 
+  background-color: transparent !important;
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
@@ -708,34 +708,40 @@ h1 span:hover {
 /* User Side Bar */
 .user-sidebar {
   scrollbar-width: thin;
-  scrollbar-color: transparent transparent; /* make scrollbar transparent by default */
+  scrollbar-color: transparent transparent;
+  /* make scrollbar transparent by default */
   z-index: 0;
 }
 
 .user-sidebar:hover {
-  scrollbar-color: #a7a7a7 #272729; /* change scrollbar color on hover */
+  scrollbar-color: #a7a7a7 #272729;
+  /* change scrollbar color on hover */
 }
 
 .user-sidebar .head-div {
-  overflow:visible !important;
+  overflow: visible !important;
 }
 
 .user-sidebar::-webkit-scrollbar {
-  width: 5px; 
+  width: 5px;
 }
 
 .user-sidebar::-webkit-scrollbar-track {
-  background: #272729; /* match Firefox track color */
+  background: #272729;
+  /* match Firefox track color */
 }
 
 .user-sidebar::-webkit-scrollbar-thumb {
-  background-color: transparent; /* make scrollbar transparent by default */
-  border-radius: 20px; 
-  border: 3px solid transparent; /* creates padding around scroll thumb with the same color as track */
+  background-color: transparent;
+  /* make scrollbar transparent by default */
+  border-radius: 20px;
+  border: 3px solid transparent;
+  /* creates padding around scroll thumb with the same color as track */
 }
 
 .user-sidebar:hover::-webkit-scrollbar-thumb {
-  background-color: #a7a7a7; /* change scrollbar color on hover */
+  background-color: #a7a7a7;
+  /* change scrollbar color on hover */
   border: 3px solid #272729;
 }
 
@@ -759,9 +765,9 @@ h1 span:hover {
 
 /* HOMEPAGE */
 .home-page {
-  background: 
-  linear-gradient(to bottom, rgba(97, 70, 70, 0.53) 0%, rgb(18, 18, 18) 100%) no-repeat center fixed,
-  linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgb(63, 63, 63) 100%) no-repeat center fixed;
+  background:
+    linear-gradient(to bottom, rgba(97, 70, 70, 0.53) 0%, rgb(18, 18, 18) 100%) no-repeat center fixed,
+    linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgb(63, 63, 63) 100%) no-repeat center fixed;
   background-size: cover, cover !important;
   height: 100vh;
 }
@@ -1088,7 +1094,7 @@ h1 span:hover {
 }
 
 .upload-modal .modal-footer {
-  border-top:  1px solid rgb(103, 12, 12);
+  border-top: 1px solid rgb(103, 12, 12);
 }
 
 .custom-dropzone-text {
@@ -1246,29 +1252,7 @@ h1 span:hover {
   background: #868686;
 }
 
-/* REACT- SELECT */
-/* The container that has the scrollbar */
-.css-46gnuy-ValueContainer {
-  scrollbar-width: thin;
-  /* For Firefox */
-  scrollbar-color: #888 #333;
-  /* For Firefox */
-}
 
-.css-46gnuy-ValueContainer::-webkit-scrollbar {
-  width: 8px;
-  /* For Chrome, Safari, and Opera */
-}
-
-.css-46gnuy-ValueContainer::-webkit-scrollbar-thumb {
-  background: #888;
-  /* For Chrome, Safari, and Opera */
-}
-
-.css-46gnuy-ValueContainer::-webkit-scrollbar-thumb:hover {
-  background: #555;
-  /* For Chrome, Safari, and Opera */
-}
 
 /* CUSTOM TABLE */
 .custom-table {
@@ -1306,6 +1290,17 @@ h1 span:hover {
 }
 
 /* PLAYLIST */
+
+.playlist-author {
+  font-size: 20px;
+  font-weight: 0;
+}
+
+.playlist-author:hover {
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
 /* Dropdown Button */
 .dropbtn {
   background-color: #04AA6D;
@@ -1327,7 +1322,7 @@ h1 span:hover {
   position: absolute;
   background-color: #f1f1f1;
   min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }
 
@@ -1339,14 +1334,81 @@ h1 span:hover {
   display: block;
 }
 
-/* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
 
-/* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
+.dropdown:hover .dropbtn {
+  background-color: #3e8e41;
+}
+
+/* PLAYLIST TABLE */
+.playlist-table {
+  color: #c7c7c7;
+  /* overflow-x: auto; */
+}
+
+.playlist-table th {
+  border-bottom: 1px solid #fff;
+  padding:15px;
+}
+
+.playlist-table tbody tr:hover {
+  background-color: #00000050 !important;
+}
+
+.playlist-table tbody tr:hover .playlist-song-author, 
+.playlist-table tbody tr:hover .album-title-row {
+  color: #fff;
+}
+
+.playlist-table tbody tr:hover .ellipsis {
+  display: block !important;
+}
+
+.ellipsis-column {
+  width: 50px !important;
+}
+
+.ellipsis {
+  display: none !important;
+}
+
+.title-column {
+}
+
+.playlist-song-title {
+  color: #fff;
+}
+
+.playlist-song-author:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* .album-column {
+  padding: 10px;
+  width: 500px;
+} */
+
+.album-title-row {
+  padding: 15px;
+  width: 90%;
+}
+
+.date-added-row {
+  padding: 15px;
+  width: 90%;
+}
+
+.duration-row {
+  padding: 15px;
+  width: 90%;
+}
 
 @keyframes bounce {
 

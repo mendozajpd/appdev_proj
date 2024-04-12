@@ -1,119 +1,188 @@
-import '../../css/dataTables.css'
-import '../../css/index.css';
-import React, { Component, useEffect, useRef, useState } from "react";
-import { Container, Image, Stack, Dropdown } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import BACKEND_URL from '../../config';
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useTable } from 'react-table';
+import { Dropdown, Image, Container, Row } from "react-bootstrap";
 import axios from 'axios';
+import BACKEND_URL from '../../config';
+
+import PlayerContext from "../context/PlayerContext";
 
 
 export function PlaylistSongsTable() {
-
     const [songs, setSongs] = useState([]);
     const token = localStorage.getItem("jwt_token");
 
-    const fetchUsers = async () => {
+    const { id } = useParams();
+
+    const navigate = useNavigate();
+
+    const { setCurrentSong, setCurrentSongName } = useContext(PlayerContext);
+
+    const handlePlayerSongChange = (song) => {
+        setCurrentSong(song);
+    }
+
+    const handlePlayerSongNameChange = (song) => {
+        setCurrentSongName(song);
+    }
+
+    const fetchSongs = async () => {
         try {
-            axios.get(`${BACKEND_URL}/api/songs`, {
+            const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-            })
-                .then(response => {
-                    console.log(response.data);
-                    setSongs(response.data);
-                })
-                .catch(error => {
-                    console.error('There was an error!', error);
-                });
+            });
+            setSongs(response.data);
+            console.log('Songs', response.data);
         } catch (error) {
-            console.error('Failed to fetch artist albums:', error);
+            console.error('Failed to fetch songs:', error);
         }
     };
 
-    const $ = require('jquery')
-    $.DataTable = require('datatables.net')
-    const tableRef = useRef();
-
     useEffect(() => {
-        fetchUsers();
-    }, []);
+        fetchSongs();
+    }, [id]);
 
+    const data = React.useMemo(() => songs, [songs]);
 
-    useEffect(() => {
-        if (!songs) {
-            return;
-        }
-
-        //console.log(tableRef.current)
-        const table = $(tableRef.current).DataTable({
-            data: songs,
-            select: true,
-            paging: false,
-            info: false,
-            columns: [
-                {
-                    title: "No.",
-                    data: null,
-                    render: (data, type, row, meta) => meta.row + 1
-                },
-                {
-                    title: "Title",
-                    sortable: false,
-                    data: null,
-                    render: (data, type, row) => {
-                        if (row.album && row.album.cover_photo_hash) {
-                            return `<img src="${BACKEND_URL}/storage/album_images/${row.album.cover_photo_hash}" alt="Album Cover" style="width: 50px; height: 50px;">`
-                        } else {
-                            return 'No cover';
-                        }
-                    }
-                },
-                { data: 'display_name', title: "" }, // Assuming 'title' is the property for the song title
-                {
-                    title: "Album",
-                    data: null,
-                    render: (data, type, row) => {
-                        return `${row.album.album_name}`
-                    }
-                },
-                {
-                    title: "Date",
-                    data: null,
-                    render: (data, type, row) => {
-                        const date = new Date(row.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                        return `<Stack gap={2}><div>${date}</div></Stack>`;
-                    }
-                },
-                // { data: 'duration', title: "Duration" }, // Assuming 'duration' is the property for the song duration
-                {
-                    title: "",
-                    data: null,
-                    render: (data, type, row) =>
-                        `
-                            <div class="dropdown">
-                                <button class="dropbtn">Dropdown</button>
-                                <div class="dropdown-content">
-                                    <a href="#">Link 1</a>
-                                    <a href="#">Link 2</a>
-                                    <a href="#">Link 3</a>
-                                </div>
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: "#",
+                accessor: (row, i) => i + 1,
+                Cell: ({ value }) =>
+                    <>
+                        <div className="mx-3">
+                            {value}
+                        </div>
+                    </>
+            },
+            {
+                Header: "Title",
+                accessor: 'display_name',
+                Cell: ({ row }) => (
+                    <div className="p-2 d-flex align-items-center">
+                        <Image src={`${BACKEND_URL}/storage/album_images/${row.original.album.cover_photo_hash}`} alt="Album Cover" style={{ width: '50px', height: '50px' }} rounded />
+                        <div className="mx-3">
+                            <div className="playlist-song-title text-truncate">
+                                {row.original.display_name}
                             </div>
-                        `
+                            <div className="playlist-song-author" onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/artist/${row.original.user_id}`);
+                            }}>
+                                {row.original.user.name}
+                            </div>
+                        </div>
+                    </div >
+                ),
+            },
+            {
+                Header: "Album",
+                accessor: 'album.album_name',
+                Cell: ({ value }) => {
+                    return (
+                        <div className="album-title-row text-truncate">
+                            {value}
+                        </div>
+                    )
                 }
-            ],
-            destroy: true,
-        });
 
-        return function () {
-            table.destroy()
-        }
-    }, [songs]);
+            },
+            {
+                Header: "Date Added",
+                accessor: 'created_at',
+                Cell: ({ value }) => {
+                    const date = new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    return (
+                        <div className="date-added-row text-truncate">
+                            {date}
+                        </div>
+                    );
+                }
+            },
+            {
+                Header: "Duration",
+                accessor: 'updated_at',
+                Cell: ({ value }) => {
+                    const date = new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    return (
+                        <div className="duration-row text-truncate">
+                            {date}
+                        </div>
+                    );
+                }
+            },
+            {
+                Header: "",
+                accessor: 'id',
+                maxWidth: 10,
+                Cell: ({ value }) => (
+                    <Dropdown className="profile-dropdown" onClick={(e) => e.stopPropagation()}>
+                        <Dropdown.Toggle id="dropdown-basic">
+                            <i className="fa fa-ellipsis-h ellipsis" />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu variant="dark">
+                            <Dropdown.Item href="/profile">Add to playlist</Dropdown.Item>
+                            <Dropdown.Item href="/settings">Remove from this playlist</Dropdown.Item>
+                            <Dropdown.Item href="/settings">Add to queue</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                ),
+            },
+        ],
+        []
+    );
+
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    } = useTable({ columns, data });
 
     return (
-        <Container className='custom-table' fluid>
+        <Container fluid className="w-100 playlist-table">
             <div>
-                <table className='display' width="100%" ref={tableRef} />
+                <table {...getTableProps()} className="w-100">
+                    <thead>
+                        {headerGroups.map(headerGroup => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map(column => (
+                                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {rows.map(row => {
+                            prepareRow(row);
+                            return (
+                                <tr onClick={() => {
+                                    const songUrl = `${BACKEND_URL}/api/play/${row.original.hashed_name}`;
+                                    fetch(songUrl)
+                                        .then(response => response.blob())
+                                        .then(blob => {
+                                            const audioBlobURL = URL.createObjectURL(blob);
+                                            handlePlayerSongChange(audioBlobURL);
+                                            handlePlayerSongNameChange(row.original.display_name);
+                                        });
+                                }} {...row.getRowProps()}>
+                                    {row.cells.map(cell => (
+                                        <td {...cell.getCellProps()}
+                                            className={cell.column.id === 'display_name' ? 'title-column' : cell.column.id === 'album.album_name' ? 'album-column' : cell.column.id === 'id' ? 'ellipsis-column' : ''
+                                            }>
+                                            {cell.render('Cell')}
+                                        </td>
+                                    ))}
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
-        </Container>)
+        </Container>
+    );
 }

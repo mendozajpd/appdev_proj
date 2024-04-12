@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, CSSProperties, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Image, Stack, Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -25,11 +25,11 @@ const override = {
 };
 
 const PlaylistPage = () => {
-  let [loading, setLoading] = useState(true);
 
   const [isVerified, setIsVerified] = useState(false);
 
   const [playlist, setPlaylist] = useState(null);
+  const [author, setAuthor] = useState('');
   const { id } = useParams();
 
   // SONGS
@@ -55,6 +55,8 @@ const PlaylistPage = () => {
     axios.get(`${BACKEND_URL}/api/playlist/${id}`)
       .then(response => {
         setPlaylist(response.data);
+        console.log(response.data);
+        getPlaylistAuthor([response.data.creator_id]);
       }).catch(error => {
         console.error('There was an error!', error);
       });
@@ -87,7 +89,6 @@ const PlaylistPage = () => {
         },
       });
       const userData = response.data; // Assuming user details are directly in response.data
-      //console.log(userData);
       setIsVerified(userData.email_verified_at !== null);
       if (userData.email_verified_at === null) {
         handleShow();
@@ -104,6 +105,20 @@ const PlaylistPage = () => {
       localStorage.removeItem("jwt_token");
     }
   };
+
+  const getPlaylistAuthor = async ([author_id]) => {
+    try {
+      axios.get(`${BACKEND_URL}/api/users/${author_id}`)
+        .then(response => {
+          setAuthor(response.data);
+          console.log(response.data);
+        }).catch(error => {
+          console.error('There was an error!', error);
+        });
+    } catch (e) {
+      console.error('Failed to fetch playlist author:', e);
+    }
+  }
 
 
 
@@ -137,11 +152,17 @@ const PlaylistPage = () => {
               <Row className="artist-banner p-5">
                 {/* <Form.Control className="search-bar" placeholder="Search" /> */}
                 <h1 className="home-page-text h-100 mb-5 d-flex align-items-end">
-                  <Image src="https://via.placeholder.com/100" style={{ width: '100px', height: '100px', marginRight: '15px' }} />
+                  <Image src="https://via.placeholder.com/150" style={{ width: '150px', height: '150px', marginRight: '15px' }} />
                   {playlist ?
-                    <p className="display-6">
-                      {playlist.name}
-                    </p>
+                    <div>
+                      <p>
+                        {playlist.name}
+                      </p>
+                      <div onClick={() => navigate(`/artist/${author.id}`)} className="playlist-author d-flex align-items-center">
+                        <Image src="https://via.placeholder.com/50" style={{ width: '30px', height: '30px', marginRight: '15px' }} roundedCircle/>
+                        {author.name}
+                      </div>
+                    </div>
                     : 'Loading...'}
                 </h1>
               </Row>
@@ -152,14 +173,25 @@ const PlaylistPage = () => {
                     <i className="fa fa-random text-white p-3 display-6" />
                   </div>
                   <Button variant="outline-light">
-                    <i className="fa fa-plus p-1"/>
+                    <i className="fa fa-plus p-1" />
                     Add Songs
                   </Button>
+                  <Dropdown className="profile-dropdown">
+                    <Dropdown.Toggle id="dropdown-basic">
+                      <i className="fa fa-ellipsis-h display-6" />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu variant="dark">
+                      <Dropdown.Item href="/profile">Add to queue</Dropdown.Item>
+                      <Dropdown.Divider />
+                      <Dropdown.Item href="/settings">Edit details</Dropdown.Item>
+                      <Dropdown.Item href="/profile">Delete playlist</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </div>
               </Row>
-              <Row className="px-5">
-                <PlaylistSongsTable />
-              </Row>
+              <div fluid className="px-5">
+                <PlaylistSongsTable/>
+              </div>
             </Col>
           </Row>
         </Container>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-// import '../css/index.css'
 import { CDBSidebar, CDBSidebarContent, CDBSidebarMenuItem, CDBSidebarMenu, CDBSidebarHeader } from 'cdbreact';
 import { Image, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
@@ -117,6 +116,8 @@ const UserSidebar = () => {
                 .then(response => {
                     console.log('Playlist created:', response.data);
                     handleClose();
+                    navigate(`/playlist/${response.data.id}`);
+                    fetchPlaylists();
                 })
                 .catch(error => {
                     console.error('Failed to create playlist:', error);
@@ -219,7 +220,6 @@ const UserSidebar = () => {
                                             {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
                                             {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
                                             <div className="mx-4 my-3">
-                                                Artist
                                             </div>
                                             <NavLink to="/upload" activeclassname="activeClicked">
                                                 <CDBSidebarMenuItem icon="">Artist Studio</CDBSidebarMenuItem>

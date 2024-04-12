@@ -6,9 +6,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Playlist;
 use App\Models\Song;
+use App\Models\PlaylistSong;
 
 class PlaylistController extends Controller
-{
+{   
+    // PLAYLIST SONGS
+    public function getPlaylistSongs($id)
+    {
+        $playlist = Playlist::find($id);
+    
+        if ($playlist === null) {
+            return response()->json(['message' => 'Playlist not found'], 404);
+        }
+    
+        $songs = $playlist->songs->load('album','user');
+    
+        return response()->json($songs);
+    }
+
+    // PLAYLIST
     public function getPlaylist($id)
     {
         $playlist = Playlist::find($id);
@@ -47,7 +63,7 @@ class PlaylistController extends Controller
         $playlist->creator_id = auth()->id();
         $playlist->save();
     
-        return response()->json(['message' => 'Playlist created successfully']);
+        return response()->json(['message' => 'Playlist created successfully','id' => $playlist->id]);
     }
 
     public function destroy(Playlist $playlist)

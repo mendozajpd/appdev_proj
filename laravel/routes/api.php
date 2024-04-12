@@ -62,6 +62,7 @@ Route::get('genres', [SongController::class, 'getGenres']);
 Route::get('playlist/{id}', [PlaylistController::class, 'getPlaylist']);
 Route::get('playlists', [PlaylistController::class, 'getPlaylists']);
 Route::post('create-playlist', [PlaylistController::class, 'createPlaylist']);
+Route::get('playlist/{id}/songs', [PlaylistController::class, 'getPlaylistSongs']);
 
 Route::group([
 

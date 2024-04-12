@@ -34,7 +34,7 @@ const ArtistPage = () => {
   const { id } = useParams();
 
   // Player
-  const { currentSong, setCurrentSong, currentSongName, setCurrentSongName } = useContext(PlayerContext);
+  const {setCurrentSong, setCurrentSongName } = useContext(PlayerContext);
   const playerRef = useRef();
 
   const handlePlayerSongChange = (song) => {
@@ -108,19 +108,6 @@ const ArtistPage = () => {
     color: "#ff3535",
     transition: "background-color 0.3s, color 0.3s, transform 0.3",
   };
-
-  const handleMouseEnter = (e) => {
-    e.target.style.backgroundColor = "red";
-    e.target.style.color = "white";
-    e.target.style.borderColor = "#8d4b4b";
-  };
-
-  const handleMouseLeave = (e) => {
-    e.target.style.backgroundColor = "transparent";
-    e.target.style.color = "#ff3535";
-    e.target.style.borderColor = "#8d4b4b";
-  };
-
 
 
   const fetchUserDetails = async () => {
@@ -258,8 +245,6 @@ const ArtistPage = () => {
                             const audioBlobURL = URL.createObjectURL(blob);
                             handlePlayerSongChange(audioBlobURL);
                             handlePlayerSongNameChange(song.display_name);
-                            // setCurrentSong(audioBlobURL);
-                            // setCurrentSongName(song.display_name);
                           });
                       }}>
                         <Col xs={1}>
