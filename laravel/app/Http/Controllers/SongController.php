@@ -28,7 +28,6 @@ class SongController extends Controller
     {
         $path = storage_path('app/public/songs/' . $filename);
     
-        // Log the file path
         Log::info('File path: ' . $path);
     
         $file = File::get($path);
@@ -39,7 +38,6 @@ class SongController extends Controller
             'Content-Disposition' => 'inline; filename="'.$filename.'"'
         );
     
-        // Log the headers
         Log::info('Headers: ', $headers);
     
         return Response::stream(function() use($path) {

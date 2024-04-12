@@ -13,7 +13,7 @@ class Song extends Model
     
     public function album()
     {
-        return $this->belongsTo(Album::class, 'album_id', 'id');
+        return $this->belongsTo(Album::class, 'album_id', 'album_id');
     }
 
     public function user()

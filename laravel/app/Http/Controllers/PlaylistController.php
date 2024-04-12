@@ -3,18 +3,50 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Playlist;
 use App\Models\Song;
 
 class PlaylistController extends Controller
 {
-    public function store(Request $request)
+    public function getPlaylist($id)
+    {
+        $playlist = Playlist::find($id);
+    
+        if ($playlist === null) {
+            return response()->json(['message' => 'Playlist not found'], 404);
+        }
+    
+        return response()->json($playlist);
+    }
+    
+    public function getPlaylists()
+    {
+        $user = auth()->user();
+        
+        if ($user === null) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+    
+        $playlists = Playlist::where('creator_id', $user->id)->get();
+    
+        return response()->json($playlists);
+    }
+
+    public function createPlaylist(Request $request)
     {
         $playlist = new Playlist;
-        $playlist->name = $request->name;
+        
+        if ($request->name) {
+            $playlist->name = $request->name;
+        } else {
+            $count = Playlist::where('creator_id', auth()->id())->count();
+            $playlist->name = 'Playlist #' . ($count + 1);
+        }
+        
         $playlist->creator_id = auth()->id();
         $playlist->save();
-
+    
         return response()->json(['message' => 'Playlist created successfully']);
     }
 

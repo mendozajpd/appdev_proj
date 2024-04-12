@@ -27,8 +27,5 @@ return new class extends Migration
         Schema::dropIfExists('playlists');
     }
 
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'creator_id');
-    }
+
 };

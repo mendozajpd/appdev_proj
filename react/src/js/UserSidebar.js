@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Nav } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
-import '../css/index.css'
+// import '../css/index.css'
 import { CDBSidebar, CDBSidebarContent, CDBSidebarMenuItem, CDBSidebarMenu, CDBSidebarHeader } from 'cdbreact';
-import { Image, Button } from 'react-bootstrap';
+import { Image, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { NavLink } from 'react-router-dom';
 import { Form, Row, Col, Stack, Dropdown } from 'react-bootstrap';
@@ -12,21 +12,27 @@ import BACKEND_URL from "../config";
 
 
 
-const UserSidebar = props => {
+const UserSidebar = () => {
+
+
+    const [isVerified, setIsVerified] = useState(false);
+    const [logoutDisabled, setLogoutDisabled] = useState(false);
+
+    // User
+    const [user, setUser] = useState(null);
+    const [isArtist, setIsArtist] = useState(false);
+
+    // Playlist
+    const [playlists, setPlaylists] = useState([]);
+    const [playlistName, setPlaylistName] = useState('');
+
     useEffect(() => {
         const token = localStorage.getItem("jwt_token");
         if (token) {
             fetchUserDetails();
         }
-
-        
+        fetchPlaylists();
     }, []);
-
-    const [isVerified, setIsVerified] = useState(false);
-    const [logoutDisabled, setLogoutDisabled] = useState(false);
-
-    const [user, setUser] = useState(null);
-    const [isArtist, setIsArtist] = useState(false);
 
     const navigate = useNavigate();
 
@@ -38,16 +44,37 @@ const UserSidebar = props => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            const userData = response.data; // Assuming user details are directly in response.data
-            //console.log(userData);
-            setUser(userData);
-            setIsArtist(userData.role === 'artist');
-            setIsVerified(userData.email_verified_at !== null);
-            // Check if the user has admin or superadmin role
+            const userData = response.data;
+            if (userData === null) {
+                localStorage.removeItem('jwt_token');
+            } else {
+                setUser(userData);
+                setIsArtist(userData.role === 'artist');
+                setIsVerified(userData.email_verified_at !== null);
+            }
         } catch (error) {
             console.error("Failed to fetch user:", error);
         }
     };
+
+    const fetchPlaylists = async () => {
+        const token = localStorage.getItem("jwt_token");
+        try {
+            axios.get(`${BACKEND_URL}/api/playlists`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+                .then(response => {
+                    setPlaylists(response.data);
+                })
+                .catch(error => {
+                    console.error('Failed to fetch playlists:', error);
+                });
+        } catch (error) {
+            console.error("Failed to fetch playlists:", error);
+        }
+    }
 
     const handleLogout = async (e) => {
         e.preventDefault();
@@ -76,52 +103,51 @@ const UserSidebar = props => {
     const handleShow = () => setShow(true);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
+    const handleCreatePlaylist = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem("jwt_token");
+            axios.post(`${BACKEND_URL}/api/create-playlist`, {
+                name: playlistName,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+                .then(response => {
+                    console.log('Playlist created:', response.data);
+                    handleClose();
+                })
+                .catch(error => {
+                    console.error('Failed to create playlist:', error);
+                });
+        } catch (e) {
+            console.error('Failed to create playlist:', e);
+        }
+    }
+
     return (
         <>
-            <Modal className="upload-modal" show={show} size='lg' onHide={handleClose} backdrop="static"
+            <Modal className="upload-modal" show={show} onHide={handleClose} backdrop="static"
                 aria-labelledby="contained-modal-title-vcenter"
                 centered>
                 <div className="p-3">
                     <Modal.Header closeButton>
-                        <Modal.Title>Edit Profile</Modal.Title>
+                        <Modal.Title>Create New Playlist</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <>
-                            <Row className='py-3 d-flex px-3' style={{ borderBottom: '1px solid #B93B3B' }}>
-                                <Col className="d-flex align-items-center justify-content-center py-2">
-                                    <Row className="album-cover-preview d-flex justify-content-center">
-                                        {/* <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' /> */}
-                                    </Row>
-                                </Col>
-                                <Col xs={12} sm={12} xl={7}>
-                                    <Form>
-                                        <Stack direction="vertical" className="px-3" gap={1}>
-                                            <Form.Group controlId="album_name">
-                                                {/* <Form.Label>Album Title</Form.Label> */}
-                                                {/* <Form.Control className="input-style" type="text" placeholder="Album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} /> */}
-                                            </Form.Group>
-                                            <Form.Group controlId="album_description">
-                                                {/* <Form.Label>Album Description</Form.Label> */}
-                                                {/* <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} /> */}
-                                            </Form.Group>
-                                            <Form.Group controlId="collaborator_names">
-                                                <Form.Label>Collaborators</Form.Label>
-                                                {/* <Form.Control className="input-style" type="text" placeholder="Artist names" value={artistNames} onChange={e => setArtistNames(e.target.value)} /> */}
-                                            </Form.Group>
-                                        </Stack>
-                                    </Form>
-                                </Col>
-                            </Row>
                             <Row className="d-flex justify-content-center py-3">
-                                {/* <Col>
-                      nice
-                    </Col> */}
                                 <Col className="d-flex justify-content-center flex-column">
-                                    {/* <Row>
-                        ADD SONGS
-                      </Row> */}
                                     <Row>
-                                        {/* <MediaDropzone onDrop={handleMediaDrop} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' /> */}
+                                        <Form.Group controlId="formPlaylistName">
+                                            <Form.Control
+                                                type="text"
+                                                placeholder="Enter playlist name"
+                                                value={playlistName} // Set the value to the state variable
+                                                onChange={e => setPlaylistName(e.target.value)} // Update the state variable when the input changes
+                                            />
+                                        </Form.Group>
                                     </Row>
                                 </Col>
                             </Row>
@@ -130,11 +156,11 @@ const UserSidebar = props => {
                     <Modal.Footer>
 
                         <Button variant="secondary" onClick={handleClose}>
-                            Cancel Changes
+                            Cancel
                         </Button>
 
-                        <Button variant="danger" onClick={handleClose}>
-                            Save Profile
+                        <Button variant="danger" onClick={handleCreatePlaylist}> {/* Call handleCreatePlaylist when the button is clicked */}
+                            Create Playlist
                         </Button>
                     </Modal.Footer>
                 </div>
@@ -172,7 +198,7 @@ const UserSidebar = props => {
                 </CDBSidebarHeader>
                 <Col className="flex-grow-1 d-flex flex-column vh-100" fluid>
                     <Row className="align-items-start">
-                        <CDBSidebarContent className="sidebar-content">
+                        <CDBSidebarContent>
                             <CDBSidebarMenu>
                                 <nav id="sidebar">
                                     <NavLink to="/" activeclassname="activeClicked">
@@ -190,33 +216,26 @@ const UserSidebar = props => {
                                     {isArtist && (
                                         <>
                                             <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
-                                            <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem>
                                             {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
+                                            {/* <CDBSidebarMenuItem icon="" className="sub-header">ARTIST</CDBSidebarMenuItem> */}
+                                            <div className="mx-4 my-3">
+                                                Artist
+                                            </div>
                                             <NavLink to="/upload" activeclassname="activeClicked">
-                                                <CDBSidebarMenuItem icon="">Content</CDBSidebarMenuItem>
+                                                <CDBSidebarMenuItem icon="">Artist Studio</CDBSidebarMenuItem>
                                             </NavLink>
                                         </>
                                     )}
                                     <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
-                                    <CDBSidebarMenuItem icon="" className="sub-header">PLAYLISTS</CDBSidebarMenuItem>
-                                    <NavLink to="/" activeclassname="activeClicked">
-                                        <CDBSidebarMenuItem icon="">Playlist #1</CDBSidebarMenuItem>
-                                    </NavLink>
-                                    <NavLink to="/" activeclassname="activeClicked">
-                                        <CDBSidebarMenuItem icon="">Playlist #2</CDBSidebarMenuItem>
-                                    </NavLink>
-                                    <NavLink to="/" activeclassname="activeClicked">
-                                        <CDBSidebarMenuItem icon="">Playlist #3</CDBSidebarMenuItem>
-                                    </NavLink>
-                                    <NavLink to="/" activeclassname="activeClicked">
-                                        <CDBSidebarMenuItem icon="">Playlist #4</CDBSidebarMenuItem>
-                                    </NavLink>
-                                    <NavLink to="/">
-                                        <CDBSidebarMenuItem icon="">
-                                            <i className="fa fa-plus-square mx-3"></i>
-                                            Create Playlist
-                                        </CDBSidebarMenuItem>
-                                    </NavLink>
+                                    <CDBSidebarMenuItem onClick={handleShow} icon="" className="sub-header d-flex justify-content-between">
+                                        PLAYLISTS
+                                        <i className="fa fa-plus-square mx-3 text-red"></i>
+                                    </CDBSidebarMenuItem>
+                                    {playlists.map((playlist, index) => (
+                                        <NavLink to={`/playlist/${playlist.id}`} key={index} activeclassname="activeClicked">
+                                            <CDBSidebarMenuItem icon="">{playlist.name}</CDBSidebarMenuItem>
+                                        </NavLink>
+                                    ))}
                                     <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
                                 </nav>
                             </CDBSidebarMenu>

@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\SongController;
+use App\Http\Controllers\PlaylistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,23 +24,27 @@ Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// AuthController Routes
 Route::get('role', [AuthController::class, 'getRole']);
 Route::post('login', [AuthController::class, 'login']); // Check role, then redirect accordingly
 Route::post('register-listener', [AuthController::class, 'registerListener']);
 Route::post('register-artist', [AuthController::class, 'registerArtist']);
 Route::post('resend-verification-email', [AuthController::class, 'sendVerificationEmail']);
 
+// UserController Routes
 Route::get('users', [UserController::class, 'getUsers']);
-Route::get('artist-requests', [ArtistRequestController::class, 'getArtistRequests']);
 Route::get('users/{id}', [UserController::class, 'getUser']);
 Route::put('users/{id}', [UserController::class, 'updateUser']);
 Route::delete('users/{id}', [UserController::class, 'deleteUser']);
 
+// ArtistRequestController Routes
+Route::get('artist-requests', [ArtistRequestController::class, 'getArtistRequests']);
+
+// ArtistController Routes
 Route::get('albums', [ArtistController::class, 'getAlbums']);
+Route::get('songs', [ArtistController::class, 'getSongs']);
 Route::get('artists', [ArtistController::class, 'getArtists']);
 Route::get('/artists/{id}', [ArtistController::class, 'getArtist']);
-Route::get('/play/{filename}', [SongController::class, 'getSong']);
-Route::get('genres', [SongController::class, 'getGenres']);
 Route::get('/songs/{id}', [ArtistController::class, 'getArtistSongs']);
 Route::get('/albums/{id}', [ArtistController::class, 'getArtistAlbums']);
 Route::post('upload-song', [ArtistController::class, 'uploadSong']);
@@ -48,6 +53,15 @@ Route::post('create/album/upload-songs', [ArtistController::class, 'createAlbumA
 Route::delete('songs/{id}', [ArtistController::class, 'deleteSong']);
 Route::put('albums/{id}', [ArtistController::class, 'editAlbum']);
 Route::put('songs/{id}', [ArtistController::class, 'editSong']);
+
+// SongController Routes
+Route::get('/play/{filename}', [SongController::class, 'getSong']);
+Route::get('genres', [SongController::class, 'getGenres']);
+
+// PlaylistController Routes
+Route::get('playlist/{id}', [PlaylistController::class, 'getPlaylist']);
+Route::get('playlists', [PlaylistController::class, 'getPlaylists']);
+Route::post('create-playlist', [PlaylistController::class, 'createPlaylist']);
 
 Route::group([
 

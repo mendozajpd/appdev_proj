@@ -62,6 +62,19 @@ class ArtistController extends Controller
         }
     }
 
+    public function getSongs() 
+    {
+        $user = auth()->user();
+        
+        if ($user) {
+            $songs = $user->songs()->with('user')->with('album')->get();
+            return response()->json($songs);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+    }
+
     public function uploadSong(Request $request)
     {
         if (!$request->hasFile('song')) {

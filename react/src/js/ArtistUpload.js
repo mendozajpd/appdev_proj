@@ -17,6 +17,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 // TEMP DATATABLE
 import { AlbumsTable } from './tables/AlbumsTable';
+import { SongsTable } from './tables/SongsTable';
 
 
 
@@ -434,7 +435,7 @@ const ArtistUpload = () => {
                   <AlbumsTable />
                 </Tab>
                 <Tab eventKey="songs" title="Songs">
-                  Tab content for Profile
+                  <SongsTable />
                 </Tab>
               </Tabs>
             </Col>
