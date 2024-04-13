@@ -12,7 +12,7 @@ import PlaylistSongsContext from "../context/PlaylistSongsContext";
 
 
 export function PlaylistSongsTable() {
-    const {songs, setSongs} = useContext(PlaylistSongsContext);
+    const { songs, setSongs } = useContext(PlaylistSongsContext);
     const token = localStorage.getItem("jwt_token");
 
     const { id } = useParams();
@@ -35,6 +35,22 @@ export function PlaylistSongsTable() {
             console.error('Failed to fetch songs:', error);
         }
     };
+
+    const removeSongFromPlaylist = async (playlist_id, song_id) => {
+        try {
+            console.log('Removing song from playlist', playlist_id, song_id)
+            await axios.delete(`${BACKEND_URL}/api/playlist/${playlist_id}/${song_id}/remove`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log('Song removed from playlist', playlist_id, song_id);
+            setPlaylistUpdate(true);
+        } catch (error) {
+            console.error('Failed to remove song:', error);
+        }
+
+    }
 
     useEffect(() => {
         fetchSongs();
@@ -118,14 +134,23 @@ export function PlaylistSongsTable() {
                 accessor: 'id',
                 maxWidth: 10,
                 Cell: ({ value }) => (
-                    <Dropdown className="profile-dropdown" onClick={(e) => e.stopPropagation() }>
+                    <Dropdown className="profile-dropdown" onClick={(e) => e.stopPropagation()}>
                         <Dropdown.Toggle id="dropdown-basic">
                             <i className="fa fa-ellipsis-h ellipsis" />
                         </Dropdown.Toggle>
                         <Dropdown.Menu variant="dark">
-                            <Dropdown.Item href="/profile">Add to playlist</Dropdown.Item>
-                            <Dropdown.Item href="/settings">Remove from this playlist</Dropdown.Item>
-                            <Dropdown.Item href="/settings">Add to queue</Dropdown.Item>
+                            <Dropdown.Item href="/profile">
+                                <i className="fa fa-plus mx-2" />
+                                Add to playlist
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => removeSongFromPlaylist(id, value)}>
+                                <i className="fa fa-trash mx-2" />
+                                Remove from this playlist
+                            </Dropdown.Item>
+                            <Dropdown.Item href="/settings">
+                                <i className="fa fa-indent mx-2" />
+                                Add to queue
+                            </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 ),

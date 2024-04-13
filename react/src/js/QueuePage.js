@@ -28,7 +28,7 @@ const override = {
   borderColor: "red",
 };
 
-const PlaylistPage = () => {
+const QueuePage = () => {
 
   const [isVerified, setIsVerified] = useState(false);
 
@@ -64,97 +64,13 @@ const PlaylistPage = () => {
     if (!token) {
       navigate('/login');
     } else {
-      fetchUserDetails();
+      // fetchUserDetails();
     }
 
-    axios.get(`${BACKEND_URL}/api/playlist/${id}`)
-      .then(response => {
-        setPlaylist(response.data);
-        // console.log(response.data);
-        getPlaylistAuthor([response.data.creator_id]);
-      }).catch(error => {
-        console.error('There was an error!', error);
-      });
 
   }, [id, isVerified]);
 
   const navigate = useNavigate();
-
-  const buttonStyle = {
-    marginTop: "30px",
-    fontSize: "150%",
-    borderRadius: "20px",
-    width: "100%",
-    height: "50px",
-    marginBottom: "10px",
-    backgroundColor: "transparent",
-    borderColor: "#8d4b4b",
-    color: "#ff3535",
-    transition: "background-color 0.3s, color 0.3s, transform 0.3",
-  };
-
-
-
-  const fetchUserDetails = async () => {
-    try {
-      const token = localStorage.getItem("jwt_token");
-      const response = await axios.get(`${BACKEND_URL}/api/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const userData = response.data; // Assuming user details are directly in response.data
-      setIsVerified(userData.email_verified_at !== null);
-      if (userData.email_verified_at === null) {
-        handleShow();
-      }
-
-      // Check if the user has admin or superadmin role
-      const isAdmin = userData.role.includes('admin');
-      const isSuperAdmin = userData.role.includes('superadmin');
-      if (isAdmin || isSuperAdmin) {
-        navigate('/admin');
-      }
-    } catch (error) {
-      console.error("Failed to fetch user:", error);
-      localStorage.removeItem("jwt_token");
-    }
-  };
-
-  const getPlaylistAuthor = async ([author_id]) => {
-    try {
-      axios.get(`${BACKEND_URL}/api/users/${author_id}`)
-        .then(response => {
-          setAuthor(response.data);
-          // console.log(response.data);
-        }).catch(error => {
-          console.error('There was an error!', error);
-        });
-    } catch (e) {
-      console.error('Failed to fetch playlist author:', e);
-    }
-  }
-
-  const deletePlaylist = async () => {
-    try {
-      axios.delete(`${BACKEND_URL}/api/playlist/${id}/delete`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("jwt_token")}`,
-        },
-      })
-        .then(response => {
-          console.log(response.data);
-          handleCloseDelete();
-          setRefreshSidebar(true);
-          navigate('/');
-        })
-        .catch(error => {
-          console.error('There was an error!', error);
-        });
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
 
   return (
@@ -227,7 +143,7 @@ const PlaylistPage = () => {
             <Button variant="secondary" onClick={handleCloseDelete}>
               Cancel
             </Button>
-            <Button variant="danger" onClick={deletePlaylist}>
+            <Button variant="danger" onClick={() => console.log('waw')}>
               Delete
             </Button>
           </Modal.Footer>
@@ -237,61 +153,33 @@ const PlaylistPage = () => {
         <Container className="home-page-content" fluid>
           <Row className="h-100 overflow-hidden">
             <Col className="vh-100 overflow-auto mb-5 custom-scrollbar">
-              <Row className="artist-banner p-5">
-                {/* <Form.Control className="search-bar" placeholder="Search" /> */}
-                <h1 className="home-page-text h-100 mb-5 d-flex align-items-end">
-                  <Image src="https://via.placeholder.com/150" style={{ width: '150px', height: '150px', marginRight: '15px' }} />
-                  {playlist ?
-                    <div>
-                      <p>
-                        {playlist.name}
-                      </p>
-                      <div onClick={() => navigate(`/artist/${author.id}`)} className="playlist-author d-flex align-items-center">
-                        <Image src="https://via.placeholder.com/50" style={{ width: '30px', height: '30px', marginRight: '15px' }} roundedCircle />
-                        {author.name}
-                      </div>
-                    </div>
-                    : 'Loading...'}
+              <Row className="px-5 pt-5 pb-3 d-flex flex-row">
+                <h1 className="text-white">
+                  Queue
                 </h1>
               </Row>
-              <Row className="px-5 py-2 d-flex flex-row">
-                <div className="d-flex align-items-center">
-                  <i className="fa fa-play text-white bg-danger p-3 rounded-circle" />
-                  <div className="mx-3">
-                    <i className="fa fa-random text-white p-3 display-6" />
-                  </div>
-                  <Button variant="outline-light" onClick={handleShowSongs}>
-                    <i className="fa fa-plus p-1" />
-                    Add Songs
-                  </Button>
-                  <Dropdown className="profile-dropdown">
-                    <Dropdown.Toggle id="dropdown-basic">
-                      <i className="fa fa-ellipsis-h display-6" />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu variant="dark">
-                      <Dropdown.Item href="/profile">
-                        <i className="fa fa-indent mx-2" />
-                        Add to queue
-                      </Dropdown.Item>
-                      <Dropdown.Divider />
-                      <Dropdown.Item href="/settings">
-                        <i className="fa fa-pencil-square-o mx-2" />
-                        Edit details
-                      </Dropdown.Item>
-                      <Dropdown.Item onClick={handleShowDelete}>
-                        <i className="fa fa-trash mx-2" />
-                        Delete playlist
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </Row>
-              <div className="px-5 h-100">
-                <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
+              <Row className="px-5">
+                <h5 className="text-gray">
+                  Now Playing
+                </h5>
+                {/* <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
                   <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
                     <PlaylistSongsTable />
                   </PlaylistUpdateContext.Provider>
-                </PlaylistSongsContext.Provider>
+                </PlaylistSongsContext.Provider> */}
+              </Row>
+              <Row className="px-5 py-5">
+                <h5 className="text-gray">
+                  Next Up
+                </h5>
+                {/* <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
+                  <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
+                    <PlaylistSongsTable />
+                  </PlaylistUpdateContext.Provider>
+                </PlaylistSongsContext.Provider> */}
+              </Row>
+
+              <div className="px-5 h-100">
               </div>
             </Col>
           </Row>
@@ -302,4 +190,4 @@ const PlaylistPage = () => {
   );
 };
 
-export default PlaylistPage;
+export default QueuePage;

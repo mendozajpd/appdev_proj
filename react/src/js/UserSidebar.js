@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Nav } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import { CDBSidebar, CDBSidebarContent, CDBSidebarMenuItem, CDBSidebarMenu, CDBSidebarHeader } from 'cdbreact';
@@ -8,6 +8,9 @@ import { NavLink } from 'react-router-dom';
 import { Form, Row, Col, Stack, Dropdown } from 'react-bootstrap';
 import axios from "axios";
 import BACKEND_URL from "../config";
+
+// CONTEXT
+import UserSidebarContext from "./context/UserSidebarContext";
 
 
 
@@ -25,13 +28,17 @@ const UserSidebar = () => {
     const [playlists, setPlaylists] = useState([]);
     const [playlistName, setPlaylistName] = useState('');
 
+    //Refresh
+    const { refreshSidebar } = useContext(UserSidebarContext);
+
     useEffect(() => {
         const token = localStorage.getItem("jwt_token");
         if (token) {
             fetchUserDetails();
         }
+
         fetchPlaylists();
-    }, []);
+    }, [refreshSidebar]);
 
     const navigate = useNavigate();
 
@@ -65,6 +72,7 @@ const UserSidebar = () => {
                 },
             })
                 .then(response => {
+                    console.log('Playlists:', response.data)
                     setPlaylists(response.data);
                 })
                 .catch(error => {
@@ -157,7 +165,6 @@ const UserSidebar = () => {
                         </>
                     </Modal.Body>
                     <Modal.Footer>
-
                         <Button variant="secondary" onClick={handleClose}>
                             Cancel
                         </Button>
@@ -174,12 +181,14 @@ const UserSidebar = () => {
                     src="/register/logo-white.png"
                     roundedCircle
                     className="Register-apple"
+                    onClick={() => navigate('/')}
                     style={{
                         width: "50px",
                         height: "50px",
                         marginLeft: "auto",
                         marginRight: "auto",
                         marginTop: "10px",
+                        cursor: 'pointer'
                     }}
                 />
                 <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large "></i>}>
@@ -191,10 +200,19 @@ const UserSidebar = () => {
                                     {user.name}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu variant="dark">
-                                    <Dropdown.Item href="/profile">Profile</Dropdown.Item>
-                                    <Dropdown.Item href="/settings">Settings</Dropdown.Item>
+                                    <Dropdown.Item href="/profile">
+                                        <i className="fa fa-user mx-2 text-white"></i>
+                                        Profile
+                                    </Dropdown.Item>
+                                    <Dropdown.Item href="/settings">
+                                        <i className="fa fa-cog mx-2 text-white"></i>
+                                        Settings
+                                    </Dropdown.Item>
                                     <Dropdown.Divider />
-                                    <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+                                    <Dropdown.Item onClick={handleLogout}>
+                                        <i className="fa fa-sign-out mx-2 text-white"></i>
+                                        Log out
+                                    </Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
                         ) : 'Loading...'}
@@ -228,15 +246,26 @@ const UserSidebar = () => {
                                         </>
                                     )}
                                     <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
-                                    <CDBSidebarMenuItem onClick={handleShow} icon="" className="sub-header d-flex justify-content-between">
-                                        PLAYLISTS
-                                        <i className="fa fa-plus-square mx-3 text-red"></i>
+                                    <CDBSidebarMenuItem icon="" className="sub-header d-flex justify-content-between">
+                                        <div className="sub-header">
+                                            Library
+                                            <i onClick={handleShow} className="fa fa-plus-square mx-3 icon-click text-red"></i>
+                                        </div>
                                     </CDBSidebarMenuItem>
                                     {playlists.map((playlist, index) => (
                                         <NavLink to={`/playlist/${playlist.id}`} key={index} activeclassname="activeClicked">
-                                            <CDBSidebarMenuItem icon="">{playlist.name}</CDBSidebarMenuItem>
+                                            <CDBSidebarMenuItem icon="">
+                                                <div className="d-flex align-items-center">
+                                                    {playlist.name}
+                                                </div>
+                                                <div className="sidebar-library-details">
+                                                    Playlist
+                                                    <i className="fa fa-circle mx-2 text-white sidebar-dot-separator"></i>
+                                                    {playlist.creator.name}
+                                                </div>
+                                            </CDBSidebarMenuItem>
                                         </NavLink>
-                                    ))}
+                                    ), [playlists])}
                                     <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
                                 </nav>
                             </CDBSidebarMenu>

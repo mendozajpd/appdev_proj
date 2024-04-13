@@ -18,6 +18,7 @@ import PendingRequests from "./js/admin/PendingRequests";
 import Banned from "./js/admin/Banned"
 import ArtistPage from "./js/ArtistPage";
 import PlaylistPage from "./js/PlaylistPage";
+import QueuePage from "./js/QueuePage";
 import EmptyPage from "./js/EmptyPage";
 
 // Layouts
@@ -43,6 +44,7 @@ function App() {
             <Route path="/artist/:id" element={<ArtistPage />} />
             <Route path="/upload" element={<ArtistUpload />} />
             <Route path="/playlist/:id" element={<PlaylistPage />} />
+            <Route path="/queue" element={<QueuePage />} />
           </Route>
           <Route path="/" element={<RootLayout />}>
             <Route path="/login" element={<Login />} />

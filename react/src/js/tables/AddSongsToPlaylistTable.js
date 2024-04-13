@@ -24,6 +24,7 @@ export function AddSongsToPlaylistTable() {
     const { setSongID } = useContext(PlayerContext);
     const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
     const [songAdded, setSongAdded] = useState(false);
+    const [addedSongs, setAddedSongs] = useState([]);
 
     const fetchSongs = async () => {
         try {
@@ -35,6 +36,7 @@ export function AddSongsToPlaylistTable() {
             const allSongs = response.data;
             const filteredSongs = allSongs.filter(song => !songs.find(ps => ps.id === song.id));
             setArtistSongs(filteredSongs);
+            // setArtistSongs(allSongs);
             // console.log('Songs', filteredSongs);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
@@ -43,7 +45,7 @@ export function AddSongsToPlaylistTable() {
 
     const addSongsToPlaylist = async (playlist_id, song_id) => {
         try {
-            await axios.post(`${BACKEND_URL}/api/add/${playlist_id}/${song_id}`, {}, {
+            await axios.post(`${BACKEND_URL}/api/playlist/${playlist_id}/${song_id}/add`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -51,6 +53,7 @@ export function AddSongsToPlaylistTable() {
             console.log('Song added to playlist', playlist_id, song_id);
             setPlaylistUpdate(true);
             setSongAdded(true);
+            setAddedSongs(prevSongs => [...prevSongs, song_id]); // Add the song id to the addedSongs state
         } catch (error) {
             console.error('Failed to add songs:', error);
         }
@@ -109,15 +112,15 @@ export function AddSongsToPlaylistTable() {
                 accessor: 'id',
                 maxWidth: 10,
                 Cell: ({ value }) => (
-                    <div className="mx-2">
-                        <Button variant="outline-danger" onClick={(e) => { e.stopPropagation(); addSongsToPlaylist(id, value) }}>
-                            Add
-                        </Button>
-                    </div>
+                    <div className="mx-4">
+        <Button variant="outline-danger" onClick={(e) => { e.stopPropagation(); addSongsToPlaylist(id, value) }} disabled={addedSongs.includes(value)}>
+            {addedSongs.includes(value) ? 'Added' : 'Add'}
+        </Button>
+                </div>
                 ),
             },
         ],
-        [artistSongs, songs]
+        [artistSongs]
     );
 
     function globalFilterFn(rows, columnIds, filterValue) {

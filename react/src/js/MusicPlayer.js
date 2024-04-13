@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Image } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import axios from 'axios';
@@ -8,8 +8,12 @@ import BACKEND_URL from '../config';
 
 const MusicPlayer = ({ songID }) => {
 
-    const navigate = useNavigate();
+    const [queue, setQueue] = useState();
 
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const [history, setHistory] = useState(null);
     const [songDetails, setSongDetails] = useState(null);
     const [currentSong, setCurrentSong] = useState(null);
 
@@ -26,6 +30,19 @@ const MusicPlayer = ({ songID }) => {
             playSong(songID);
         }
     }, [songID]);
+
+
+    const navigateBack = () => {
+        console.log('Navigating back to:', history);
+        navigate(history);
+        setHistory('');
+    };
+
+    const navigateToQueue = () => {
+        console.log('Navigating to queue from:', location.pathname)
+        setHistory(location.pathname);
+        navigate('/queue');
+    };
 
     const playSong = async (songID) => {
         try {
@@ -65,8 +82,16 @@ const MusicPlayer = ({ songID }) => {
                 <Col xs={6}>
                     <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100' />
                 </Col>
-                <Col xs={2}>
-                    {/* <h1>Settings</h1> */}
+                <Col xs={2} className='d-flex align-items-center px-5'>
+                    {location.pathname === '/queue' ? (
+                        <div className='p-1 icon-border-active'>
+                            <i className="fa fa-bars  icon-click icon-active" onClick={() => navigateBack()}></i>
+                        </div>
+                    ) : (
+                        <div className='p-1'>
+                            <i className="fa fa-bars  icon-click icon-hover-white" onClick={() => navigateToQueue()}></i>
+                        </div>
+                    )}
                 </Col>
                 <Col xs={2} className="invisible-text">
                     extra space (bad practice, but it works for now)

@@ -1,22 +1,27 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import UserSidebar from "../UserSidebar";
+import { Container } from "react-bootstrap";
 import { useEffect, useState, useContext } from "react";
 import MusicPlayer from "../MusicPlayer";
 import axios from "axios";
 import BACKEND_URL from "../../config";
+import UserSidebar from "../UserSidebar";
 
 // Context
 import PlayerContext from "../context/PlayerContext";
-import { Container } from "react-bootstrap";
+import UserSidebarContext from "../context/UserSidebarContext";
 
 
 const UserLayout = () => {
     const [token, setToken] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
+    const [refreshSidebar, setRefreshSidebar] = useState(false);
+
     const navigate = useNavigate();
 
+    
     const { songID } = useContext(PlayerContext);
+    const [queue, setQueue] = useState();
 
     useEffect(() => {
         const storedToken = localStorage.getItem('jwt_token');
@@ -49,13 +54,15 @@ const UserLayout = () => {
     return (
 
         <div className="home-page d-flex vh-100">
-            <UserSidebar />
-            <Container className="g-0" fluid>
-                <div className="home-page-content">
-                    <Outlet />
-                    <MusicPlayer songID={songID}  />
-                </div>
-            </Container>
+            <UserSidebarContext.Provider value={{ refreshSidebar, setRefreshSidebar }}>
+                <UserSidebar />
+                <Container className="g-0" fluid>
+                    <div className="home-page-content">
+                        <Outlet />
+                        <MusicPlayer songID={songID} />
+                    </div>
+                </Container>
+            </UserSidebarContext.Provider>
         </div>
     );
 }

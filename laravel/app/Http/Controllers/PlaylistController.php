@@ -46,7 +46,7 @@ class PlaylistController extends Controller
     
         $playlists = Playlist::where('creator_id', $user->id)->get();
     
-        return response()->json($playlists);
+        return response()->json($playlists->load('creator'));
     }
 
     public function createPlaylist(Request $request)
@@ -66,15 +66,20 @@ class PlaylistController extends Controller
         return response()->json(['message' => 'Playlist created successfully','id' => $playlist->id]);
     }
 
-    public function destroy(Playlist $playlist)
+    public function destroy($id)
     {
-        // Check if the authenticated user is the creator of the playlist
+        $playlist = Playlist::find($id);
+    
+        if (!$playlist) {
+            return response()->json(['message' => 'Playlist not found'], 404);
+        }
+    
         if (auth()->id() !== $playlist->creator_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-
+    
         $playlist->delete();
-
+    
         return response()->json(['message' => 'Playlist deleted successfully']);
     }
 
@@ -100,8 +105,12 @@ class PlaylistController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
+        if (!$playlist->songs()->where('songs.id', $song->id)->exists()) {
+            return response()->json(['message' => 'Song not found in playlist'], 404);
+        }
+    
         $playlist->songs()->detach($song->id);
-
+    
         return response()->json(['message' => 'Song removed from playlist']);
     }
 }

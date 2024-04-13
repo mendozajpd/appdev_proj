@@ -760,10 +760,50 @@ h1 span:hover {
 }
 
 .sub-header {
-  color: #dd0000;
+  font-weight: 600;
   cursor: default !important;
 }
 
+
+.sidebar-library-details {
+  font-size: 15px;
+  color: #a7a7a7;
+}
+
+.sidebar-dot-separator {
+  font-size: 5px;
+}
+
+/* ICON */
+.icon-click {
+  cursor: pointer;
+}
+
+.icon-hover-white {
+  color: #a7a7a7;
+}
+
+.icon-hover-white:hover {
+  font-weight: 600;
+  color: #f2f2f2 !important;
+}
+
+.icon-border-active {
+  border: 1px solid #b80000;
+  border-radius: 5px;
+}
+
+.icon-border-active:hover {
+  border: 1px solid #f70000;
+}
+
+.icon-active {
+  color: #b80000 !important;
+}
+
+.icon-active:hover {
+  color: #f70000 !important;
+}
 
 /* HOMEPAGE */
 .home-page {
@@ -1318,6 +1358,7 @@ h1 span:hover {
   text-decoration: underline;
   cursor: pointer;
 }
+
 /* Dropdown Button */
 .dropbtn {
   background-color: #04AA6D;
@@ -1371,14 +1412,14 @@ h1 span:hover {
 
 .playlist-table th {
   border-bottom: 1px solid #fff;
-  padding:15px;
+  padding: 15px;
 }
 
 .playlist-table tbody tr:hover {
   background-color: #00000050 !important;
 }
 
-.playlist-table tbody tr:hover .playlist-song-author, 
+.playlist-table tbody tr:hover .playlist-song-author,
 .playlist-table tbody tr:hover .album-title-row {
   color: #fff;
 }
@@ -1400,8 +1441,7 @@ h1 span:hover {
   display: none !important;
 }
 
-.title-column {
-}
+.title-column {}
 
 .playlist-search-icon {
   font-size: 25px;
