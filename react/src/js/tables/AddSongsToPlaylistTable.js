@@ -5,7 +5,10 @@ import { Button, Image, Container, Row, Form } from "react-bootstrap";
 import axios from 'axios';
 import BACKEND_URL from '../../config';
 
+
+// CONTEXT
 import PlayerContext from "../context/PlayerContext";
+import PlaylistUpdateContext from "../context/PlaylistUpdateContext";
 
 
 export function AddSongsToPlaylistTable() {
@@ -17,6 +20,8 @@ export function AddSongsToPlaylistTable() {
     const navigate = useNavigate();
 
     const { setSongID } = useContext(PlayerContext);
+    const { setPlaylistUpdate } = useContext(PlaylistUpdateContext);
+    const [playlistSongs, setPlaylistSongs] = useState([]);
 
     const fetchSongs = async () => {
         try {
@@ -25,15 +30,49 @@ export function AddSongsToPlaylistTable() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setSongs(response.data);
-            console.log('Songs', response.data);
+            const allSongs = response.data;
+            const filteredSongs = allSongs.filter(song => !playlistSongs.songs.find(ps => ps.id === song.id));
+            setSongs(filteredSongs);
+            console.log('Songs', filteredSongs);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
         }
     };
 
+    const fetchPlaylistSongs = async () => {
+        try {
+            const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setPlaylistSongs(response.data);
+        } catch (error) {
+            console.error('Failed to fetch playlist songs:', error);
+        }
+    };
+
+    const addSongsToPlaylist = async (playlist_id, song_id) => {
+        try {
+            await axios.post(`${BACKEND_URL}/api/add/${playlist_id}/${song_id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log('Song added to playlist');
+            setPlaylistUpdate(true);
+        } catch (error) {
+            console.error('Failed to add songs:', error);
+        }
+    }
+
     useEffect(() => {
-        fetchSongs();
+        const fetchData = async () => {
+            await fetchPlaylistSongs();
+            fetchSongs();
+        };
+    
+        fetchData();
     }, [id]);
 
     const data = React.useMemo(() => songs, [songs]);
@@ -82,7 +121,7 @@ export function AddSongsToPlaylistTable() {
                 maxWidth: 10,
                 Cell: ({ value }) => (
                     <div className="mx-2">
-                        <Button variant="outline-danger" onClick={(e) => e.stopPropagation()}>
+                        <Button variant="outline-danger" onClick={(e) => { e.stopPropagation(); addSongsToPlaylist(id, value) }}>
                             Add
                         </Button>
                     </div>
@@ -96,9 +135,11 @@ export function AddSongsToPlaylistTable() {
         return rows.filter(row => {
             const displayName = row.values['display_name'];
             const albumName = row.values['album.album_name'];
+            const songID = row.values['id'];
 
-            return (displayName ? displayName.toLowerCase().includes(filterValue.toLowerCase()) : false)
-                || (albumName ? albumName.toLowerCase().includes(filterValue.toLowerCase()) : false)
+            return ((displayName ? displayName.toLowerCase().includes(filterValue.toLowerCase()) : false)
+                || (albumName ? albumName.toLowerCase().includes(filterValue.toLowerCase()) : false))
+                ;
         });
     }
 
@@ -137,15 +178,20 @@ export function AddSongsToPlaylistTable() {
                     <thead>
                         <tr>
                             <th colSpan={3}>
-                                <Form>
-                                    <Form.Group>
-                                        <Form.Control type="text"
-                                            value={globalFilter || ''}
-                                            onChange={e => setGlobalFilter(e.target.value)}
-                                            placeholder={`Search...`} >
-                                        </Form.Control>
-                                    </Form.Group>
-                                </Form>
+                                <div className="d-flex w-100 justify-content-end">
+                                    <div className="d-flex align-content-center flex-wrap">
+                                        <i className="fa fa-search mx-2 playlist-search-icon" />
+                                    </div>
+                                    <Form>
+                                        <Form.Group>
+                                            <Form.Control type="text"
+                                                value={globalFilter || ''}
+                                                onChange={e => setGlobalFilter(e.target.value)}
+                                                placeholder={`Search...`} >
+                                            </Form.Control>
+                                        </Form.Group>
+                                    </Form>
+                                </div>
                             </th>
                         </tr>
                     </thead>

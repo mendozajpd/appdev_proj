@@ -5,7 +5,9 @@ import { Dropdown, Image, Container, Row } from "react-bootstrap";
 import axios from 'axios';
 import BACKEND_URL from '../../config';
 
+// CONTEXT
 import PlayerContext from "../context/PlayerContext";
+import PlaylistUpdateContext from "../context/PlaylistUpdateContext";
 
 
 export function PlaylistSongsTable() {
@@ -17,6 +19,7 @@ export function PlaylistSongsTable() {
     const navigate = useNavigate();
 
     const { setSongID } = useContext(PlayerContext);
+    const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
 
     const fetchSongs = async () => {
         try {
@@ -25,7 +28,7 @@ export function PlaylistSongsTable() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setSongs(response.data);
+            setSongs(response.data.songs);
             console.log('Songs', response.data);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
@@ -34,7 +37,10 @@ export function PlaylistSongsTable() {
 
     useEffect(() => {
         fetchSongs();
-    }, [id]);
+        if (playlistUpdate) {
+            setPlaylistUpdate(false);
+        }
+    }, [id, playlistUpdate]);
 
     const data = React.useMemo(() => songs, [songs]);
 
@@ -84,7 +90,7 @@ export function PlaylistSongsTable() {
             },
             {
                 Header: "Date Added",
-                accessor: 'created_at',
+                accessor: 'pivot.created_at',
                 Cell: ({ value }) => {
                     const date = new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                     return (
@@ -101,7 +107,7 @@ export function PlaylistSongsTable() {
                     const date = new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                     return (
                         <div className="duration-row text-truncate">
-                            {date}
+                            n/a
                         </div>
                     );
                 }

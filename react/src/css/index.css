@@ -1403,6 +1403,10 @@ h1 span:hover {
 .title-column {
 }
 
+.playlist-search-icon {
+  font-size: 25px;
+}
+
 .playlist-song-title {
   color: #fff;
 }

@@ -17,7 +17,9 @@ import { PlaylistSongsTable } from "./tables/PlaylistSongsTable";
 import { AddSongsToPlaylistTable } from "./tables/AddSongsToPlaylistTable";
 
 // Context
-import PlayerContext from "./context/PlayerContext";
+import PlaylistUpdateContext from "./context/PlaylistUpdateContext";
+import PlaylistSongsContext from "./context/PlaylistSongsContext";
+
 
 const override = {
   display: "block",
@@ -47,7 +49,7 @@ const PlaylistPage = () => {
   const handleShowSongs = () => setShowSongs(true);
 
   // PLAYLIST
-
+  const [playlistUpdate, setPlaylistUpdate] = useState(false);
 
 
   useEffect(() => {
@@ -156,13 +158,15 @@ const PlaylistPage = () => {
           centered size="lg">
           <Modal.Header>
             <Modal.Title>Add Songs to Playlist</Modal.Title>
-            <CloseButton onClick={handleCloseSongs} variant="white"/>
+            <CloseButton onClick={handleCloseSongs} variant="white" />
           </Modal.Header>
           <Modal.Body>
             <Container>
-              <AddSongsToPlaylistTable />
+              <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
+                <AddSongsToPlaylistTable />
+              </PlaylistUpdateContext.Provider>
             </Container>
-            </Modal.Body>
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={handleCloseSongs}>
               Done
@@ -184,7 +188,7 @@ const PlaylistPage = () => {
                         {playlist.name}
                       </p>
                       <div onClick={() => navigate(`/artist/${author.id}`)} className="playlist-author d-flex align-items-center">
-                        <Image src="https://via.placeholder.com/50" style={{ width: '30px', height: '30px', marginRight: '15px' }} roundedCircle/>
+                        <Image src="https://via.placeholder.com/50" style={{ width: '30px', height: '30px', marginRight: '15px' }} roundedCircle />
                         {author.name}
                       </div>
                     </div>
@@ -215,7 +219,9 @@ const PlaylistPage = () => {
                 </div>
               </Row>
               <div fluid className="px-5">
-                <PlaylistSongsTable/>
+                <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
+                  <PlaylistSongsTable />
+                </PlaylistUpdateContext.Provider>
               </div>
             </Col>
           </Row>

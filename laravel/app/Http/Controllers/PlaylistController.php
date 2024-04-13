@@ -21,7 +21,7 @@ class PlaylistController extends Controller
     
         $songs = $playlist->songs->load('album','user');
     
-        return response()->json($songs);
+        return response()->json(['songs' => $songs, 'playlist' => $playlist]);
     }
 
     // PLAYLIST
@@ -78,15 +78,24 @@ class PlaylistController extends Controller
         return response()->json(['message' => 'Playlist deleted successfully']);
     }
 
-    public function addSong(Playlist $playlist, Song $song)
+    public function addSongToPlaylist(Playlist $playlist, Song $song)
     {
+        if (auth()->id() !== $playlist->creator_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $playlist->songs()->attach($song->id);
 
         return response()->json(['message' => 'Song added to playlist']);
     }
 
-    public function removeSong(Playlist $playlist, Song $song)
+    public function removeSongFromPlaylist(Playlist $playlist, Song $song)
     {
+
+        if (auth()->id() !== $playlist->creator_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $playlist->songs()->detach($song->id);
 
         return response()->json(['message' => 'Song removed from playlist']);

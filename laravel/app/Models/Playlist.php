@@ -18,6 +18,6 @@ class Playlist extends Model
 
     public function songs()
     {
-        return $this->belongsToMany(Song::class, 'playlist_song');
+        return $this->belongsToMany(Song::class, 'playlist_song')->withTimestamps();
     }
 }

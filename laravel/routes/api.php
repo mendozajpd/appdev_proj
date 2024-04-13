@@ -64,6 +64,8 @@ Route::get('playlist/{id}', [PlaylistController::class, 'getPlaylist']);
 Route::get('playlists', [PlaylistController::class, 'getPlaylists']);
 Route::post('create-playlist', [PlaylistController::class, 'createPlaylist']);
 Route::get('playlist/{id}/songs', [PlaylistController::class, 'getPlaylistSongs']);
+Route::post('add/{playlist}/{song}', [PlaylistController::class, 'addSongToPlaylist']);
+Route::post('remove-from-playlist', [PlaylistController::class, 'removeSongFromPlaylist']);
 
 Route::group([
 
