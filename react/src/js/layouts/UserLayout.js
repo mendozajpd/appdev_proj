@@ -28,7 +28,7 @@ const UserLayout = () => {
                 },
             })
                 .then(response => {
-                    console.log('Role:', response.data);
+                    // console.log('Role:', response.data);
                     setToken(storedToken);
                 })
                 .catch(error => {

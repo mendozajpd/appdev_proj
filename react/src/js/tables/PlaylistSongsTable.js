@@ -8,10 +8,11 @@ import BACKEND_URL from '../../config';
 // CONTEXT
 import PlayerContext from "../context/PlayerContext";
 import PlaylistUpdateContext from "../context/PlaylistUpdateContext";
+import PlaylistSongsContext from "../context/PlaylistSongsContext";
 
 
 export function PlaylistSongsTable() {
-    const [songs, setSongs] = useState([]);
+    const {songs, setSongs} = useContext(PlaylistSongsContext);
     const token = localStorage.getItem("jwt_token");
 
     const { id } = useParams();
@@ -117,7 +118,7 @@ export function PlaylistSongsTable() {
                 accessor: 'id',
                 maxWidth: 10,
                 Cell: ({ value }) => (
-                    <Dropdown className="profile-dropdown" onClick={(e) => e.stopPropagation()}>
+                    <Dropdown className="profile-dropdown" onClick={(e) => e.stopPropagation() }>
                         <Dropdown.Toggle id="dropdown-basic">
                             <i className="fa fa-ellipsis-h ellipsis" />
                         </Dropdown.Toggle>

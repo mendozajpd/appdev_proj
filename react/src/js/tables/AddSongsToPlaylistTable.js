@@ -9,10 +9,12 @@ import BACKEND_URL from '../../config';
 // CONTEXT
 import PlayerContext from "../context/PlayerContext";
 import PlaylistUpdateContext from "../context/PlaylistUpdateContext";
+import PlaylistSongsContext from "../context/PlaylistSongsContext";
 
 
 export function AddSongsToPlaylistTable() {
-    const [songs, setSongs] = useState([]);
+    const [artistSongs, setArtistSongs] = useState([]);
+    const { songs, setSongs } = useContext(PlaylistSongsContext);
     const token = localStorage.getItem("jwt_token");
 
     const { id } = useParams();
@@ -20,7 +22,7 @@ export function AddSongsToPlaylistTable() {
     const navigate = useNavigate();
 
     const { setSongID } = useContext(PlayerContext);
-    const { setPlaylistUpdate } = useContext(PlaylistUpdateContext);
+    const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
     const [playlistSongs, setPlaylistSongs] = useState([]);
 
     const fetchSongs = async () => {
@@ -31,24 +33,11 @@ export function AddSongsToPlaylistTable() {
                 },
             });
             const allSongs = response.data;
-            const filteredSongs = allSongs.filter(song => !playlistSongs.songs.find(ps => ps.id === song.id));
-            setSongs(filteredSongs);
+            const filteredSongs = allSongs.filter(song => !songs.find(ps => ps.id === song.id));
+            setArtistSongs(filteredSongs);
             console.log('Songs', filteredSongs);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
-        }
-    };
-
-    const fetchPlaylistSongs = async () => {
-        try {
-            const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setPlaylistSongs(response.data);
-        } catch (error) {
-            console.error('Failed to fetch playlist songs:', error);
         }
     };
 
@@ -61,21 +50,19 @@ export function AddSongsToPlaylistTable() {
             });
             console.log('Song added to playlist');
             setPlaylistUpdate(true);
+
+            // Update the songs state with the new song
+            setSongs(prevSongs => [...prevSongs, { id: song_id }]);
         } catch (error) {
             console.error('Failed to add songs:', error);
         }
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            await fetchPlaylistSongs();
-            fetchSongs();
-        };
-    
-        fetchData();
-    }, [id]);
+        fetchSongs();
+    }, [id, playlistUpdate]);
 
-    const data = React.useMemo(() => songs, [songs]);
+    const data = React.useMemo(() => artistSongs, [artistSongs]);
 
     const columns = React.useMemo(
         () => [

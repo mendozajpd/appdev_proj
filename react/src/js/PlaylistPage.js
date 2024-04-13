@@ -35,9 +35,6 @@ const PlaylistPage = () => {
   const [author, setAuthor] = useState('');
   const { id } = useParams();
 
-  // SONGS
-  const [songs, setSongs] = useState([]);
-
   // MODAL FOR EMAIL VERIFICATION
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -50,6 +47,7 @@ const PlaylistPage = () => {
 
   // PLAYLIST
   const [playlistUpdate, setPlaylistUpdate] = useState(false);
+  const [songs, setSongs] = useState([]);
 
 
   useEffect(() => {
@@ -63,7 +61,7 @@ const PlaylistPage = () => {
     axios.get(`${BACKEND_URL}/api/playlist/${id}`)
       .then(response => {
         setPlaylist(response.data);
-        console.log(response.data);
+        // console.log(response.data);
         getPlaylistAuthor([response.data.creator_id]);
       }).catch(error => {
         console.error('There was an error!', error);
@@ -119,7 +117,7 @@ const PlaylistPage = () => {
       axios.get(`${BACKEND_URL}/api/users/${author_id}`)
         .then(response => {
           setAuthor(response.data);
-          console.log(response.data);
+          // console.log(response.data);
         }).catch(error => {
           console.error('There was an error!', error);
         });
@@ -162,9 +160,11 @@ const PlaylistPage = () => {
           </Modal.Header>
           <Modal.Body>
             <Container>
-              <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
-                <AddSongsToPlaylistTable />
-              </PlaylistUpdateContext.Provider>
+              <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
+                <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
+                  <AddSongsToPlaylistTable />
+                </PlaylistUpdateContext.Provider>
+              </PlaylistSongsContext.Provider>
             </Container>
           </Modal.Body>
           <Modal.Footer>
@@ -219,9 +219,11 @@ const PlaylistPage = () => {
                 </div>
               </Row>
               <div fluid className="px-5">
-                <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
-                  <PlaylistSongsTable />
-                </PlaylistUpdateContext.Provider>
+                <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
+                  <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
+                    <PlaylistSongsTable />
+                  </PlaylistUpdateContext.Provider>
+                </PlaylistSongsContext.Provider>
               </div>
             </Col>
           </Row>
