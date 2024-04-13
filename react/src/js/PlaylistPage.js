@@ -17,6 +17,7 @@ import { PlaylistSongsTable } from "./tables/PlaylistSongsTable";
 import { AddSongsToPlaylistTable } from "./tables/AddSongsToPlaylistTable";
 
 // Context
+import PlayerContext from "./context/PlayerContext";
 import PlaylistUpdateContext from "./context/PlaylistUpdateContext";
 import PlaylistSongsContext from "./context/PlaylistSongsContext";
 import UserSidebarContext from "./context/UserSidebarContext";
@@ -48,13 +49,15 @@ const PlaylistPage = () => {
 
   // MODAL FOR DELETING PLAYLIST
   const [showDeletePlaylist, setShowDeletePlaylist] = useState(false);
-  // const [isEnableDelete, setEnableDelete] = useState(true);
   const handleCloseDelete = () => setShowDeletePlaylist(false);
   const handleShowDelete = () => setShowDeletePlaylist(true);
 
   // PLAYLIST
   const [playlistUpdate, setPlaylistUpdate] = useState(false);
   const [songs, setSongs] = useState([]);
+
+  // Player 
+  const { setQueue, setCurrentQueue } = useContext(PlayerContext);
 
   // Refresh sidebar
   const { setRefreshSidebar } = useContext(UserSidebarContext);
@@ -153,6 +156,14 @@ const PlaylistPage = () => {
         });
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  const playPlaylist = () => {
+    if (songs) {
+
+      setQueue(songs);
+      setCurrentQueue(0);
     }
   }
 
@@ -256,7 +267,7 @@ const PlaylistPage = () => {
               </Row>
               <Row className="px-5 py-2 d-flex flex-row">
                 <div className="d-flex align-items-center">
-                  <i className="fa fa-play text-white bg-danger p-3 rounded-circle icon-click" />
+                  <i className="fa fa-play text-white bg-danger p-3 rounded-circle icon-click" onClick={playPlaylist} />
                   <div className="mx-3">
                     <i className="fa fa-random text-gray p-3 display-6" />
                   </div>
@@ -269,12 +280,12 @@ const PlaylistPage = () => {
                       <i className="fa fa-ellipsis-h display-6" />
                     </Dropdown.Toggle>
                     <Dropdown.Menu variant="dark">
-                      <Dropdown.Item href="/profile">
+                      <Dropdown.Item href="/profile" disabled>
                         <i className="fa fa-indent mx-2" />
                         Add to queue
                       </Dropdown.Item>
                       <Dropdown.Divider />
-                      <Dropdown.Item href="/settings">
+                      <Dropdown.Item href="/settings" disabled>
                         <i className="fa fa-pencil-square-o mx-2" />
                         Edit details
                       </Dropdown.Item>
