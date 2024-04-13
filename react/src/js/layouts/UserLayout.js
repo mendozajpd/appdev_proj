@@ -59,7 +59,7 @@ const UserLayout = () => {
                 <Container className="g-0" fluid>
                     <div className="home-page-content">
                         <Outlet />
-                        <MusicPlayer songID={songID} />
+                        <MusicPlayer/>
                     </div>
                 </Container>
             </UserSidebarContext.Provider>

@@ -9,9 +9,9 @@ import BACKEND_URL from '../config';
 import PlayerContext from "./context/PlayerContext";
 
 
-const MusicPlayer = ({ songID }) => {
+const MusicPlayer = () => {
 
-    const { queue, setQueue, currentQueue, setCurrentQueue } = useContext(PlayerContext);
+    const { queue, currentQueue, setCurrentQueue } = useContext(PlayerContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -31,25 +31,6 @@ const MusicPlayer = ({ songID }) => {
     useEffect(() => {
         playSong();
     }, [queue, currentQueue]);
-
-    const setSongsQueue = () => {
-        setQueue(
-            [
-                { id: 6 },
-                { id: 7 },
-                { id: 8 },
-            ]
-        );
-        resetQueueIndex();
-    }
-
-    const resetQueueIndex = () => {
-        setCurrentQueue(0);
-    }
-
-    const resetQueue = () => {
-        setQueue([]);
-    }
 
     const handleNextSong = () => {
         if (currentQueue < queue.length - 1) {
@@ -138,12 +119,12 @@ const MusicPlayer = ({ songID }) => {
                     )}
                 </Col>
                 <Col xs={2} className="invisible-text">
-                    <Button onClick={setSongsQueue}>
+                    {/* <Button onClick={setSongsQueue}>
                         Add songs to queue
                     </Button>
                     <Button onClick={resetQueue}>
                         Reset Queue
-                    </Button>
+                    </Button> */}
                     {/* extra space (bad practice, but it works for now) */}
                 </Col>
             </div>

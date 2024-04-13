@@ -4,20 +4,15 @@ import { CloseButton, Button, Container, Row, Col, Image, Stack, Dropdown } from
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
-import UserSidebar from "./UserSidebar";
-import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { SyncLoader } from "react-spinners"
-import ArtistAlbumItem from "./items/ArtistAlbumItem";
 
 // Table
-import { PlaylistSongsTable } from "./tables/PlaylistSongsTable";
-import { AddSongsToPlaylistTable } from "./tables/AddSongsToPlaylistTable";
+import { QueueTable } from "./tables/QueueTable";
 
 // Context
-import PlaylistUpdateContext from "./context/PlaylistUpdateContext";
+import PlayerContext from "./context/PlayerContext";
 import PlaylistSongsContext from "./context/PlaylistSongsContext";
 import UserSidebarContext from "./context/UserSidebarContext";
 
@@ -32,8 +27,6 @@ const QueuePage = () => {
 
   const [isVerified, setIsVerified] = useState(false);
 
-  const [playlist, setPlaylist] = useState(null);
-  const [author, setAuthor] = useState('');
   const { id } = useParams();
 
   // MODAL FOR EMAIL VERIFICATION
@@ -41,36 +34,10 @@ const QueuePage = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // MODAL FOR ADDING SONGS TO PLAYLIST
-  const [showAddSongs, setShowSongs] = useState(false);
-  const handleCloseSongs = () => setShowSongs(false);
-  const handleShowSongs = () => setShowSongs(true);
-
-  // MODAL FOR DELETING PLAYLIST
-  const [showDeletePlaylist, setShowDeletePlaylist] = useState(false);
-  // const [isEnableDelete, setEnableDelete] = useState(true);
-  const handleCloseDelete = () => setShowDeletePlaylist(false);
-  const handleShowDelete = () => setShowDeletePlaylist(true);
-
-  // PLAYLIST
-  const [playlistUpdate, setPlaylistUpdate] = useState(false);
-  const [songs, setSongs] = useState([]);
-
-  // Refresh sidebar
-  const { setRefreshSidebar } = useContext(UserSidebarContext);
-
   useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    if (!token) {
-      navigate('/login');
-    } else {
-      // fetchUserDetails();
-    }
-
 
   }, [id, isVerified]);
 
-  const navigate = useNavigate();
 
 
   return (
@@ -96,60 +63,6 @@ const QueuePage = () => {
           </Modal.Footer>
         </Modal>
 
-        <Modal className="upload-modal" onHide={handleCloseSongs} show={showAddSongs}
-          centered size="lg">
-          <Modal.Header>
-            <Modal.Title>Add Songs to Playlist</Modal.Title>
-            <CloseButton onClick={handleCloseSongs} variant="white" />
-          </Modal.Header>
-          <Modal.Body>
-            <Container>
-              <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
-                <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
-                  <AddSongsToPlaylistTable />
-                </PlaylistUpdateContext.Provider>
-              </PlaylistSongsContext.Provider>
-            </Container>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="danger" onClick={handleCloseSongs}>
-              Done
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal className="upload-modal" onHide={handleCloseDelete} show={showDeletePlaylist} static backdrop="static"
-          centered>
-          <Modal.Header>
-            <Modal.Title>Delete Playlist?</Modal.Title>
-            <CloseButton onClick={handleCloseDelete} variant="white" />
-          </Modal.Header>
-          <Modal.Body>
-            <Container>
-              <p className="d-flex align-content-center text-truncate">
-                <div className="text-nowrap">
-                  This will delete
-                </div>
-                <div className="d-flex align-content-center text-nowrap mx-2">
-                  <strong>
-                    {playlist ? playlist.name : 'Loading...'}
-                  </strong>
-                </div>
-                PERMANENTLY.
-              </p>
-            </Container>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseDelete}>
-              Cancel
-            </Button>
-            <Button variant="danger" onClick={() => console.log('waw')}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-
         <Container className="home-page-content" fluid>
           <Row className="h-100 overflow-hidden">
             <Col className="vh-100 overflow-auto mb-5 custom-scrollbar">
@@ -162,6 +75,7 @@ const QueuePage = () => {
                 <h5 className="text-gray">
                   Now Playing
                 </h5>
+                <QueueTable />
                 {/* <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
                   <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
                     <PlaylistSongsTable />

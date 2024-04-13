@@ -256,9 +256,9 @@ const PlaylistPage = () => {
               </Row>
               <Row className="px-5 py-2 d-flex flex-row">
                 <div className="d-flex align-items-center">
-                  <i className="fa fa-play text-white bg-danger p-3 rounded-circle" />
+                  <i className="fa fa-play text-white bg-danger p-3 rounded-circle icon-click" />
                   <div className="mx-3">
-                    <i className="fa fa-random text-white p-3 display-6" />
+                    <i className="fa fa-random text-gray p-3 display-6" />
                   </div>
                   <Button variant="outline-light" onClick={handleShowSongs}>
                     <i className="fa fa-plus p-1" />
