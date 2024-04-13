@@ -42,7 +42,6 @@ Route::get('artist-requests', [ArtistRequestController::class, 'getArtistRequest
 
 // ArtistController Routes
 Route::get('albums', [ArtistController::class, 'getAlbums']);
-Route::get('songs', [ArtistController::class, 'getSongs']);
 Route::get('artists', [ArtistController::class, 'getArtists']);
 Route::get('/artists/{id}', [ArtistController::class, 'getArtist']);
 Route::get('/songs/{id}', [ArtistController::class, 'getArtistSongs']);
@@ -56,6 +55,7 @@ Route::put('songs/{id}', [ArtistController::class, 'editSong']);
 
 // SongController Routes
 Route::get('/play/{filename}', [SongController::class, 'getSong']);
+Route::get('songs', [SongController::class, 'getSongs']);
 Route::get('song-details/{id}', [SongController::class, 'getSongDetails']);
 Route::get('genres', [SongController::class, 'getGenres']);
 

@@ -14,6 +14,7 @@ import ArtistAlbumItem from "./items/ArtistAlbumItem";
 
 // Table
 import { PlaylistSongsTable } from "./tables/PlaylistSongsTable";
+import { AddSongsToPlaylistTable } from "./tables/AddSongsToPlaylistTable";
 
 // Context
 import PlayerContext from "./context/PlayerContext";
@@ -151,8 +152,7 @@ const PlaylistPage = () => {
           </Modal.Footer>
         </Modal>
 
-        <Modal className="upload-modal" show={showAddSongs} backdrop="static"
-          aria-labelledby="contained-modal-title-vcenter"
+        <Modal className="upload-modal" onHide={handleCloseSongs} show={showAddSongs}
           centered size="lg">
           <Modal.Header>
             <Modal.Title>Add Songs to Playlist</Modal.Title>
@@ -160,12 +160,12 @@ const PlaylistPage = () => {
           </Modal.Header>
           <Modal.Body>
             <Container>
-              okay
+              <AddSongsToPlaylistTable />
             </Container>
             </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseSongs}>
-              Ok
+            <Button variant="danger" onClick={handleCloseSongs}>
+              Done
             </Button>
           </Modal.Footer>
         </Modal>

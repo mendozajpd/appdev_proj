@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useTable } from 'react-table';
-import { Dropdown, Image, Container, Row } from "react-bootstrap";
+import { useTable, usePagination, useGlobalFilter } from 'react-table';
+import { Button, Image, Container, Row, Form } from "react-bootstrap";
 import axios from 'axios';
 import BACKEND_URL from '../../config';
 
 import PlayerContext from "../context/PlayerContext";
 
 
-export function PlaylistSongsTable() {
+export function AddSongsToPlaylistTable() {
     const [songs, setSongs] = useState([]);
     const token = localStorage.getItem("jwt_token");
 
@@ -20,7 +20,7 @@ export function PlaylistSongsTable() {
 
     const fetchSongs = async () => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs`, {
+            const response = await axios.get(`${BACKEND_URL}/api/songs`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -41,16 +41,6 @@ export function PlaylistSongsTable() {
     const columns = React.useMemo(
         () => [
             {
-                Header: "#",
-                accessor: (row, i) => i + 1,
-                Cell: ({ value }) =>
-                    <>
-                        <div className="mx-3">
-                            {value}
-                        </div>
-                    </>
-            },
-            {
                 Header: "Title",
                 accessor: 'display_name',
                 Cell: ({ row }) => (
@@ -60,7 +50,7 @@ export function PlaylistSongsTable() {
                             <div className="playlist-song-title text-truncate">
                                 {row.original.display_name}
                             </div>
-                            <div className="playlist-song-author d-inline" onClick={(e) => {
+                            <div className="playlist-song-author" onClick={(e) => {
                                 e.stopPropagation();
                                 navigate(`/artist/${row.original.user_id}`);
                             }}>
@@ -75,35 +65,15 @@ export function PlaylistSongsTable() {
                 accessor: 'album.album_name',
                 Cell: ({ value }) => {
                     return (
-                        <div className="album-title-row text-truncate d-inline">
-                            {value}
+                        <div className="mx-5 text-truncate">
+                            <div className="album-title-row d-inline" onClick={(e) => {
+                                e.stopPropagation();
+                                console.log('navigate to album', value);
+                            }}>
+                                {value}
+                            </div>
                         </div>
                     )
-                }
-
-            },
-            {
-                Header: "Date Added",
-                accessor: 'created_at',
-                Cell: ({ value }) => {
-                    const date = new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    return (
-                        <div className="date-added-row text-truncate">
-                            {date}
-                        </div>
-                    );
-                }
-            },
-            {
-                Header: "Duration",
-                accessor: 'updated_at',
-                Cell: ({ value }) => {
-                    const date = new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    return (
-                        <div className="duration-row text-truncate">
-                            {date}
-                        </div>
-                    );
                 }
             },
             {
@@ -111,45 +81,76 @@ export function PlaylistSongsTable() {
                 accessor: 'id',
                 maxWidth: 10,
                 Cell: ({ value }) => (
-                    <Dropdown className="profile-dropdown" onClick={(e) => e.stopPropagation()}>
-                        <Dropdown.Toggle id="dropdown-basic">
-                            <i className="fa fa-ellipsis-h ellipsis" />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu variant="dark">
-                            <Dropdown.Item href="/profile">Add to playlist</Dropdown.Item>
-                            <Dropdown.Item href="/settings">Remove from this playlist</Dropdown.Item>
-                            <Dropdown.Item href="/settings">Add to queue</Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
+                    <div className="mx-2">
+                        <Button variant="outline-danger" onClick={(e) => e.stopPropagation()}>
+                            Add
+                        </Button>
+                    </div>
                 ),
             },
         ],
         []
     );
 
+    function globalFilterFn(rows, columnIds, filterValue) {
+        return rows.filter(row => {
+            const displayName = row.values['display_name'];
+            const albumName = row.values['album.album_name'];
+
+            return (displayName ? displayName.toLowerCase().includes(filterValue.toLowerCase()) : false)
+                || (albumName ? albumName.toLowerCase().includes(filterValue.toLowerCase()) : false)
+        });
+    }
+
     const {
         getTableProps,
         getTableBodyProps,
         headerGroups,
-        rows,
+        page, // Use 'page' instead of 'rows'
         prepareRow,
-    } = useTable({ columns, data });
+        canPreviousPage,
+        canNextPage,
+        pageOptions,
+        pageCount,
+        gotoPage,
+        nextPage,
+        previousPage,
+        setPageSize,
+        state: { pageIndex, pageSize },
+        setGlobalFilter,
+        state: { globalFilter },
+    } = useTable(
+        {
+            columns,
+            data,
+            initialState: { pageIndex: 0, pageSize: 5 },
+            globalFilter: globalFilterFn, // Use the custom filter function
+        },
+        useGlobalFilter,
+        usePagination
+    );
 
     return (
-        <Container fluid className="w-100 playlist-table">
+        <Container fluid className="playlist-table w-100 overflow-auto">
             <div>
                 <table {...getTableProps()} className="w-100">
                     <thead>
-                        {headerGroups.map(headerGroup => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map(column => (
-                                    <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-                                ))}
-                            </tr>
-                        ))}
+                        <tr>
+                            <th colSpan={3}>
+                                <Form>
+                                    <Form.Group>
+                                        <Form.Control type="text"
+                                            value={globalFilter || ''}
+                                            onChange={e => setGlobalFilter(e.target.value)}
+                                            placeholder={`Search...`} >
+                                        </Form.Control>
+                                    </Form.Group>
+                                </Form>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody {...getTableBodyProps()}>
-                        {rows.map(row => {
+                        {page.map(row => { // Use 'page' instead of 'rows'
                             prepareRow(row);
                             return (
                                 <tr onClick={() => {
@@ -167,6 +168,23 @@ export function PlaylistSongsTable() {
                         })}
                     </tbody>
                 </table>
+            </div>
+            <div className="d-flex justify-content-between">
+                <div>
+
+                    <Button variant="secondary" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                        {'<'}
+                    </Button>
+                    <Button variant="secondary" onClick={() => nextPage()} disabled={!canNextPage}>
+                        {'>'}
+                    </Button>
+                </div>
+                <span className="d-flex align-items-center mx-3">
+                    Page
+                    <strong className="mx-1">
+                        {pageIndex + 1} of {pageOptions.length}
+                    </strong>{' '}
+                </span>
             </div>
         </Container>
     );

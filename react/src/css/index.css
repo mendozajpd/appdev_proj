@@ -1383,6 +1383,11 @@ h1 span:hover {
   color: #fff;
 }
 
+.album-title-row:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .playlist-table tbody tr:hover .ellipsis {
   display: block !important;
 }

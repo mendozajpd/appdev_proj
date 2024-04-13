@@ -57,7 +57,7 @@ const MusicPlayer = ({ songID }) => {
                             </div>
                             <div>
                                 <div className="player-song-title d-flex align-items-center px-2 text-truncate">{songDetails.display_name}</div>
-                                <div className="player-song-author  px-2 text-truncate" onClick={() => navigate(`/artist/${songDetails.user.id}`)}>{songDetails.user.name}</div>
+                                <div className="player-song-author d-inline px-2 text-truncate" onClick={() => navigate(`/artist/${songDetails.user.id}`)}>{songDetails.user.name}</div>
                             </div>
                         </>
                     )}

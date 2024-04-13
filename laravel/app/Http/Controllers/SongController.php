@@ -24,10 +24,10 @@ class SongController extends Controller
         return response()->json($song->load('album','user'));
     }
 
-    public function getSongs(Request $request)
+    public function getSongs()
     {
         $songs = Song::all();
-        return response()->json($songs);
+        return response()->json($songs->load('album','user'));
     }
 
     public function getSong($filename)
