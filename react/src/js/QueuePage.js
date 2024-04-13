@@ -72,9 +72,7 @@ const QueuePage = () => {
                 </h1>
               </Row>
               <Row className="px-5">
-                <h5 className="text-gray">
-                  Now Playing
-                </h5>
+
                 <QueueTable />
                 {/* <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
                   <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
@@ -82,18 +80,7 @@ const QueuePage = () => {
                   </PlaylistUpdateContext.Provider>
                 </PlaylistSongsContext.Provider> */}
               </Row>
-              <Row className="px-5 py-5">
-                <h5 className="text-gray">
-                  Next Up
-                </h5>
-                {/* <PlaylistSongsContext.Provider value={{ songs, setSongs }}>
-                  <PlaylistUpdateContext.Provider value={{ playlistUpdate, setPlaylistUpdate }}>
-                    <PlaylistSongsTable />
-                  </PlaylistUpdateContext.Provider>
-                </PlaylistSongsContext.Provider> */}
-              </Row>
-
-              <div className="px-5 h-100">
+              <div className="px-5 h-50">
               </div>
             </Col>
           </Row>

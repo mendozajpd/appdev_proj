@@ -70,18 +70,6 @@ export function QueueTable() {
 
             },
             {
-                Header: "Date Added",
-                accessor: 'pivot.created_at',
-                Cell: ({ value }) => {
-                    const date = new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    return (
-                        <div className="date-added-row text-truncate">
-                            {date}
-                        </div>
-                    );
-                }
-            },
-            {
                 Header: "Duration",
                 accessor: 'updated_at',
                 Cell: ({ value }) => {
