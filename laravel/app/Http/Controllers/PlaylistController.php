@@ -83,9 +83,13 @@ class PlaylistController extends Controller
         if (auth()->id() !== $playlist->creator_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-
+    
+        if ($playlist->songs()->where('songs.id', $song->id)->exists()) {
+            return response()->json(['message' => 'Song already in playlist'], 409);
+        }
+    
         $playlist->songs()->attach($song->id);
-
+    
         return response()->json(['message' => 'Song added to playlist']);
     }
 

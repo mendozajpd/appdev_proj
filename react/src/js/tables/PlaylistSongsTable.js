@@ -30,7 +30,7 @@ export function PlaylistSongsTable() {
                 },
             });
             setSongs(response.data.songs);
-            console.log('Songs', response.data);
+            // console.log('Songs', response.data);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
         }

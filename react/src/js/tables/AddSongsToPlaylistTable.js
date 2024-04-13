@@ -14,7 +14,7 @@ import PlaylistSongsContext from "../context/PlaylistSongsContext";
 
 export function AddSongsToPlaylistTable() {
     const [artistSongs, setArtistSongs] = useState([]);
-    const { songs, setSongs } = useContext(PlaylistSongsContext);
+    const {songs, setSongs} = useContext(PlaylistSongsContext);
     const token = localStorage.getItem("jwt_token");
 
     const { id } = useParams();
@@ -23,7 +23,7 @@ export function AddSongsToPlaylistTable() {
 
     const { setSongID } = useContext(PlayerContext);
     const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
-    const [playlistSongs, setPlaylistSongs] = useState([]);
+    const [songAdded, setSongAdded] = useState(false);
 
     const fetchSongs = async () => {
         try {
@@ -35,7 +35,7 @@ export function AddSongsToPlaylistTable() {
             const allSongs = response.data;
             const filteredSongs = allSongs.filter(song => !songs.find(ps => ps.id === song.id));
             setArtistSongs(filteredSongs);
-            console.log('Songs', filteredSongs);
+            // console.log('Songs', filteredSongs);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
         }
@@ -48,18 +48,20 @@ export function AddSongsToPlaylistTable() {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            console.log('Song added to playlist');
+            console.log('Song added to playlist', playlist_id, song_id);
             setPlaylistUpdate(true);
-
-            // Update the songs state with the new song
-            setSongs(prevSongs => [...prevSongs, { id: song_id }]);
+            setSongAdded(true);
         } catch (error) {
             console.error('Failed to add songs:', error);
         }
     }
 
     useEffect(() => {
+        console.log('all songs', artistSongs);
         fetchSongs();
+        if (songAdded) {
+            setSongAdded(false);
+        }
     }, [id, playlistUpdate]);
 
     const data = React.useMemo(() => artistSongs, [artistSongs]);
@@ -115,7 +117,7 @@ export function AddSongsToPlaylistTable() {
                 ),
             },
         ],
-        []
+        [artistSongs, songs]
     );
 
     function globalFilterFn(rows, columnIds, filterValue) {
