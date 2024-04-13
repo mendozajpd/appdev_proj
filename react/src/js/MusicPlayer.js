@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Col, Image } from 'react-bootstrap';
+import React, { useState, useEffect, useContext } from 'react';
+import { Col, Image, Button } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import axios from 'axios';
 import BACKEND_URL from '../config';
 
+import PlayerContext from "./context/PlayerContext";
+
+
 const MusicPlayer = ({ songID }) => {
 
-    const [queue, setQueue] = useState();
+    const { queue, setQueue, currentQueue, setCurrentQueue } = useContext(PlayerContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -26,11 +29,39 @@ const MusicPlayer = ({ songID }) => {
     }
 
     useEffect(() => {
-        if (songID) {
-            playSong(songID);
-        }
-    }, [songID]);
+        playSong();
+    }, [queue, currentQueue]);
 
+    const setSongsQueue = () => {
+        setQueue(
+            [
+                { id: 6 },
+                { id: 7 },
+                { id: 8 },
+            ]
+        );
+        resetQueueIndex();
+    }
+
+    const resetQueueIndex = () => {
+        setCurrentQueue(0);
+    }
+
+    const resetQueue = () => {
+        setQueue([]);
+    }
+
+    const handleNextSong = () => {
+        if (currentQueue < queue.length - 1) {
+            setCurrentQueue(currentQueue + 1);
+        }
+    }
+
+    const handlePreviousSong = () => {
+        if (currentQueue > 0) {
+            setCurrentQueue(currentQueue - 1);
+        }
+    }
 
     const navigateBack = () => {
         console.log('Navigating back to:', history);
@@ -44,7 +75,13 @@ const MusicPlayer = ({ songID }) => {
         navigate('/queue');
     };
 
-    const playSong = async (songID) => {
+    const playSong = async () => {
+        if (queue.length === 0) {
+            console.log('No songs in queue');
+            return;
+        }
+
+        const songID = queue[currentQueue].id;
         try {
             axios.get(`${BACKEND_URL}/api/song-details/${songID}`)
                 .then(response => {
@@ -80,7 +117,14 @@ const MusicPlayer = ({ songID }) => {
                     )}
                 </Col>
                 <Col xs={6}>
-                    <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100' />
+                    <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100'
+                        onClickNext={() => {
+                            handleNextSong();
+                        }}
+                        onClickPrevious={() => {
+                            handlePreviousSong();
+                        }}
+                    />
                 </Col>
                 <Col xs={2} className='d-flex align-items-center px-5'>
                     {location.pathname === '/queue' ? (
@@ -94,7 +138,13 @@ const MusicPlayer = ({ songID }) => {
                     )}
                 </Col>
                 <Col xs={2} className="invisible-text">
-                    extra space (bad practice, but it works for now)
+                    <Button onClick={setSongsQueue}>
+                        Add songs to queue
+                    </Button>
+                    <Button onClick={resetQueue}>
+                        Reset Queue
+                    </Button>
+                    {/* extra space (bad practice, but it works for now) */}
                 </Col>
             </div>
         </div>

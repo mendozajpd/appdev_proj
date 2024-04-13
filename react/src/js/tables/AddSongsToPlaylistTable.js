@@ -21,7 +21,7 @@ export function AddSongsToPlaylistTable() {
 
     const navigate = useNavigate();
 
-    const { setSongID } = useContext(PlayerContext);
+    const { setQueue, setCurrentQueue } = useContext(PlayerContext);
     const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
     const [songAdded, setSongAdded] = useState(false);
     const [addedSongs, setAddedSongs] = useState([]);
@@ -188,11 +188,14 @@ export function AddSongsToPlaylistTable() {
                         </tr>
                     </thead>
                     <tbody {...getTableBodyProps()}>
-                        {page.map(row => { // Use 'page' instead of 'rows'
+                        {page.map((row) => { // Use 'page' instead of 'rows'
                             prepareRow(row);
                             return (
                                 <tr onClick={() => {
-                                    setSongID(row.original.id);
+                                    const songToPlay = [row.original]; 
+                                    console.log(songToPlay)
+                                    setQueue(songToPlay);
+                                    setCurrentQueue(0);
                                 }} {...row.getRowProps()}>
                                     {row.cells.map(cell => (
                                         <td {...cell.getCellProps()}

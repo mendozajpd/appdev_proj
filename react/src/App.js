@@ -33,11 +33,24 @@ function App() {
   const [currentSongName, setCurrentSongName] = useState(null);
   const [currentSongUrl, setCurrentSongUrl] = useState(null);
   const [songID, setSongID] = useState(null);
+  const [queue, setQueue] = useState([]);
+  const [currentQueue, setCurrentQueue] = useState(0);
 
   return (
     <Router>
       <ToastContainer />
-      <PlayerContext.Provider value={{ currentSongName, setCurrentSongName, currentSong: currentSongUrl, setCurrentSong: setCurrentSongUrl, songID, setSongID }}>
+      <PlayerContext.Provider value={{
+        currentSongName,
+        setCurrentSongName,
+        currentSong: currentSongUrl,
+        setCurrentSong: setCurrentSongUrl,
+        songID,
+        setSongID,
+        queue,
+        setQueue,
+        currentQueue,
+        setCurrentQueue
+      }}>
         <Routes>
           <Route path="/" element={<UserLayout />}>
             <Route index element={<HomePage />} />

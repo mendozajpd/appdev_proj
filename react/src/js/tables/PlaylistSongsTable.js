@@ -19,7 +19,7 @@ export function PlaylistSongsTable() {
 
     const navigate = useNavigate();
 
-    const { setSongID } = useContext(PlayerContext);
+    const { setQueue, setCurrentQueue } = useContext(PlayerContext);
     const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
 
     const fetchSongs = async () => {
@@ -181,11 +181,14 @@ export function PlaylistSongsTable() {
                         ))}
                     </thead>
                     <tbody {...getTableBodyProps()}>
-                        {rows.map(row => {
+                        {rows.map((row, index) => {
                             prepareRow(row);
                             return (
                                 <tr onClick={() => {
-                                    setSongID(row.original.id);
+                                    const songsFromClickedRow = songs.slice(index);
+                                    console.log(songsFromClickedRow)
+                                    setQueue(songsFromClickedRow);
+                                    setCurrentQueue(0);
                                 }} {...row.getRowProps()}>
                                     {row.cells.map(cell => (
                                         <td {...cell.getCellProps()}
