@@ -65,6 +65,9 @@ const ArtistUpload = () => {
   const [mediaFiles, setMediaFiles] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState({});
 
+  // CREATE ALBUM BUTTON
+  const [isCreateAlbumButtonDisabled, setIsCreateAlbumButtonDisabled] = useState(false);
+
   // TOASTIFY 
   const upload_success = (message) => {
     toast.success(message, {
@@ -217,51 +220,52 @@ const ArtistUpload = () => {
 
   const handleCreateAlbum = async (e) => {
     e.preventDefault();
+    setIsCreateAlbumButtonDisabled(true);
 
-    // Check if all required fields are filled
     if (!albumTitle) {
       upload_failed('Album title is missing.');
+      setIsCreateAlbumButtonDisabled(false);
       return;
     }
     if (!albumDescription) {
       upload_failed('Album description is missing.');
+      setIsCreateAlbumButtonDisabled(false);
       return;
     }
     if (!albumPhoto) {
       upload_failed('Album photo is missing.');
+      setIsCreateAlbumButtonDisabled(false);
       return;
     }
 
     if (mediaFiles.length === 0) {
       upload_failed('No songs uploaded. Please upload at least one song.');
+      setIsCreateAlbumButtonDisabled(false);
       return;
     }
 
     for (let file of mediaFiles) {
       if (!file.displayName) {
         upload_failed('Song title is missing.');
+        setIsCreateAlbumButtonDisabled(false);
         return;
       }
     }
-
-    //console.log(mediaFiles);
-    //console.log(selectedGenres);
 
     const formData = new FormData();
     formData.append('album_name', albumTitle);
     formData.append('album_description', albumDescription);
     formData.append('album_photo', albumPhoto);
-    formData.append('is_published', 0); // or false, depending on your requirements
-    // formData.append('release_date', releaseDate); // if you have a release date field
+    formData.append('is_published', 0);
+    // formData.append('release_date', releaseDate); 
 
-
-    // Add each song file to the form data
     mediaFiles.forEach((file, index) => {
       formData.append(`songs[${index}]`, file);
       formData.append(`displayNames[${index}]`, file.displayName);
       const genres = selectedGenres[file.path] || [];
       if (genres.length === 0) {
         upload_failed(`The song ${file.name} does not have a genre.`);
+        setIsCreateAlbumButtonDisabled(false);
         return;
       }
       genres.forEach((genre, genreIndex) => {
@@ -269,7 +273,6 @@ const ArtistUpload = () => {
       });
     });
 
-    //console.log(mediaFiles);
     const token = localStorage.getItem("jwt_token");
 
     try {
@@ -287,6 +290,7 @@ const ArtistUpload = () => {
       resetUpload();
     } catch (error) {
       upload_failed(error.response.data.message);
+      setIsCreateAlbumButtonDisabled(false);
       console.error('There was an error!', error);
     }
   };
@@ -394,7 +398,7 @@ const ArtistUpload = () => {
               )}
               {uploadStep < 2 ? (
                 <>
-                  <Button variant="danger" onClick={handleCreateAlbum}>
+                  <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={handleCreateAlbum}>
                     Create Album
                   </Button>
                 </>
@@ -414,7 +418,7 @@ const ArtistUpload = () => {
                   <h1>Studio</h1>
                 </div>
                 <div className="d-flex align-items-center">
-                  <Button className="btn btn-outline-danger" onClick={() => { handleShow(); resetUpload(); }}>
+                  <Button className="btn btn-outline-danger" onClick={() => { handleShow(); resetUpload(); setIsCreateAlbumButtonDisabled(false); }}>
                     <i className="fa fa-plus-square px-2" aria-hidden="true" />
                     CREATE
                   </Button>

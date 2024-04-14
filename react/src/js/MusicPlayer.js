@@ -98,7 +98,7 @@ const MusicPlayer = () => {
                     )}
                 </Col>
                 <Col xs={6}>
-                    <AudioPlayer src={currentSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100'
+                    <AudioPlayer src={currentSong} onEnded={handleNextSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100'
                         onClickNext={() => {
                             handleNextSong();
                         }}
