@@ -91,15 +91,11 @@ export function QueueTable() {
                             <i className="fa fa-ellipsis-h ellipsis" />
                         </Dropdown.Toggle>
                         <Dropdown.Menu variant="dark">
-                            <Dropdown.Item href="/profile">
+                            <Dropdown.Item href="/profile" disabled>
                                 <i className="fa fa-plus mx-2" />
                                 Add to playlist
                             </Dropdown.Item>
-                            {/* <Dropdown.Item onClick={() => removeSongFromPlaylist(id, value)}>
-                                <i className="fa fa-trash mx-2" />
-                                Remove from this playlist
-                            </Dropdown.Item> */}
-                            <Dropdown.Item href="/settings">
+                            <Dropdown.Item href="/settings" disabled>
                                 <i className="fa fa-indent mx-2" />
                                 Add to queue
                             </Dropdown.Item>

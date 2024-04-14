@@ -227,7 +227,7 @@ const UserSidebar = () => {
                                         <CDBSidebarMenuItem icon="">Home</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink to="" activeclassname="activeClicked">
-                                        <CDBSidebarMenuItem icon="">Podcast</CDBSidebarMenuItem>
+                                        <CDBSidebarMenuItem icon="" active={false}>Podcast</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink to="" activeclassname="activeClicked">
                                         <CDBSidebarMenuItem icon="">Videocasts</CDBSidebarMenuItem>

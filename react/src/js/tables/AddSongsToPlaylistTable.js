@@ -14,7 +14,7 @@ import PlaylistSongsContext from "../context/PlaylistSongsContext";
 
 export function AddSongsToPlaylistTable() {
     const [artistSongs, setArtistSongs] = useState([]);
-    const {songs, setSongs} = useContext(PlaylistSongsContext);
+    const { songs, setSongs } = useContext(PlaylistSongsContext);
     const token = localStorage.getItem("jwt_token");
 
     const { id } = useParams();
@@ -113,10 +113,10 @@ export function AddSongsToPlaylistTable() {
                 maxWidth: 10,
                 Cell: ({ value }) => (
                     <div className="mx-4">
-        <Button variant="outline-danger" onClick={(e) => { e.stopPropagation(); addSongsToPlaylist(id, value) }} disabled={addedSongs.includes(value)}>
-            {addedSongs.includes(value) ? 'Added' : 'Add'}
-        </Button>
-                </div>
+                        <Button variant="outline-danger" onClick={(e) => { e.stopPropagation(); addSongsToPlaylist(id, value) }} disabled={addedSongs.includes(value)}>
+                            {addedSongs.includes(value) ? 'Added' : 'Add'}
+                        </Button>
+                    </div>
                 ),
             },
         ],
@@ -188,11 +188,11 @@ export function AddSongsToPlaylistTable() {
                         </tr>
                     </thead>
                     <tbody {...getTableBodyProps()}>
-                        {page.map((row) => { // Use 'page' instead of 'rows'
+                        {page.map((row) => {
                             prepareRow(row);
                             return (
                                 <tr onClick={() => {
-                                    const songToPlay = [row.original]; 
+                                    const songToPlay = [row.original];
                                     console.log(songToPlay)
                                     setQueue(songToPlay);
                                     setCurrentQueue(0);
