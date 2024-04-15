@@ -185,10 +185,10 @@ export function PlaylistSongsTable() {
                             prepareRow(row);
                             return (
                                 <tr onClick={() => {
-                                    const songsFromClickedRow = songs.slice(index);
-                                    console.log(songsFromClickedRow)
-                                    setQueue(songsFromClickedRow);
-                                    setCurrentQueue(0);
+                                    // const songsFromClickedRow = songs.slice(index);
+                                    // console.log(songsFromClickedRow)
+                                    setQueue(songs);
+                                    setCurrentQueue(index);
                                 }} {...row.getRowProps()}>
                                     {row.cells.map(cell => (
                                         <td {...cell.getCellProps()}
