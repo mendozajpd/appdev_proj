@@ -35,12 +35,14 @@ const MusicPlayer = () => {
     const handleNextSong = () => {
         if (currentQueue < queue.length - 1) {
             setCurrentQueue(currentQueue + 1);
+            resetSongListened();
         }
     }
 
     const handlePreviousSong = () => {
         if (currentQueue > 0) {
             setCurrentQueue(currentQueue - 1);
+            resetSongListened();
         }
     }
 
@@ -90,6 +92,31 @@ const MusicPlayer = () => {
         setIsPlaying(false);
     };
 
+    // SONG LISTENED
+
+    const [songListened, setSongListened] = useState(false);
+    const [songListenedCount, setSongListenedCount] = useState(0);
+
+    const handleSongListened = () => {
+        if (!songListened) {
+            console.log('Song listened', queue[currentQueue]);
+            axios.post(`${BACKEND_URL}/api/listen/${queue[currentQueue].id}`, {}, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('jwt_token')}`,
+                },
+            
+            })
+                .then(response => {
+                    console.log('Song listened', response.data);
+                    setSongListened(true);
+                });
+        }
+    }
+
+    const resetSongListened = () => {
+        setSongListened(false);
+        setSongListenedCount(0);
+    }
 
     return (
         <div className="position-relative flex-grow-1 d-flex">
@@ -120,10 +147,14 @@ const MusicPlayer = () => {
                         className='user-player h-100'
                         onClickNext={handleNextSong}
                         onClickPrevious={handlePreviousSong}
-                        listenInterval={10000}
+                        listenInterval={5000}
                         onListen={() => {
                             if (isPlaying) {
-                                console.log('listening');
+                                setSongListenedCount(songListenedCount + 1);
+
+                                if (songListenedCount >= 1) {
+                                    handleSongListened();
+                                }
                             }
                         }}
                     />
