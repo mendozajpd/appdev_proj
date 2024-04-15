@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Song;
 use App\Models\User;
+use App\Models\Listen;
 use App\Models\Album;
 use App\Jobs\CreateAlbumAndUploadSongsJob;
 use App\Jobs\CreateAlbumJob;
@@ -13,20 +14,26 @@ use Illuminate\Http\Request;
 
 class ArtistController extends Controller
 {
-    // LISTEN
-    public function mostListened($limit)
+
+    public function getArtistCount()
     {
-        $mostListenedArtists = DB::table('listens')
-            ->join('songs', 'listens.song_id', '=', 'songs.id')
-            ->select('songs.user_id', DB::raw('count(*) as total_listens'))
-            ->groupBy('songs.user_id')
-            ->orderBy('total_listens', 'desc')
-            ->take($limit)
-            ->get();
+        $artistCount = User::where('role', 'artist')->count();
 
-        return view('artist.mostListened', ['artists' => $mostListenedArtists]);
+        return response()->json(['artistCount' => $artistCount]);
     }
+    
+    public function getAlbumOfSong($songId)
+    {
+        $song = Song::find($songId);
 
+        if ($song) {
+            $album = $song->album;
+            return response()->json($album);
+        } else {
+            return response()->json(['error' => 'Song not found'], 404);
+        }
+    }
+    
     public function getArtist($id)
     {
     $artist = User::find($id);
@@ -44,6 +51,7 @@ class ArtistController extends Controller
 
         return response()->json($artists);
     }
+
 
     public function getAlbums(Request $request)
     {

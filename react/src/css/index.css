@@ -116,6 +116,10 @@ body {
   color: red;
 }
 
+.text-details {
+  font-size: 15px;
+}
+
 h1 {
   margin-top: 30px;
 }
@@ -1113,8 +1117,10 @@ h1 span:hover {
 
 /* ARTIST STUDIO */
 
-
-
+.studio-card {
+  border: 1px solid #a7a7a740 !important;
+  color: #efefef !important;
+}
 .studio-artist-name {
   font-weight: normal;
   color: #a7a7a7
@@ -1497,6 +1503,8 @@ h1 span:hover {
   padding: 15px;
   width: 90%;
 }
+
+
 
 /* MISC */
 .clickable {

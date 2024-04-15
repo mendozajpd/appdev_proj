@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Image, Stack, CloseButton, Card } from "react-bootstrap";
 import axios from "axios";
@@ -20,53 +20,14 @@ import { AlbumsTable } from './tables/AlbumsTable';
 import { SongsTable } from './tables/SongsTable';
 
 
+// Context
+import StudioContext from "./context/StudioContext";
+
 
 const ArtistDashboard = () => {
-  const [isVerified, setIsVerified] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(0);
-  const [logoutDisabled, setLogoutDisabled] = useState(false);
 
-  const [artist, setArtist] = useState(null);
   const { id } = useParams();
-
-  // Player
-  const [currentSong, setCurrentSong] = useState(null);
-  const playerRef = useRef();
-
-  // SONGS
-  const [songs, setSongs] = useState([]);
-
-  // ALBUMS
-  const [albums, setAlbums] = useState([]);
-  const [selectedAlbum, setSelectedAlbum] = useState('');
-
-  // MODAL
-  const [show, setShow] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-
-  const handleClose = () => {
-    const files = localStorage.getItem('files');
-    if (files) {
-      setShowConfirm(true);
-    } else {
-      setShow(false);
-    }
-  };
-  const handleShow = () => setShow(true);
-
-  // FILES
-  const [albumTitle, setAlbumTitle] = useState('');
-  const [artistNames, setArtistNames] = useState('');
-  const [albumDescription, setAlbumDescription] = useState('');
-  const [albumPhoto, setAlbumPhoto] = useState(null);
-  const [songTitle, setSongTitle] = useState('');
-  const [songFile, setSongFile] = useState(null);
-  const [mediaFiles, setMediaFiles] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState({});
-
-  // CREATE ALBUM BUTTON
-  const [isCreateAlbumButtonDisabled, setIsCreateAlbumButtonDisabled] = useState(false);
+  const { user } = useContext(StudioContext);
 
   // TOASTIFY 
   const upload_success = (message) => {
@@ -106,30 +67,7 @@ const ArtistDashboard = () => {
     });
   }
 
-  useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    const handleBeforeUnload = (e) => {
-      const files = localStorage.getItem('files');
-      if (files) {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
 
-    if (!token) {
-      navigate('/login');
-    } else {
-      fetchUserDetails();
-    }
-
-
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-
-  }, [id, isVerified]);
 
 
   const navigate = useNavigate();
@@ -147,269 +85,113 @@ const ArtistDashboard = () => {
     transition: "background-color 0.3s, color 0.3s, transform 0.3",
   };
 
+  const limit = 999;
 
-  const fetchUserDetails = async () => {
+  const [mostListenedSong, setMostListenedSong] = useState([]);
+  const [mostListenedSongRank, setMostListenedSongRank] = useState([]);
+  const [mostListenedArtistRank, setMostListenedArtistRank] = useState([]);
+  const [artistListens, setArtistListens] = useState([]);
+  const [artistPopulation, setArtistPopulation] = useState([]);
+  const [mostListenedSongName, setMostListenedSongName] = useState('')
+  const [mostListenedSongAlbumDetails, setMostListenedSongAlbumDetails] = useState([])
+
+  const fetchArtistPopulation = async () => {
     try {
-      const token = localStorage.getItem("jwt_token");
-      const response = await axios.get(`${BACKEND_URL}/api/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.get(`${BACKEND_URL}/api/artist-count`, {
+        headers: {}
       });
-      const userData = response.data; // Assuming user details are directly in response.data
-      //console.log(userData);
-      setIsVerified(userData.email_verified_at !== null);
-      if (userData.email_verified_at === null) {
-        handleShow();
-      }
 
-      // Check if the user has admin or superadmin role
-      const isAdmin = userData.role.includes('admin');
-      const isSuperAdmin = userData.role.includes('superadmin');
-      if (isAdmin || isSuperAdmin) {
-        navigate('/admin');
-      }
+      // console.log('Artist Population:', response.data);
+      setArtistPopulation(response.data);
+
     } catch (error) {
-      console.error("Failed to fetch user:", error);
-      localStorage.removeItem("jwt_token");
+      console.error('Failed to fetch artist population:', error);
     }
-  };
+  }
 
-  // Modal page handlers
-  const resetUpload = () => {
-    setUploadStep(0);
-    setAlbumTitle('');
-    setArtistNames('');
-    setAlbumDescription('');
-    setAlbumPhoto(null);
-    setSongTitle('');
-    setSongFile(null);
-    setSelectedAlbum('');
-    setSelectedGenres({});
-  };
-
-  const handleContinue = () => {
-    setUploadStep(uploadStep + 1); // Add this function
-  };
-
-  const handleBack = () => {
-    setUploadStep(uploadStep - 1); // Add this function
-  };
-
-  // Dropzone
-  const handleAlbumCoverDrop = (acceptedFiles) => {
-    setAlbumPhoto(acceptedFiles[0]);
-    //console.log(acceptedFiles[0].name);
-  };
-
-  const handleMediaDrop = (acceptedFiles) => {
-    setMediaFiles(acceptedFiles);
-    acceptedFiles.forEach(file => {
-      //console.log(file.name);
-    });
-  };
-
-  const handleGenreChange = (selectedGenres) => {
-    setSelectedGenres(selectedGenres);
-  };
-
-  const handleFileDelete = (fileToDelete) => {
-    const newMediaFiles = mediaFiles.filter(file => file !== fileToDelete);
-    setMediaFiles(newMediaFiles);
-  };
-
-  const handleCreateAlbum = async (e) => {
-    e.preventDefault();
-    setIsCreateAlbumButtonDisabled(true);
-
-    if (!albumTitle) {
-      upload_failed('Album title is missing.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
-    }
-    if (!albumDescription) {
-      upload_failed('Album description is missing.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
-    }
-    if (!albumPhoto) {
-      upload_failed('Album photo is missing.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
-    }
-
-    if (mediaFiles.length === 0) {
-      upload_failed('No songs uploaded. Please upload at least one song.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
-    }
-
-    for (let file of mediaFiles) {
-      if (!file.displayName) {
-        upload_failed('Song title is missing.');
-        setIsCreateAlbumButtonDisabled(false);
-        return;
-      }
-    }
-
-    const formData = new FormData();
-    formData.append('album_name', albumTitle);
-    formData.append('album_description', albumDescription);
-    formData.append('album_photo', albumPhoto);
-    formData.append('is_published', 0);
-    // formData.append('release_date', releaseDate); 
-
-    mediaFiles.forEach((file, index) => {
-      formData.append(`songs[${index}]`, file);
-      formData.append(`displayNames[${index}]`, file.displayName);
-      const genres = selectedGenres[file.path] || [];
-      if (genres.length === 0) {
-        upload_failed(`The song ${file.name} does not have a genre.`);
-        setIsCreateAlbumButtonDisabled(false);
-        return;
-      }
-      genres.forEach((genre, genreIndex) => {
-        formData.append(`genres[${index}][${genreIndex}]`, genre.value);
-      });
-    });
-
-    const token = localStorage.getItem("jwt_token");
-
+  const fetchMostListenedSongOfArtist = async () => {
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/create/album/upload-songs`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.get(`${BACKEND_URL}/api/most-listened-song-of-artist/${user.id}/${limit}`, {
+        headers: {}
       });
 
-      //console.log(response.data);
-      upload_success(response.data.message);
-      localStorage.removeItem('files');
-      handleClose();
-      resetUpload();
+      console.log('Most listened artist song:', response.data.songs[0]);
+      const mostListened = response.data.songs[0];
+      setMostListenedSong(mostListened);
+      setMostListenedSongName(mostListened.song.display_name);
+
     } catch (error) {
-      upload_failed(error.response.data.message);
-      setIsCreateAlbumButtonDisabled(false);
-      console.error('There was an error!', error);
+      console.error('Failed to fetch most listened artist song:', error);
     }
-  };
+  }
+
+  const fetchMostListenedSongRank = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/most-listened-song/${limit}`, {
+        headers: {}
+      });
+
+      console.log('Most listened song:', response.data);
+
+      // Get Song ID
+      const songRank = response.data.songs.findIndex(song => song.song_id === mostListenedSong.song_id);
+
+      // console.log('Song rank:', songRank + 1);
+
+      setMostListenedSongRank(songRank + 1);
+
+    } catch (error) {
+      console.error('Failed to fetch most listened song:', error);
+    }
+  }
+
+  const fetchMostListenedArtistRank = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/most-listened-artist/${limit}`, {
+        headers: {}
+      });
+
+      const artistRank = response.data.artists.findIndex(artist => artist.user_id === user.id);
+      const artist = response.data.artists.filter(artist => artist.user_id === user.id)[0];
+
+      console.log('Artist rank:', artistRank + 1);
+  
+      if (artist) {
+        setArtistListens(artist.total_listens);
+        console.log('waw', artist);
+      }
+
+      setMostListenedArtistRank(artistRank + 1);
+
+    } catch (error) {
+      console.error('Failed to fetch most listened song:', error);
+    }
+  }
+
+  const fetchAlbumOfSong = async () => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/song/${mostListenedSong.song_id}/album`, {
+        headers: {}
+      });
+
+      console.log(response.data);
+      setMostListenedSongAlbumDetails(response.data);
+    } catch (error) {
+      console.error('Failed to fetch album:', error)
+    }
+  }
+
+  useEffect(() => {
+    fetchArtistPopulation();
+    fetchMostListenedSongOfArtist();
+    fetchMostListenedSongRank();
+    fetchMostListenedArtistRank();
+    fetchAlbumOfSong();
+  }, [user]);
 
   return (
     <>
       <div className="home-page d-flex vh-100 artist-studio fade-in">
-        {showConfirm && (
-          <Modal className="upload-modal" show={showConfirm}>
-            <Modal.Header>
-              <Modal.Title>Confirm</Modal.Title>
-              <CloseButton onClick={() => setShowConfirm(false)} variant="white" />
-            </Modal.Header>
-            <Modal.Body>You have unsaved changes. Are you sure you want to close?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="light" onClick={() => setShowConfirm(false)}>
-                Cancel
-              </Button>
-              <Button variant="secondary" onClick={() => {
-                localStorage.removeItem('files');
-                setMediaFiles([]);
-                setShow(false);
-                setShowConfirm(false);
-              }}>
-                Discard
-              </Button>
-              <Button variant="danger" onClick={() => { /* Save as draft logic here */ setShow(false); setShowConfirm(false); }}>
-                Save as Draft
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        )}
-
-        <Modal className="upload-modal" show={show} size='lg' onHide={handleClose} backdrop="static"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered>
-          <div className="p-3">
-            <Modal.Header>
-              <Modal.Title>Create Album</Modal.Title>
-              <CloseButton onClick={handleClose} variant="white" />
-            </Modal.Header>
-            <Modal.Body>
-              {uploadStep === 0 ? (
-                <>
-                  <Row className='py-3 d-flex px-3 bot-line' >
-                    <Col className="d-flex align-items-center justify-content-center py-2">
-                      <Row className="album-cover-preview d-flex justify-content-center">
-                        <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
-                      </Row>
-                    </Col>
-                    <Col xs={12} sm={12} xl={7}>
-                      <Form onSubmit={handleCreateAlbum}>
-                        <Stack direction="vertical" className="px-3" gap={1}>
-                          <Form.Group controlId="album_name">
-                            <Form.Control className="input-style" type="text" placeholder="Album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
-                          </Form.Group>
-                          <Form.Group controlId="album_description">
-                            <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} />
-                          </Form.Group>
-                          <Form.Group controlId="collaborator_names">
-                            <Form.Label>Collaborators</Form.Label>
-                            <Form.Control className="input-style" type="text" placeholder="Artist names" value={artistNames} onChange={e => setArtistNames(e.target.value)} />
-                          </Form.Group>
-                        </Stack>
-                      </Form>
-                    </Col>
-                  </Row>
-                  <Row className="d-flex justify-content-center py-3">
-                    <Col className="d-flex justify-content-center flex-column">
-                      <Row>
-                        <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
-                      </Row>
-                    </Col>
-                  </Row>
-                </>
-              ) : uploadStep === 1 ? (
-                <div>Page 1 (prevButton, nextButton)</div>
-              ) : uploadStep === 2 ? (
-                <div>Page 2 (prevButton)</div>
-              ) : ''}
-            </Modal.Body>
-            <Modal.Footer className="justify-content-between">
-              {mediaFiles.length > 0 ? (
-                <>
-                  {mediaFiles.length == 1 ? (
-                    <>
-                      {mediaFiles.length} Song uploaded
-                    </>
-                  ) :
-                    (
-                      <>
-                        {mediaFiles.length} Songs uploaded
-                      </>
-                    )}
-                </>
-              ) : (
-                <>
-                  No Songs uploaded
-                </>
-              )}
-              {uploadStep > 0 && (
-                <Button variant="secondary" onClick={handleBack}>
-                  Back
-                </Button>
-              )}
-              {uploadStep < 2 ? (
-                <>
-                  <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={handleCreateAlbum}>
-                    Create Album
-                  </Button>
-                </>
-              ) : (
-                <Button variant="secondary" onClick={handleClose}>
-                  Ok
-                </Button>
-              )}
-            </Modal.Footer>
-          </div>
-        </Modal>
 
         <Container className="home-page-content mt-4" fluid>
           <Row className="">
@@ -421,42 +203,94 @@ const ArtistDashboard = () => {
               </Row>
               <Row>
                 <Col xs={4} className="">
-                  <Card className="mb-1">
+                  <Card bg="dark" className="mb-1 studio-card" >
                     <Card.Body>
-                      <Card.Title>Card Title</Card.Title>
+                      <Card.Title className="text-truncate">Most Listened Song</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                      <Card.Text>
-                        Some quick example text to build on the card title and make up the
-                        bulk of the card's content.
+                      <Card.Text className="d-flex justify-content-around flex-wrap">
+                        <div className="my-3 align-items-end text-truncate" style={{ minWidth: '100px' }}>
+                          <div className="mx-2 justify-content-center d-flex">
+                            <Image src={`${BACKEND_URL}/storage/album_images/${mostListenedSongAlbumDetails.cover_photo_hash}`} style={{ width: '100px', height: '100px' }} rounded />
+                          </div>
+                          <div className="d-flex flex-column justify-content-center">
+                            <div className="d-flex justify-content-center">
+                              {/* {mostListenedSong  ? mostListenedSong.song.display_name : 'Loading...'} */}
+                              {mostListenedSongName}
+                            </div>
+                            <div className="d-flex text-gray text-details justify-content-center">
+                              {/* {mostListenedSong ? (mostListenedSong.song.display_name) : ('Loading...')} */}
+                              {mostListenedSongAlbumDetails.album_name}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mx-3 justify-content-center">
+                          <div className="d-flex justify-content-center text-truncate">
+                            <h1 className="mb-0 display-1">
+                              {mostListenedSong ? (mostListenedSong.total_listens) : ('Loading...')}
+
+                            </h1>
+                          </div>
+                          <div className="d-flex align-content-end justify-content-center mx-2 flex-wrap">
+                            listens
+                          </div>
+                        </div>
+                        <div className="justify-content-center text-truncate">
+                          <div className="d-flex justify-content-center text-truncate">
+                            <h1 className="mb-0 display-1">
+                              #{mostListenedSongRank && mostListenedSongRank}
+                            </h1>
+                          </div>
+                          <div className="d-flex align-content-end justify-content-center mx-2">
+                            most listened globally
+                          </div>
+                        </div>
                       </Card.Text>
-                      <Card.Link href="#">Card Link</Card.Link>
-                      <Card.Link href="#">Another Link</Card.Link>
                     </Card.Body>
                   </Card>
-                  <Card className="mt-1">
+                  <Card bg="dark" className="mt-1 studio-card">
                     <Card.Body>
-                      <Card.Title>Card Title</Card.Title>
+                      <Card.Title className="text-truncate">Artist Ranking</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                      <Card.Text>
-                        Some quick example text to build on the card title and make up the
-                        bulk of the card's content.
+                      <Card.Text className="d-flex flex-wrap">
+                        <div className="mx-2 text-truncate">
+                          <div className="d-flex align-items-end">
+                            <h1 className="display-1">
+                              #{mostListenedArtistRank && mostListenedArtistRank}
+                            </h1>
+                            <div className="my-3 d-flex text-gray text-truncate">
+                              of {artistPopulation.artistCount}
+                            </div>
+                          </div>
+                          <div className="d-flex align-items-end text-truncate">
+                            <div>
+                              most listened artist
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mx-2 text-truncate">
+                          <div className="d-flex align-items-end">
+                            <h1 className="display-1">
+                              {artistListens}
+                            </h1>
+                          </div>
+                          <div className="d-flex align-items-end text-truncate">
+                            <div>
+                              total listens
+                            </div>
+                          </div>
+                        </div>
                       </Card.Text>
-                      <Card.Link href="#">Card Link</Card.Link>
-                      <Card.Link href="#">Another Link</Card.Link>
                     </Card.Body>
                   </Card>
                 </Col>
                 <Col>
-                  <Card className="h-100">
+                  <Card bg='dark' className="studio-card h-100">
                     <Card.Body>
-                      <Card.Title>Card Title</Card.Title>
+                      <Card.Title>Show Data Here</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
                       <Card.Text>
-                        Some quick example text to build on the card title and make up the
-                        bulk of the card's content.
+                        Wow this is some good data. :O
                       </Card.Text>
-                      <Card.Link href="#">Card Link</Card.Link>
-                      <Card.Link href="#">Another Link</Card.Link>
                     </Card.Body>
                   </Card>
                 </Col>

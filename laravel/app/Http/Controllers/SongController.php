@@ -30,7 +30,6 @@ class SongController extends Controller
         ]);
     
         $song->increment('listens_count');
-        // $song->user->increment('listens_count');
     
         return response()->json(['message' => 'Song listened']);
     }

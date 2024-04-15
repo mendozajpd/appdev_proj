@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\PlaylistController;
+use App\Http\Controllers\ListenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Route::delete('users/{id}', [UserController::class, 'deleteUser']);
 Route::get('artist-requests', [ArtistRequestController::class, 'getArtistRequests']);
 
 // ArtistController Routes
+Route::get('artist-count', [ArtistController::class, 'getArtistCount']);
+Route::get('/song/{id}/album', [ArtistController::class, 'getAlbumOfSong']);
 Route::get('albums', [ArtistController::class, 'getAlbums']);
 Route::get('artists', [ArtistController::class, 'getArtists']);
 Route::get('/artists/{id}', [ArtistController::class, 'getArtist']);
@@ -53,12 +56,17 @@ Route::delete('songs/{id}', [ArtistController::class, 'deleteSong']);
 Route::put('albums/{id}', [ArtistController::class, 'editAlbum']);
 Route::put('songs/{id}', [ArtistController::class, 'editSong']);
 
+// ListenController Routes
+Route::post('listen/{song}', [ListenController::class, 'listen']);
+Route::get('most-listened-artist/{limit}', [ListenController::class, 'mostListenedArtist']);
+Route::get('most-listened-song/{limit}', [ListenController::class, 'mostListenedSong']);
+Route::get('most-listened-song-of-artist/{artistId}/{limit}', [ListenController::class, 'mostListenedSongOfArtist']);
+
 // SongController Routes
 Route::get('/play/{filename}', [SongController::class, 'getSong']);
 Route::get('songs', [SongController::class, 'getSongs']);
 Route::get('song-details/{id}', [SongController::class, 'getSongDetails']);
 Route::get('genres', [SongController::class, 'getGenres']);
-Route::post('listen/{song}', [SongController::class, 'listen']);
 
 // PlaylistController Routes
 Route::get('playlist/{id}', [PlaylistController::class, 'getPlaylist']);
