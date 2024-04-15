@@ -30,7 +30,7 @@ const MusicPlayer = () => {
 
     useEffect(() => {
         playSong();
-    }, [queue, currentQueue]);
+    }, [currentQueue]);
 
     const handleNextSong = () => {
         if (currentQueue < queue.length - 1) {

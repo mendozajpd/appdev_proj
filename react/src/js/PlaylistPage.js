@@ -57,7 +57,7 @@ const PlaylistPage = () => {
   const [songs, setSongs] = useState([]);
 
   // Player 
-  const { setQueue, setCurrentQueue } = useContext(PlayerContext);
+  const { currentQueue, queue, setQueue, setCurrentQueue } = useContext(PlayerContext);
 
   // Refresh sidebar
   const { setRefreshSidebar } = useContext(UserSidebarContext);
@@ -161,11 +161,34 @@ const PlaylistPage = () => {
 
   const playPlaylist = () => {
     if (songs) {
-
       setQueue(songs);
       setCurrentQueue(0);
     }
   }
+
+  const addSongsToQueue = async () => {
+    const token = localStorage.getItem("jwt_token");
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setSongs(response.data.songs);
+      const fetchedSongs = response.data.songs;
+      console.log(response.data.songs)
+      if (fetchedSongs.length > 0 && queue.length == 0) {
+        setQueue(songs);
+        setCurrentQueue(0);
+      } else {
+        let newQueue = [...queue];
+        newQueue.splice(currentQueue + 1, 0, ...fetchedSongs);
+        setQueue(newQueue);
+      }
+    } catch (error) {
+      console.error('Failed to fetch songs:', error);
+    }
+  };
 
 
   return (
@@ -280,7 +303,7 @@ const PlaylistPage = () => {
                       <i className="fa fa-ellipsis-h display-6" />
                     </Dropdown.Toggle>
                     <Dropdown.Menu variant="dark">
-                      <Dropdown.Item href="/profile" disabled>
+                      <Dropdown.Item onClick={() => addSongsToQueue()}>
                         <i className="fa fa-indent mx-2" />
                         Add to queue
                       </Dropdown.Item>

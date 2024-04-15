@@ -35,7 +35,7 @@ function App() {
   const [currentPlaylist, setCurrentPlaylist] = useState(null);
   const [songID, setSongID] = useState(null);
   const [queue, setQueue] = useState([]);
-  const [currentQueue, setCurrentQueue] = useState(0);
+  const [currentQueue, setCurrentQueue] = useState(-1);
 
   return (
     <Router>

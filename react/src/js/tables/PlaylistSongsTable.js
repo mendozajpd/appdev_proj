@@ -20,7 +20,7 @@ export function PlaylistSongsTable() {
     const navigate = useNavigate();
 
     // QUEUE
-    const { setQueue, currentQueue, setCurrentQueue, currentPlaylist, setCurrentPlaylist } = useContext(PlayerContext);
+    const { queue, setQueue, currentQueue, setCurrentQueue, currentPlaylist, setCurrentPlaylist } = useContext(PlayerContext);
     const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
 
     // SELECTION
@@ -54,6 +54,20 @@ export function PlaylistSongsTable() {
             console.error('Failed to remove song:', error);
         }
 
+    }
+
+    const handleAddSongToQueue = async (songID) => {
+        const response = await axios.get(`${BACKEND_URL}/api/song-details/${songID}`, {});
+        const fetchedSong = response.data;
+
+        if (queue.length === 0) {
+            setQueue([fetchedSong]);
+            setCurrentQueue(0);
+        } else {
+            let newQueue = [...queue];
+            newQueue.splice(currentQueue + 1, 0, fetchedSong);
+            setQueue(newQueue);
+        }
     }
 
     useEffect(() => {
@@ -157,7 +171,7 @@ export function PlaylistSongsTable() {
                                 <i className="fa fa-trash mx-2" />
                                 Remove from this playlist
                             </Dropdown.Item>
-                            <Dropdown.Item href="/settings" disabled>
+                            <Dropdown.Item onClick={() => handleAddSongToQueue(value)}>
                                 <i className="fa fa-indent mx-2" />
                                 Add to queue
                             </Dropdown.Item>
@@ -196,9 +210,10 @@ export function PlaylistSongsTable() {
                             return (
                                 <tr
                                     onClick={() => {
+                                        console.log(index)
                                         setQueue(songs);
                                         setCurrentQueue(index);
-                                        setSelected(index); // Set the selected state
+                                        setSelected(index);
                                         setCurrentPlaylist(id);
                                     }}
                                     {...row.getRowProps()}
