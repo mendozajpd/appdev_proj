@@ -233,15 +233,21 @@ const UserSidebar = () => {
                                         <CDBSidebarMenuItem icon="">Videocasts</CDBSidebarMenuItem>
                                     </NavLink>
                                     <NavLink to="" activeclassname="activeClicked">
-                                        <CDBSidebarMenuItem icon="">Subscription Settings</CDBSidebarMenuItem>
+                                        <CDBSidebarMenuItem icon="">Subscription</CDBSidebarMenuItem>
                                     </NavLink>
                                     {isArtist && (
                                         <>
-                                            <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
-                                            <div className="mx-4 my-3">
-                                            </div>
-                                            <NavLink to="/upload" activeclassname="activeClicked">
-                                                <CDBSidebarMenuItem icon="">Artist Studio</CDBSidebarMenuItem>
+                                            {/* <CDBSidebarHeader className="sub-header"></CDBSidebarHeader> */}
+                                            {/* <CDBSidebarMenuItem icon="" className="sub-header d-flex justify-content-between">
+                                                <div className="sub-header">
+                                                    Artist
+                                                </div>
+                                            </CDBSidebarMenuItem> */}
+                                            {/* <NavLink to="/upload" activeclassname="activeClicked">
+                                                <CDBSidebarMenuItem icon="">Metrics</CDBSidebarMenuItem>
+                                            </NavLink> */}
+                                            <NavLink to="/studio" activeclassname="activeClicked">
+                                                <CDBSidebarMenuItem icon="">MediaHarbor Studio</CDBSidebarMenuItem>
                                             </NavLink>
                                         </>
                                     )}
@@ -266,7 +272,7 @@ const UserSidebar = () => {
                                             </CDBSidebarMenuItem>
                                         </NavLink>
                                     ), [playlists])}
-                                    <CDBSidebarHeader className="sub-header"></CDBSidebarHeader>
+                                    {/* <CDBSidebarHeader className="sub-header"></CDBSidebarHeader> */}
                                 </nav>
                             </CDBSidebarMenu>
                         </CDBSidebarContent>

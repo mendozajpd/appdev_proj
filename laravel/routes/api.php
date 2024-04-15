@@ -58,6 +58,7 @@ Route::get('/play/{filename}', [SongController::class, 'getSong']);
 Route::get('songs', [SongController::class, 'getSongs']);
 Route::get('song-details/{id}', [SongController::class, 'getSongDetails']);
 Route::get('genres', [SongController::class, 'getGenres']);
+Route::post('listen/{song}', [SongController::class, 'listen']);
 
 // PlaylistController Routes
 Route::get('playlist/{id}', [PlaylistController::class, 'getPlaylist']);

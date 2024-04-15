@@ -80,6 +80,16 @@ const MusicPlayer = () => {
         }
     };
 
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    const handlePlay = () => {
+        setIsPlaying(true);
+    };
+
+    const handlePause = () => {
+        setIsPlaying(false);
+    };
+
 
     return (
         <div className="position-relative flex-grow-1 d-flex">
@@ -98,12 +108,23 @@ const MusicPlayer = () => {
                     )}
                 </Col>
                 <Col xs={6}>
-                    <AudioPlayer src={currentSong} onEnded={handleNextSong} showDownloadProgress={false} showSkipControls={true} showJumpControls={false} autoPlay className='user-player h-100'
-                        onClickNext={() => {
-                            handleNextSong();
-                        }}
-                        onClickPrevious={() => {
-                            handlePreviousSong();
+                    <AudioPlayer
+                        src={currentSong}
+                        onPlay={handlePlay}
+                        onPause={handlePause}
+                        onEnded={handleNextSong}
+                        showDownloadProgress={false}
+                        showSkipControls={true}
+                        showJumpControls={false}
+                        autoPlay
+                        className='user-player h-100'
+                        onClickNext={handleNextSong}
+                        onClickPrevious={handlePreviousSong}
+                        listenInterval={10000}
+                        onListen={() => {
+                            if (isPlaying) {
+                                console.log('listening');
+                            }
                         }}
                     />
                 </Col>

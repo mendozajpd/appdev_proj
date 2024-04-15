@@ -76,7 +76,12 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
     }
 
     public function songs()
-{
-    return $this->hasMany(Song::class);
-}
+    {
+        return $this->hasMany(Song::class);
+    }
+    
+    public function listens()
+    {
+        return $this->hasMany(Listen::class);
+    }
 }

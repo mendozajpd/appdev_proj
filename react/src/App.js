@@ -13,17 +13,19 @@ import Login from "./js/pages/root/Login";
 import HomePage from "./js/HomePage";
 import AdminDashboard from "./js/admin/AdminDashboard";
 import AdminManageUsers from "./js/admin/AdminManageUsers";
-import ArtistUpload from "./js/ArtistUpload";
 import PendingRequests from "./js/admin/PendingRequests";
 import Banned from "./js/admin/Banned"
 import ArtistPage from "./js/ArtistPage";
 import PlaylistPage from "./js/PlaylistPage";
 import QueuePage from "./js/QueuePage";
 import EmptyPage from "./js/EmptyPage";
+import ArtistUpload from "./js/ArtistUpload";
+import ArtistDashboard from "./js/ArtistDashboard";
 
 // Layouts
 import RootLayout from "./js/layouts/RootLayout";
 import UserLayout from "./js/layouts/UserLayout";
+import StudioLayout from "./js/layouts/StudioLayout";
 
 // Context
 import PlayerContext from "./js/context/PlayerContext";
@@ -57,10 +59,17 @@ function App() {
         <Routes>
           <Route path="/" element={<UserLayout />}>
             <Route index element={<HomePage />} />
-            <Route path="/artist/:id" element={<ArtistPage />} />
-            <Route path="/upload" element={<ArtistUpload />} />
+            {/* <Route path="/artist/:id" element={<ArtistPage />} /> */}
+            {/* <Route path="/upload" element={<ArtistUpload />} /> */}
             <Route path="/playlist/:id" element={<PlaylistPage />} />
             <Route path="/queue" element={<QueuePage />} />
+            <Route path="/user/:id" element={<ArtistPage />} />
+          </Route>
+          <Route path="studio" element={<StudioLayout />}>
+            <Route index element={<ArtistDashboard />} />
+            <Route path="content" element={<ArtistUpload />} />
+            <Route path="playlist/:id" element={<PlaylistPage />} />
+            <Route path="queue" element={<QueuePage />} />
           </Route>
           <Route path="/" element={<RootLayout />}>
             <Route path="/login" element={<Login />} />

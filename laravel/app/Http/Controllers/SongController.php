@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Song;
+use App\Models\Listen;
 use App\Models\Genre;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -12,6 +13,28 @@ use Illuminate\Http\Request;
 
 class SongController extends Controller
 {
+    public function listen(Song $song)
+    {
+        if (!$song) {
+            return response()->json(['message' => 'Song not found'], 404);
+        }
+    
+        $userId = auth()->id();
+        if (!$userId) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+    
+        Listen::create([
+            'user_id' => $userId,
+            'song_id' => $song->id,
+        ]);
+    
+        $song->increment('listens_count');
+        // $song->user->increment('listens_count');
+    
+        return response()->json(['message' => 'Song listened']);
+    }
+
     public function getGenres()
     {
         $genres = Genre::all();

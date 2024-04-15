@@ -50,7 +50,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const handleArtistClick = (artistId) => {
-    navigate(`/artist/${artistId}`);
+    navigate(`/user/${artistId}`);
   };
 
   const buttonStyle = {

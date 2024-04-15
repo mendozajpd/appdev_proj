@@ -109,7 +109,7 @@ body {
 }
 
 .text-red {
-  color: #b10000;
+  color: rgb(177, 0, 0);
 }
 
 .text-red:hover {
@@ -1043,6 +1043,7 @@ h1 span:hover {
 /* PLAYER */
 .user-player-bar {
   background: #130f10 !important;
+  z-index: 1;
   border-top: 1px solid #2d2d2d;
 }
 
@@ -1112,13 +1113,35 @@ h1 span:hover {
 
 /* ARTIST STUDIO */
 
-.artist-studio {
-  color: #fff;
+
+
+.studio-artist-name {
+  font-weight: normal;
+  color: #a7a7a7
+}
+
+.studio-pfp-container {
+  margin-right: 35px;
+  margin-top: 75px;
+}
+
+.studio-pfp {
+  height: 125px;
+  width: 125px;
+}
+
+.studio-logo {
+  color: #be1c1c;
+  font-size: 25px;
+  font-weight: 600;
 }
 
 .top-nav {
   background: #1f1f1f;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 10000 !important;
+  height: 70px;
+  width: 100vw;
 }
 
 
@@ -1473,6 +1496,22 @@ h1 span:hover {
 .duration-row {
   padding: 15px;
   width: 90%;
+}
+
+/* MISC */
+.clickable {
+  cursor: pointer;
+}
+
+/* FADE IN */
+
+.fade-in {
+  animation: fadeIn .3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
 }
 
 @keyframes bounce {

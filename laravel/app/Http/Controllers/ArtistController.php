@@ -13,6 +13,20 @@ use Illuminate\Http\Request;
 
 class ArtistController extends Controller
 {
+    // LISTEN
+    public function mostListened($limit)
+    {
+        $mostListenedArtists = DB::table('listens')
+            ->join('songs', 'listens.song_id', '=', 'songs.id')
+            ->select('songs.user_id', DB::raw('count(*) as total_listens'))
+            ->groupBy('songs.user_id')
+            ->orderBy('total_listens', 'desc')
+            ->take($limit)
+            ->get();
+
+        return view('artist.mostListened', ['artists' => $mostListenedArtists]);
+    }
+
     public function getArtist($id)
     {
     $artist = User::find($id);

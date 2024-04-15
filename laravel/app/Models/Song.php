@@ -25,4 +25,9 @@ class Song extends Model
     {
         return $this->belongsToMany(Genre::class);
     }
+
+    public function listens()
+{
+    return $this->hasMany(Listen::class);
+}
 }

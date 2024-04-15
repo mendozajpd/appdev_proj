@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack, CloseButton } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Image, Stack, CloseButton, Card } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -21,7 +21,7 @@ import { SongsTable } from './tables/SongsTable';
 
 
 
-const ArtistUpload = () => {
+const ArtistDashboard = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -297,7 +297,7 @@ const ArtistUpload = () => {
 
   return (
     <>
-      <div className="home-page d-flex vh-100 artist-studio">
+      <div className="home-page d-flex vh-100 artist-studio fade-in">
         {showConfirm && (
           <Modal className="upload-modal" show={showConfirm}>
             <Modal.Header>
@@ -411,26 +411,56 @@ const ArtistUpload = () => {
           </div>
         </Modal>
 
-        <Container className="home-page-content mt-4 fade-in" fluid>
+        <Container className="home-page-content mt-4" fluid>
           <Row className="">
             <Col className="px-5 py-3">
               <Row>
                 <h4 className="home-page-text px-3">
-                  Artist Content
+                  Artist Dashboard
                 </h4>
               </Row>
-              <Tabs
-                defaultActiveKey="albums"
-                id="uncontrolled-tab-example"
-                className="mb-3 artist sticky-tab"
-              >
-                <Tab eventKey="albums" title="Albums">
-                  <AlbumsTable />
-                </Tab>
-                <Tab eventKey="songs" title="Songs">
-                  <SongsTable />
-                </Tab>
-              </Tabs>
+              <Row>
+                <Col xs={4} className="">
+                  <Card className="mb-1">
+                    <Card.Body>
+                      <Card.Title>Card Title</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+                      <Card.Text>
+                        Some quick example text to build on the card title and make up the
+                        bulk of the card's content.
+                      </Card.Text>
+                      <Card.Link href="#">Card Link</Card.Link>
+                      <Card.Link href="#">Another Link</Card.Link>
+                    </Card.Body>
+                  </Card>
+                  <Card className="mt-1">
+                    <Card.Body>
+                      <Card.Title>Card Title</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+                      <Card.Text>
+                        Some quick example text to build on the card title and make up the
+                        bulk of the card's content.
+                      </Card.Text>
+                      <Card.Link href="#">Card Link</Card.Link>
+                      <Card.Link href="#">Another Link</Card.Link>
+                    </Card.Body>
+                  </Card>
+                </Col>
+                <Col>
+                  <Card className="h-100">
+                    <Card.Body>
+                      <Card.Title>Card Title</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+                      <Card.Text>
+                        Some quick example text to build on the card title and make up the
+                        bulk of the card's content.
+                      </Card.Text>
+                      <Card.Link href="#">Card Link</Card.Link>
+                      <Card.Link href="#">Another Link</Card.Link>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Container>
@@ -440,4 +470,4 @@ const ArtistUpload = () => {
   );
 };
 
-export default ArtistUpload;
+export default ArtistDashboard;
