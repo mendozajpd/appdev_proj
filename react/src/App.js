@@ -32,6 +32,7 @@ function App() {
 
   const [currentSongName, setCurrentSongName] = useState(null);
   const [currentSongUrl, setCurrentSongUrl] = useState(null);
+  const [currentPlaylist, setCurrentPlaylist] = useState(null);
   const [songID, setSongID] = useState(null);
   const [queue, setQueue] = useState([]);
   const [currentQueue, setCurrentQueue] = useState(0);
@@ -49,7 +50,9 @@ function App() {
         queue,
         setQueue,
         currentQueue,
-        setCurrentQueue
+        setCurrentQueue,
+        currentPlaylist,
+        setCurrentPlaylist
       }}>
         <Routes>
           <Route path="/" element={<UserLayout />}>

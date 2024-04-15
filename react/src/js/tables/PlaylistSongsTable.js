@@ -19,8 +19,12 @@ export function PlaylistSongsTable() {
 
     const navigate = useNavigate();
 
-    const { setQueue, setCurrentQueue } = useContext(PlayerContext);
+    // QUEUE
+    const { setQueue, currentQueue, setCurrentQueue, currentPlaylist, setCurrentPlaylist } = useContext(PlayerContext);
     const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
+
+    // SELECTION
+    const [selected, setSelected] = useState(null);
 
     const fetchSongs = async () => {
         try {
@@ -53,11 +57,17 @@ export function PlaylistSongsTable() {
     }
 
     useEffect(() => {
+        if (currentPlaylist === id) {
+            setSelected(currentQueue);
+        } else {
+            setSelected(null);
+        }
+
         fetchSongs();
         if (playlistUpdate) {
             setPlaylistUpdate(false);
         }
-    }, [id, playlistUpdate]);
+    }, [id, playlistUpdate, currentQueue, currentPlaylist]);
 
     const data = React.useMemo(() => songs, [songs]);
 
@@ -184,12 +194,19 @@ export function PlaylistSongsTable() {
                         {rows.map((row, index) => {
                             prepareRow(row);
                             return (
-                                <tr onClick={() => {
-                                    // const songsFromClickedRow = songs.slice(index);
-                                    // console.log(songsFromClickedRow)
-                                    setQueue(songs);
-                                    setCurrentQueue(index);
-                                }} {...row.getRowProps()}>
+                                <tr
+                                    onClick={() => {
+                                        setQueue(songs);
+                                        setCurrentQueue(index);
+                                        setSelected(index); // Set the selected state
+                                        setCurrentPlaylist(id);
+                                    }}
+                                    {...row.getRowProps()}
+                                    style={{
+                                        background: index === selected ? '#ffffff10' : '#00000001',
+                                        color: index === selected ? 'white' : '#a7a7a7',
+                                    }}
+                                >
                                     {row.cells.map(cell => (
                                         <td {...cell.getCellProps()}
                                             className={cell.column.id === 'display_name' ? 'title-column' : cell.column.id === 'album.album_name' ? 'album-column' : cell.column.id === 'id' ? 'ellipsis-column' : ''

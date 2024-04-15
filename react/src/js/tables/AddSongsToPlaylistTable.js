@@ -77,7 +77,7 @@ export function AddSongsToPlaylistTable() {
                 Cell: ({ row }) => (
                     <div className="p-2 d-flex align-items-center">
                         <Image src={`${BACKEND_URL}/storage/album_images/${row.original.album.cover_photo_hash}`} alt="Album Cover" style={{ width: '50px', height: '50px' }} rounded />
-                        <div className="mx-3">
+                        <div className="mx-3" style={{width:'200px'}}>
                             <div className="playlist-song-title text-truncate">
                                 {row.original.display_name}
                             </div>
