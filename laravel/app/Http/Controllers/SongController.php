@@ -13,26 +13,7 @@ use Illuminate\Http\Request;
 
 class SongController extends Controller
 {
-    public function listen(Song $song)
-    {
-        if (!$song) {
-            return response()->json(['message' => 'Song not found'], 404);
-        }
-    
-        $userId = auth()->id();
-        if (!$userId) {
-            return response()->json(['message' => 'User not authenticated'], 401);
-        }
-    
-        Listen::create([
-            'user_id' => $userId,
-            'song_id' => $song->id,
-        ]);
-    
-        $song->increment('listens_count');
-    
-        return response()->json(['message' => 'Song listened']);
-    }
+
 
     public function getGenres()
     {

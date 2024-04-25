@@ -27,7 +27,7 @@ class Song extends Model
     }
 
     public function listens()
-{
-    return $this->hasMany(Listen::class);
-}
+    {
+        return $this->hasMany(Listen::class);
+    }
 }
