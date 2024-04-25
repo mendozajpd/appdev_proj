@@ -200,7 +200,7 @@ const UserSidebar = () => {
                                     {user.name}
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu variant="dark">
-                                    <Dropdown.Item href="/profile">
+                                    <Dropdown.Item href={`/user/${user.id}`}>
                                         <i className="fa fa-user mx-2 text-white"></i>
                                         Profile
                                     </Dropdown.Item>
