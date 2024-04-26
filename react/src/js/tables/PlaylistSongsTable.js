@@ -29,6 +29,9 @@ export function PlaylistSongsTable() {
     // SELECTION
     const [selected, setSelected] = useState(null);
 
+    // SONGS FETCHED
+    const [songsFetched, setSongsFetched] = useState(0);
+
     const fetchSongs = async () => {
         try {
             const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs?page=${page}`, {
@@ -37,6 +40,7 @@ export function PlaylistSongsTable() {
                 },
             });
             setSongs(prevSongs => [...prevSongs, ...response.data.songs.data]);
+            setSongsFetched(response.data.songs.data.length);
             console.log('Songs', response.data);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
@@ -73,7 +77,27 @@ export function PlaylistSongsTable() {
         }
     }
 
+    const observerRef = useRef(null);
+
+    const handleObserver = (entities) => {
+        const target = entities[0];
+        if (target.isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+            if (observerRef.current) {
+                observerRef.current.disconnect(); 
+                console.log('Disconnected');
+            }
+        }
+    }
+
     useEffect(() => {
+        if (localStorage.getItem('playlist_id') !== id) {
+            setSongs([]);
+            localStorage.setItem('playlist_id', id);
+        } else {
+            localStorage.setItem('playlist_id', id);
+        }
+
         if (currentPlaylist === id) {
             setSelected(currentQueue);
         } else {
@@ -89,27 +113,21 @@ export function PlaylistSongsTable() {
             rootMargin: "20px",
             threshold: 1.0
         };
-    
-        let observer;
+
         if (loader.current) {
-            observer = new IntersectionObserver(handleObserver, options);
-            observer.observe(loader.current);
+            observerRef.current = new IntersectionObserver(handleObserver, options);
+            observerRef.current.observe(loader.current);
         }
-    
+
         return () => {
-            if (observer) {
-                observer.disconnect();
+            if (observerRef.current) {
+                observerRef.current.disconnect();
             }
         };
 
-    }, [page, id, playlistUpdate, currentQueue, currentPlaylist]);
+    }, [page, id, playlistUpdate, currentQueue, currentPlaylist,songsFetched]);
 
-    const handleObserver = (entities) => {
-        const target = entities[0];
-        if (target.isIntersecting) {
-            setPage((prevPage) => prevPage + 1);
-        }
-    }
+
 
     const data = React.useMemo(() => songs, [songs]);
 
@@ -260,9 +278,17 @@ export function PlaylistSongsTable() {
                                 </tr>
                             );
                         })}
-                        <tr ref={loader}>
-                            <td>Loading...</td>
-                        </tr>
+                        {songs && songs.length === 0 ? (
+                            <tr>
+                                <td colSpan={6} className="text-center">
+                                    No songs found
+                                </td>
+                            </tr>
+                        ) : (
+                            <tr ref={loader}>
+                                <td>Loading...</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
