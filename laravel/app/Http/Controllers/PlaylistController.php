@@ -19,7 +19,7 @@ class PlaylistController extends Controller
             return response()->json(['message' => 'Playlist not found'], 404);
         }
     
-        $songs = $playlist->songs->load('album','user');
+        $songs = $playlist->songs()->with('album','user')->paginate(10);
     
         return response()->json(['songs' => $songs, 'playlist' => $playlist]);
     }

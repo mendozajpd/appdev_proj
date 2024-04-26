@@ -36,8 +36,6 @@ export function AddSongsToPlaylistTable() {
             const allSongs = response.data;
             const filteredSongs = allSongs.filter(song => !songs.find(ps => ps.id === song.id));
             setArtistSongs(filteredSongs);
-            // setArtistSongs(allSongs);
-            // console.log('Songs', filteredSongs);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
         }
@@ -83,7 +81,7 @@ export function AddSongsToPlaylistTable() {
                             </div>
                             <div className="playlist-song-author" onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(`/artist/${row.original.user_id}`);
+                                navigate(`/user/${row.original.user_id}`);
                             }}>
                                 {row.original.user.name}
                             </div>
@@ -212,8 +210,7 @@ export function AddSongsToPlaylistTable() {
             </div>
             <div className="d-flex justify-content-between">
                 <div>
-
-                    <Button variant="secondary" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                    <Button className='mx-2'variant="secondary" onClick={() => previousPage()} disabled={!canPreviousPage}>
                         {'<'}
                     </Button>
                     <Button variant="secondary" onClick={() => nextPage()} disabled={!canNextPage}>

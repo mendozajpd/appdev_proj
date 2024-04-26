@@ -21,11 +21,21 @@ class UsersTableSeeder extends Seeder
                 'role' => 'artist',
             ]);
 
-            $user->albums()->create([
+            $album = $user->albums()->create([
                 'album_name' => $faker->sentence(1),
                 'album_description' => $faker->sentence(2),
                 'user_id' => $user->id,
                 'cover_photo_hash' => '2264e77c40d0b139e3e77c221e5a4aaf22047d4b46af47834ffa271b50144511.png',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+            
+            for ($j = 0; $j < 400; $j++)
+            $song = $album->songs()->create([
+                'display_name' => $faker->sentence(1),
+                'hashed_name' => '22e224f7f2038d67cd8f33d5243740fcba0b60895ddbfff7963e9b546ad556f3.mp3',
+                'album_id' => $album->album_id,
+                'user_id' => $user->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

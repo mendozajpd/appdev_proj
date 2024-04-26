@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTable } from 'react-table';
 import { Dropdown, Image, Container, Row } from "react-bootstrap";
@@ -19,6 +19,9 @@ export function PlaylistSongsTable() {
 
     const navigate = useNavigate();
 
+    const [page, setPage] = useState(1);
+    const loader = useRef(null);
+
     // QUEUE
     const { queue, setQueue, currentQueue, setCurrentQueue, currentPlaylist, setCurrentPlaylist } = useContext(PlayerContext);
     const { playlistUpdate, setPlaylistUpdate } = useContext(PlaylistUpdateContext);
@@ -28,13 +31,13 @@ export function PlaylistSongsTable() {
 
     const fetchSongs = async () => {
         try {
-            const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs`, {
+            const response = await axios.get(`${BACKEND_URL}/api/playlist/${id}/songs?page=${page}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setSongs(response.data.songs);
-            // console.log('Songs', response.data);
+            setSongs(prevSongs => [...prevSongs, ...response.data.songs.data]);
+            console.log('Songs', response.data);
         } catch (error) {
             console.error('Failed to fetch songs:', error);
         }
@@ -81,7 +84,32 @@ export function PlaylistSongsTable() {
         if (playlistUpdate) {
             setPlaylistUpdate(false);
         }
-    }, [id, playlistUpdate, currentQueue, currentPlaylist]);
+        var options = {
+            root: null,
+            rootMargin: "20px",
+            threshold: 1.0
+        };
+    
+        let observer;
+        if (loader.current) {
+            observer = new IntersectionObserver(handleObserver, options);
+            observer.observe(loader.current);
+        }
+    
+        return () => {
+            if (observer) {
+                observer.disconnect();
+            }
+        };
+
+    }, [page, id, playlistUpdate, currentQueue, currentPlaylist]);
+
+    const handleObserver = (entities) => {
+        const target = entities[0];
+        if (target.isIntersecting) {
+            setPage((prevPage) => prevPage + 1);
+        }
+    }
 
     const data = React.useMemo(() => songs, [songs]);
 
@@ -232,6 +260,9 @@ export function PlaylistSongsTable() {
                                 </tr>
                             );
                         })}
+                        <tr ref={loader}>
+                            <td>Loading...</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

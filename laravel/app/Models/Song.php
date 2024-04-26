@@ -30,4 +30,9 @@ class Song extends Model
     {
         return $this->hasMany(Listen::class);
     }
+    
+    public function playlists()
+    {
+        return $this->belongsToMany(Playlist::class);
+    }
 }
