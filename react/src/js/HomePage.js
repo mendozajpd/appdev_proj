@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Image, Stack, Card } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -36,22 +36,14 @@ const HomePage = () => {
     // }
 
 
-    axios.get(`${BACKEND_URL}/api/artists`)
-      .then(response => {
-        setArtists(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error!', error);
-      });
+
 
   }, [isVerified]);
 
   // NAVIGATION
   const navigate = useNavigate();
 
-  const handleArtistClick = (artistId) => {
-    navigate(`/user/${artistId}`);
-  };
+
 
   const buttonStyle = {
     marginTop: "30px",
@@ -151,53 +143,11 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="home-page d-flex vh-100">
-        {/* <UserSidebar /> */}
-        <Modal show={show} onHide={handleClose} backdrop="static"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Email Verification Required</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>
-              We noticed that your email address has not been verified yet.
-              To ensure the security of your account and to gain full access
-              to all features of our application, it's important to verify your
-              email address. We kindly request you to check your email for the verification link.
-            </p></Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Ok
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Container className="home-page-content" fluid>
-          <Row className="h-100">
-            <Col className="p-5">
-              <Row className="mb-5">
-                <Form.Control className="search-bar" placeholder="Search" />
-              </Row>
-              <p className="home-page-text">
-                Upcoming Artists
-              </p>
-
-              <Stack direction="horizontal" className="artist-item-container p-3" gap={3}>
-                {artists.length === 0 ?
-                  (
-                    <div className="user-white-text">
-                      No Artists Yet :((
-                    </div>
-                  )
-                  :
-                  (artists.map(artist => (
-                    <ArtistItem key={artist.id} name={artist.name} onClick={() => handleArtistClick(artist.id)} />
-                  )))
-                }
-              </Stack>
-            </Col>
-          </Row>
-        </Container>
+      <div className="text-white p-5">
+        New Artists
+        <div className="d-flex gap-2 item-container p-2">
+          <ArtistItem/>
+        </div>
       </div>
     </>
   );

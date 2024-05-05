@@ -816,6 +816,7 @@ h1 span:hover {
     linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgb(63, 63, 63) 100%) no-repeat center fixed;
   background-size: cover, cover !important;
   height: 100vh;
+  
 }
 
 .search-bar {
@@ -835,16 +836,51 @@ h1 span:hover {
   box-shadow: none !important;
 }
 
-.home-page-content {
+/* .home-page-content {
   padding-left: 0 !important;
   overflow-x: hidden;
-}
+} */
 
 .home-page-text {
   color: white;
 }
 
-.artist-item-container {
+.item-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.item-container::-webkit-scrollbar {
+  width: 10px;
+  height: 5px;
+  border-radius: 10px;
+}
+
+/* Track */
+.item-container::-webkit-scrollbar-track {
+  background: #d3d3d351;
+  border-radius: 10px;
+
+}
+
+/* Handle */
+.item-container::-webkit-scrollbar-thumb {
+  background: #bbbbbb;
+  border-radius: 10px;
+
+}
+
+/* Handle on hover */
+.item-container::-webkit-scrollbar-thumb:hover {
+  background: #dadada;
+  border-radius: 10px;
+
+}
+
+/* ARTIST ITEM */
+
+
+/* .artist-item-container {
   overflow: auto;
   width: 900px;
   height: 230px;
@@ -868,7 +904,7 @@ h1 span:hover {
   color: #000000;
   cursor: pointer;
   transition: 0.5s;
-}
+} */
 
 /* For Chrome and Safari */
 /* Width of the scrollbar */
@@ -1484,11 +1520,6 @@ h1 span:hover {
   cursor: pointer;
 }
 
-/* .album-column {
-  padding: 10px;
-  width: 500px;
-} */
-
 .album-title-row {
   padding: 15px;
   width: 90%;
@@ -1509,6 +1540,11 @@ h1 span:hover {
 /* MISC */
 .clickable {
   cursor: pointer;
+}
+
+.clickable-hover:hover {
+  cursor: pointer;
+  background-color: #44444471 !important;
 }
 
 /* FADE IN */

@@ -44,9 +44,12 @@ const ArtistUpload = () => {
   // MODAL
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
 
   const handleClose = () => {
     const files = localStorage.getItem('files');
+    localStorage.removeItem('showUpload');
+    setShowUpload(false);
     if (files) {
       setShowConfirm(true);
     } else {
@@ -107,6 +110,12 @@ const ArtistUpload = () => {
   }
 
   useEffect(() => {
+    const showUpload = localStorage.getItem("showUpload");
+    if (showUpload === 'true') {
+      handleShow();
+      localStorage.removeItem("showUpload");
+    }
+    
     const token = localStorage.getItem("jwt_token");
     const handleBeforeUnload = (e) => {
       const files = localStorage.getItem('files');
@@ -129,7 +138,7 @@ const ArtistUpload = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
 
-  }, [id, isVerified]);
+  }, [showUpload, id, isVerified]);
 
 
   const navigate = useNavigate();
@@ -274,6 +283,7 @@ const ArtistUpload = () => {
     });
 
     const token = localStorage.getItem("jwt_token");
+
 
     try {
       const response = await axios.post(`${BACKEND_URL}/api/create/album/upload-songs`, formData, {

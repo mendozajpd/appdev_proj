@@ -56,7 +56,7 @@ const UserLayout = () => {
         <div className="home-page d-flex vh-100">
             <UserSidebarContext.Provider value={{ refreshSidebar, setRefreshSidebar }}>
                 <UserSidebar />
-                <Container className="g-0" fluid>
+                <Container className="g-0 overflow-hidden" fluid>
                     <div className="home-page-content">
                         <Outlet />
                         <MusicPlayer/>

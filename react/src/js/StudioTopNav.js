@@ -47,6 +47,11 @@ const StudioTopNav = () => {
         }
     };
 
+    const handleUpload = () => {
+        localStorage.setItem('showUpload', 'true');
+        navigate('/studio/content');
+    }
+
 
     return (
         <Row className="top-nav position-fixed g-0">
@@ -73,7 +78,7 @@ const StudioTopNav = () => {
                 </div>
                 <div className="d-flex align-items-center">
                     {/* <Button className="btn btn-outline-danger" onClick={() => { handleShow(); resetUpload(); setIsCreateAlbumButtonDisabled(false); }}> */}
-                    <Button className="btn btn-outline-danger" >
+                    <Button onClick={() => handleUpload()} className="btn btn-outline-danger" >
                         <i className="fa fa-plus-square px-2" aria-hidden="true" />
                         CREATE
                     </Button>

@@ -155,7 +155,7 @@ const ArtistDashboard = () => {
       const artist = response.data.artists.filter(artist => artist.user_id === user.id)[0];
 
       console.log('Artist rank:', artistRank + 1);
-  
+
       if (artist) {
         setArtistListens(artist.total_listens);
         console.log('waw', artist);
@@ -203,51 +203,58 @@ const ArtistDashboard = () => {
               </Row>
               <Row>
                 <Col xs={4} className="">
-                  <Card bg="dark" className="mb-1 studio-card" >
+                  <Card bg="dark" className="mb-1 studio-card" style={{minWidth: '10rem'}}>
                     <Card.Body>
                       <Card.Title className="text-truncate">Most Listened Song</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
                       <Card.Text className="d-flex justify-content-around flex-wrap">
-                        <div className="my-3 align-items-end text-truncate" style={{ minWidth: '100px' }}>
-                          <div className="mx-2 justify-content-center d-flex">
-                            <Image src={`${BACKEND_URL}/storage/album_images/${mostListenedSongAlbumDetails.cover_photo_hash}`} style={{ width: '100px', height: '100px' }} rounded />
-                          </div>
-                          <div className="d-flex flex-column justify-content-center">
-                            <div className="d-flex justify-content-center">
-                              {/* {mostListenedSong  ? mostListenedSong.song.display_name : 'Loading...'} */}
-                              {mostListenedSongName}
+                        {mostListenedSong && mostListenedSong.song_id ? (
+                          <>
+                            <div className="my-3 align-items-end text-truncate" style={{ minWidth: '100px' }}>
+                              <div className="mx-2 justify-content-center d-flex">
+                                <Image src={`${BACKEND_URL}/storage/album_images/${mostListenedSongAlbumDetails.cover_photo_hash}`} style={{ width: '100px', height: '100px' }} rounded />
+                              </div>
+                              <div className="d-flex flex-column justify-content-center">
+                                <div className="d-flex justify-content-center">
+                                  {/* {mostListenedSong  ? mostListenedSong.song.display_name : 'Loading...'} */}
+                                  {mostListenedSongName}
+                                </div>
+                                <div className="d-flex text-gray text-details justify-content-center">
+                                  {/* {mostListenedSong ? (mostListenedSong.song.display_name) : ('Loading...')} */}
+                                  {mostListenedSongAlbumDetails.album_name}
+                                </div>
+                              </div>
                             </div>
-                            <div className="d-flex text-gray text-details justify-content-center">
-                              {/* {mostListenedSong ? (mostListenedSong.song.display_name) : ('Loading...')} */}
-                              {mostListenedSongAlbumDetails.album_name}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="mx-3 justify-content-center">
-                          <div className="d-flex justify-content-center text-truncate">
-                            <h1 className="mb-0 display-1">
-                              {mostListenedSong ? (mostListenedSong.total_listens) : ('Loading...')}
+                            <div className="mx-3 justify-content-center">
+                              <div className="d-flex justify-content-center text-truncate">
+                                <h1 className="mb-0 display-1">
+                                  {mostListenedSong ? (mostListenedSong.total_listens) : ('Loading...')}
 
-                            </h1>
-                          </div>
-                          <div className="d-flex align-content-end justify-content-center mx-2 flex-wrap">
-                            listens
-                          </div>
-                        </div>
-                        <div className="justify-content-center text-truncate">
-                          <div className="d-flex justify-content-center text-truncate">
-                            <h1 className="mb-0 display-1">
-                              #{mostListenedSongRank && mostListenedSongRank}
-                            </h1>
-                          </div>
-                          <div className="d-flex align-content-end justify-content-center mx-2">
-                            most listened globally
-                          </div>
-                        </div>
+                                </h1>
+                              </div>
+                              <div className="d-flex align-content-end justify-content-center mx-2 flex-wrap">
+                                listens
+                              </div>
+                            </div>
+                            <div className="justify-content-center text-truncate">
+                              <div className="d-flex justify-content-center text-truncate">
+                                <h1 className="mb-0 display-1">
+                                  #{mostListenedSongRank && mostListenedSongRank}
+                                </h1>
+                              </div>
+                              <div className="d-flex align-content-end justify-content-center mx-2">
+                                most listened globally
+                              </div>
+                            </div>
+                          </>
+                        ) :
+                          (
+                            <div className="text-gray d-flex" >You don't have a most listened song yet. Please upload a song first.</div>
+                          )}
                       </Card.Text>
                     </Card.Body>
                   </Card>
-                  <Card bg="dark" className="mt-1 studio-card">
+                  <Card bg="dark" className="mt-1 studio-card" style={{minWidth: '10rem'}}>
                     <Card.Body>
                       <Card.Title className="text-truncate">Artist Ranking</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
@@ -284,7 +291,7 @@ const ArtistDashboard = () => {
                   </Card>
                 </Col>
                 <Col>
-                  <Card bg='dark' className="studio-card h-100">
+                  <Card bg='dark' className="studio-card h-100" style={{minWidth: '20rem'}}>
                     <Card.Body>
                       <Card.Title>Show Data Here</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
