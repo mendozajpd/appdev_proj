@@ -86,6 +86,11 @@ Route::get('podcasts/{id}', [PodcastController::class, 'show']);
 Route::post('podcasts', [PodcastController::class, 'store']);
 Route::put('podcasts/{podcast}', [PodcastController::class, 'update']);
 Route::delete('podcasts/{podcast}', [PodcastController::class, 'destroy']);
+// Podcast Episode
+Route::get('podcasts/{podcast}/episodes', [PodcastController::class, 'indexEpisode']);
+Route::post('podcasts/{podcast}/episodes', [PodcastController::class, 'storeEpisode']);
+Route::put('podcasts/{podcast}/episodes/{episode}', [PodcastController::class, 'updateEpisode']);
+Route::delete('podcasts/{podcast}/episodes/{episode}', [PodcastController::class, 'destroyEpisode']);
 
 // VideocastController Routes
 Route::get('videocasts', [VideocastController::class, 'index']);

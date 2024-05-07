@@ -348,7 +348,7 @@ const ArtistUpload = () => {
                       </Form.Group>
                     </Form>
                   </div>
-                  <div className="m-2 ">
+                  <div className="my-2 ">
                     <div>
                       Visibility
                     </div>
@@ -358,7 +358,7 @@ const ArtistUpload = () => {
                       show={showDropdown}
                       onToggle={(isOpen) => setShowDropdown(isOpen)}
                     >
-                      <Dropdown.Toggle className="input-style" id="dropdown-autoclose-outside">
+                      <Dropdown.Toggle className="input-style" id="dropdown-autoclose-outside" style={{width: '100%'}}>
                         Public
                       </Dropdown.Toggle>
                       <Dropdown.Menu variant="dark" style={{ width: '20rem' }}>

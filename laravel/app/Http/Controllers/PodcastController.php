@@ -54,19 +54,42 @@ class PodcastController extends Controller
 
     public function indexEpisode(Podcast $podcast)
     {
-        $episodes = $podcast->episodes;
-        return view('podcasts.episodes.index', compact('episodes'));
+        try {
+            $episodes = $podcast->episodes;
+            return response()->json($episodes);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to retrieve episodes', 'message' => $e->getMessage()], 500);
+        }
     }
-
-    public function createEpisode(Podcast $podcast)
-    {
-        return view('podcasts.episodes.create', compact('podcast'));
-    }
-
+    
     public function storeEpisode(Request $request, Podcast $podcast)
     {
-        $episode = new PodcastEpisode($request->all());
-        $podcast->episodes()->save($episode);
-        return redirect()->route('podcasts.episodes.index', $podcast);
+        try {
+            $episode = new PodcastEpisode($request->all());
+            $podcast->episodes()->save($episode);
+            return response()->json($episode, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to create episode', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function updateEpisode(Request $request, Podcast $podcast, PodcastEpisode $episode)
+    {
+        try {
+            $episode->update($request->all());
+            return response()->json($episode);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update episode', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function destroyEpisode(Podcast $podcast, PodcastEpisode $episode)
+    {
+        try {
+            $episode->delete();
+            return response()->json(['message' => 'Episode deleted']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete episode', 'message' => $e->getMessage()], 500);
+        }
     }
 }
