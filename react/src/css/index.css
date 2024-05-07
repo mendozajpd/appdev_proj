@@ -803,6 +803,10 @@ h1 span:hover {
   color: #f70000 !important;
 }
 
+.icon-small {
+  font-size: 10px;
+}
+
 /* HOMEPAGE */
 .home-page {
   background:

@@ -19,10 +19,7 @@ const UserLayout = () => {
     const [refreshSidebar, setRefreshSidebar] = useState(false);
 
     const navigate = useNavigate();
-
-
-    const { songID } = useContext(PlayerContext);
-    const [queue, setQueue] = useState();
+    const { playingViewActive, setPlayingViewActive } = useContext(PlayerContext);
 
     useEffect(() => {
         const storedToken = localStorage.getItem('jwt_token');
@@ -64,7 +61,12 @@ const UserLayout = () => {
                     </div>
                 </Container>
                 {/* PLAYING VIEW */}
-                <UserPlayingView />
+                {playingViewActive ? (
+                    <UserPlayingView />
+                ) : (
+                    <>
+                    </>
+                )}
             </UserSidebarContext.Provider>
         </div>
     );

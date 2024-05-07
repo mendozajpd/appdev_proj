@@ -11,7 +11,7 @@ import PlayerContext from "./context/PlayerContext";
 
 const MusicPlayer = () => {
 
-    const { queue, currentQueue, setCurrentQueue } = useContext(PlayerContext);
+    const { queue, currentQueue, setCurrentQueue, playingViewActive, setPlayingViewActive } = useContext(PlayerContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -104,7 +104,7 @@ const MusicPlayer = () => {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwt_token')}`,
                 },
-            
+
             })
                 .then(response => {
                     console.log('Song listened', response.data);
@@ -159,16 +159,30 @@ const MusicPlayer = () => {
                         }}
                     />
                 </Col>
-                <Col xs={2} className='d-flex align-items-center px-5'>
-                    {location.pathname === '/queue' ? (
-                        <div className='p-1 icon-border-active'>
-                            <i className="fa fa-bars  icon-click icon-active" onClick={() => navigateBack()}></i>
-                        </div>
-                    ) : (
-                        <div className='p-1'>
-                            <i className="fa fa-bars  icon-click icon-hover-white" onClick={() => navigateToQueue()}></i>
-                        </div>
-                    )}
+                <Col xs={2} className='d-flex align-items-center px-5 gap-2'>
+                    <div>
+
+                        {location.pathname === '/queue' ? (
+                            <div className='p-1 icon-border-active'>
+                                <i className="fa fa-bars  icon-click icon-active" onClick={() => navigateBack()}></i>
+                            </div>
+                        ) : (
+                            <div className='p-1'>
+                                <i className="fa fa-bars  icon-click icon-hover-white" onClick={() => navigateToQueue()}></i>
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        {playingViewActive ? (
+                            <div className='m-1'>
+                                <i className="fa fa-play icon-click icon-small icon-active p-1 icon-border-active" onClick={() => setPlayingViewActive(false)}></i>
+                            </div>
+                        ) : (
+                            <div className='p-1'>
+                                <i className="fa fa-play icon-click icon-small icon-hover-white p-1" style={{border: '1px solid white', borderRadius:'5px'}} onClick={() => setPlayingViewActive(true)}></i>
+                            </div>
+                        )}
+                    </div>
                 </Col>
                 <Col xs={2} className="invisible-text">
                     {/* <Button onClick={setSongsQueue}>
