@@ -48,8 +48,7 @@ const StudioTopNav = () => {
     };
 
     const handleUpload = () => {
-        localStorage.setItem('showUpload', 'true');
-        navigate('/studio/content');
+        navigate('/studio/upload');
     }
 
 
@@ -78,10 +77,22 @@ const StudioTopNav = () => {
                 </div>
                 <div className="d-flex align-items-center">
                     {/* <Button className="btn btn-outline-danger" onClick={() => { handleShow(); resetUpload(); setIsCreateAlbumButtonDisabled(false); }}> */}
-                    <Button onClick={() => handleUpload()} className="btn btn-outline-danger" >
-                        <i className="fa fa-plus-square px-2" aria-hidden="true" />
-                        CREATE
-                    </Button>
+                    <Dropdown className="custom-dropdown">
+                        <Dropdown.Toggle variant="outline-danger" id="dropdown-basic">
+                            <i className="fa fa-plus-square px-1" aria-hidden="true" />
+                            UPLOAD
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu variant="dark">
+                            <Dropdown.Item onClick={() => navigate(`/studio/upload`)}>
+                                <i className="fa fa-music mx-2 text-white"></i>
+                                Music
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => navigate('/studio/upload')}>
+                                <i className="fa fa-microphone mx-2 text-white"></i>
+                                Cast
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                     <div className="mx-3 clickable">
                         <Dropdown className="profile-dropdown">
                             <Dropdown.Toggle id="dropdown-basic">

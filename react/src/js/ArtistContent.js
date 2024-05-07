@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack, CloseButton, Card } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, Image, Stack, CloseButton } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -19,9 +19,6 @@ import Tabs from 'react-bootstrap/Tabs';
 import { AlbumsTable } from './tables/AlbumsTable';
 import { SongsTable } from './tables/SongsTable';
 
-
-// Context
-import StudioContext from "./context/StudioContext";
 
 
 const ArtistUpload = () => {
@@ -118,7 +115,7 @@ const ArtistUpload = () => {
       handleShow();
       localStorage.removeItem("showUpload");
     }
-
+    
     const token = localStorage.getItem("jwt_token");
     const handleBeforeUnload = (e) => {
       const files = localStorage.getItem('files');
@@ -310,12 +307,40 @@ const ArtistUpload = () => {
 
   return (
     <>
-      <div className="home-page d-flex vh-100 artist-studio fade-in">
-
-        <Container className="home-page-content mt-4" fluid>
-          <div className="p-3 text-white">
+      <div className="home-page d-flex vh-100 artist-studio">
+        {showConfirm && (
+          <Modal className="upload-modal" show={showConfirm}>
             <Modal.Header>
-              <Modal.Title>Upload Music</Modal.Title>
+              <Modal.Title>Confirm</Modal.Title>
+              <CloseButton onClick={() => setShowConfirm(false)} variant="white" />
+            </Modal.Header>
+            <Modal.Body>You have unsaved changes. Are you sure you want to close?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="light" onClick={() => setShowConfirm(false)}>
+                Cancel
+              </Button>
+              <Button variant="secondary" onClick={() => {
+                localStorage.removeItem('files');
+                setMediaFiles([]);
+                setShow(false);
+                setShowConfirm(false);
+              }}>
+                Discard
+              </Button>
+              <Button variant="danger" onClick={() => { /* Save as draft logic here */ setShow(false); setShowConfirm(false); }}>
+                Save as Draft
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        )}
+
+        <Modal className="upload-modal" show={show} size='lg' onHide={handleClose} backdrop="static"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered>
+          <div className="p-3">
+            <Modal.Header>
+              <Modal.Title>Create Album</Modal.Title>
+              <CloseButton onClick={handleClose} variant="white" />
             </Modal.Header>
             <Modal.Body>
               {uploadStep === 0 ? (
@@ -394,6 +419,30 @@ const ArtistUpload = () => {
               )}
             </Modal.Footer>
           </div>
+        </Modal>
+
+        <Container className="home-page-content mt-4 fade-in" fluid>
+          <Row className="">
+            <Col className="px-5 py-3">
+              <Row>
+                <h4 className="home-page-text px-3">
+                  Artist Content
+                </h4>
+              </Row>
+              <Tabs
+                defaultActiveKey="albums"
+                id="uncontrolled-tab-example"
+                className="mb-3 artist sticky-tab"
+              >
+                <Tab eventKey="albums" title="Albums">
+                  <AlbumsTable />
+                </Tab>
+                <Tab eventKey="songs" title="Songs">
+                  <SongsTable />
+                </Tab>
+              </Tabs>
+            </Col>
+          </Row>
         </Container>
       </div>
       <ToastContainer />

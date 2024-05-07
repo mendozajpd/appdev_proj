@@ -19,8 +19,10 @@ import ArtistPage from "./js/ArtistPage";
 import PlaylistPage from "./js/PlaylistPage";
 import QueuePage from "./js/QueuePage";
 import EmptyPage from "./js/EmptyPage";
+import ArtistContent from "./js/ArtistContent";
 import ArtistUpload from "./js/ArtistUpload";
 import ArtistDashboard from "./js/ArtistDashboard";
+import StudioAlbumPage from "./js/StudioAlbumPage";
 
 // Layouts
 import RootLayout from "./js/layouts/RootLayout";
@@ -67,9 +69,10 @@ function App() {
           </Route>
           <Route path="studio" element={<StudioLayout />}>
             <Route index element={<ArtistDashboard />} />
-            <Route path="content" element={<ArtistUpload />} />
-            <Route path="playlist/:id" element={<PlaylistPage />} />
+            <Route path="content" element={<ArtistContent />} />
+            <Route path="upload" element={<ArtistUpload />} />
             <Route path="queue" element={<QueuePage />} />
+            <Route path="album/:id" element={<StudioAlbumPage />} />
           </Route>
           <Route path="/" element={<RootLayout />}>
             <Route path="/login" element={<Login />} />

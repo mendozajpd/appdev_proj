@@ -1,16 +1,13 @@
-import '../../css/dataTables.css'
-import '../../css/index.css';
-import React, { Component, useEffect, useRef, useState } from "react";
-import { Container, Image, Stack } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
-import BACKEND_URL from '../../config';
+import React, { useEffect, useState } from "react";
+import { Container, Image } from 'react-bootstrap';
+import { useTable } from 'react-table';
 import axios from 'axios';
-
+import BACKEND_URL from '../../config';
 
 export function AlbumsTable() {
-
     const [albums, setAlbums] = useState([]);
     const token = localStorage.getItem("jwt_token");
+
     const fetchUsers = async () => {
         try {
             axios.get(`${BACKEND_URL}/api/albums`, {
@@ -20,7 +17,6 @@ export function AlbumsTable() {
             })
                 .then(response => {
                     setAlbums(response.data);
-                    //console.log(response.data);
                 })
                 .catch(error => {
                     console.error('There was an error!', error);
@@ -30,66 +26,89 @@ export function AlbumsTable() {
         }
     };
 
-    const $ = require('jquery')
-    $.DataTable = require('datatables.net')
-    const tableRef = useRef();
-
     useEffect(() => {
         fetchUsers();
     }, []);
 
+    const data = React.useMemo(() => albums, [albums]);
 
-    useEffect(() => {
-        if (!albums) {
-            return;
-        }
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: "No.",
+                accessor: (row, index) => index + 1,
+            },
+            {
+                Header: "Album Cover",
+                accessor: 'cover_photo_hash',
+                Cell: ({ value }) => <Image src={`${BACKEND_URL}/storage/album_images/${value}`} alt="Album Cover" style={{ width: 50, height: 50 }} />,
+            },
+            {
+                Header: "Album",
+                accessor: 'album_name',
+            },
+            {
+                Header: "Description",
+                accessor: 'album_description',
+            },
+            {
+                Header: "Date",
+                accessor: 'created_at',
+                Cell: ({ row: { original } }) => {
+                    const date = new Date(original.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    const status = original.is_published ? 'Published' : 'Draft';
+                    return (
+                        <div>
+                            {date}
+                            <div className="text-gray">
+                                {status}
+                            </div>
+                        </div>
+                    );
+                },
+            },
+            {
+                Header: "Release Date",
+                accessor: 'release_date',
+                Cell: ({ value }) => value ? new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A',
+            },
+        ],
+        []
+    );
 
-        //console.log(tableRef.current)
-        const table = $(tableRef.current).
-            DataTable({
-                data: albums,
-                slect: true,
-                columns: [
-                    {
-                        title: "No.",
-                        data: null,
-                        render: (data, type, row, meta) => meta.row + 1
-                    },
-                    {
-                        title: "Album Cover",
-                        data: 'cover_photo_hash',
-                        render: data => `<Image src="${BACKEND_URL}/storage/album_images/${data}" alt="Album Cover" style="width: 50px; height: 50px;">`
-                    },
-                    { data: 'album_name', title: "Album" },
-                    { data: 'album_description', title: "Description" },
-                    {
-                        title: "Date",
-                        data: null,
-                        render: (data, type, row) => {
-                            const status = row.is_published ? 'Published' : 'Draft';
-                            const date = new Date(row.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                            return `<Stack gap={2}><div>${date}</div><div style="color: gray;">${status}</div></Stack>`;
-                        }
-                    },
-                    {
-                        data: 'release_date',
-                        title: "Release Date",
-                        render: data => data ? new Date(data).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'
-                    }
-                ],
-                destroy: true,
-            });
-
-        return function () {
-            //console.log("Table destroyed")
-            table.destroy()
-        }
-    }, [albums]);
+    const {
+        getTableProps,
+        getTableBodyProps,
+        headerGroups,
+        rows,
+        prepareRow,
+    } = useTable({ columns, data });
 
     return (
         <Container className='custom-table' fluid>
-            <div>
-                <table className='display' width="100%" ref={tableRef} />
-            </div>
-        </Container>)
+            <table {...getTableProps()} style={{ width: '100%', textAlign: 'left' }}>
+                <thead>
+                    {headerGroups.map(headerGroup => (
+                        <tr {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map(column => (
+                                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                            ))}
+                        </tr>
+                    ))}
+                </thead>
+                <tbody {...getTableBodyProps()}>
+                    {rows.map(row => {
+                        prepareRow(row);
+                        return (
+                            <tr {...row.getRowProps()}>
+                                {row.cells.map(cell => (
+                                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                ))}
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </Container>
+    );
 }

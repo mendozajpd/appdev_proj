@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Row, Col, Image, Stack, CloseButton, Card } from "react-bootstrap";
+import { Form, Button, Container, Row, Dropdown, Col, Image, Stack, CloseButton, Card } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -145,6 +145,9 @@ const ArtistUpload = () => {
 
 
   const navigate = useNavigate();
+
+  // DROPDOWN
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const buttonStyle = {
     marginTop: "30px",
@@ -314,51 +317,146 @@ const ArtistUpload = () => {
 
         <Container className="home-page-content mt-4" fluid>
           <div className="p-3 text-white">
-            <Modal.Header>
-              <Modal.Title>Upload Music</Modal.Title>
+            <Modal.Header className="py-3">
+              <Modal.Title>Album Details</Modal.Title>
+              <div>
+                <Button variant="outline-light" className="no-hover" style={{ border: 'none' }}>
+                  UNDO CHANGES
+                </Button>
+                <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={handleCreateAlbum}>
+                  SAVE
+                </Button>
+              </div>
             </Modal.Header>
             <Modal.Body>
-              {uploadStep === 0 ? (
-                <>
-                  <Row className='py-3 d-flex px-3 bot-line' >
-                    <Col className="d-flex align-items-center justify-content-center py-2">
-                      <Row className="album-cover-preview d-flex justify-content-center">
-                        <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
-                      </Row>
-                    </Col>
-                    <Col xs={12} sm={12} xl={7}>
-                      <Form onSubmit={handleCreateAlbum}>
-                        <Stack direction="vertical" className="px-3" gap={1}>
-                          <Form.Group controlId="album_name">
-                            <Form.Control className="input-style" type="text" placeholder="Album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
-                          </Form.Group>
-                          <Form.Group controlId="album_description">
-                            <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} />
-                          </Form.Group>
-                          <Form.Group controlId="collaborator_names">
-                            <Form.Label>Collaborators</Form.Label>
-                            <Form.Control className="input-style" type="text" placeholder="Artist names" value={artistNames} onChange={e => setArtistNames(e.target.value)} />
-                          </Form.Group>
-                        </Stack>
-                      </Form>
-                    </Col>
+              <Row className="gap-2">
+                <Col className="">
+                  <div className="d-flex justify-content-center py-2">
+                    <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
+                  </div>
+                  <div>
+                    <Form onSubmit={handleCreateAlbum}>
+                      <Form.Group controlId="album_name">
+                        <Form.Control className="input-style" type="text" placeholder="Album title (Required)" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
+                      </Form.Group>
+                      <Form.Group controlId="album_description" className="py-2">
+                        <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} />
+                      </Form.Group>
+                      <Form.Group controlId="collaborator_names">
+                        <Form.Label>Collaborators</Form.Label>
+                        <Form.Control className="input-style" type="text" placeholder="Artist names" value={artistNames} onChange={e => setArtistNames(e.target.value)} />
+                      </Form.Group>
+                    </Form>
+                  </div>
+                  <div className="m-2 ">
+                    <div>
+                      Visibility
+                    </div>
+                    <Dropdown
+                      className="d-inline"
+                      autoClose="outside"
+                      show={showDropdown}
+                      onToggle={(isOpen) => setShowDropdown(isOpen)}
+                    >
+                      <Dropdown.Toggle className="input-style" id="dropdown-autoclose-outside">
+                        Public
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu variant="dark" style={{ width: '20rem' }}>
+                        <div className="mx-2">
+                          <Form>
+                            <div key={`default-radio`} className="mb-3">
+                              <Form.Check
+                                type={'radio'}
+                                id={`radio-1`}
+                                name={`group`}
+                                label={`Unlisted`}
+                              />
+                              <Form.Check
+                                type={'radio'}
+                                id={`radio-2`}
+                                name={`group`}
+                                label={`Public`}
+                              />
+                            </div>
+                          </Form>
+                        </div>
+                        <div className="px-3 justify-content-end d-flex">
+                          <Button
+                            variant="outline-light"
+                            className="no-hover"
+                            style={{ border: 'none' }}
+                            onClick={() => setShowDropdown(false)}
+                          >
+                            Cancel
+                          </Button>
+                          <Button variant="danger">
+                            Save
+                          </Button>
+                        </div>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                </Col>
+                <Col xs={8} style={{ height: '35rem' }} className="overflow-auto media-dropzone">
+                  <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
+                </Col>
+              </Row>
+              <Row className="justify-content-end">
+                {mediaFiles.length > 0 ? (
+                  <>
+                    {mediaFiles.length == 1 ? (
+                      <>
+                        {mediaFiles.length} Song uploaded
+                      </>
+                    ) :
+                      (
+                        <>
+                          {mediaFiles.length} Songs uploaded
+                        </>
+                      )}
+                  </>
+                ) : (
+                  <>
+                    No Songs uploaded
+                  </>
+                )}
+              </Row>
+              {/* <Row className='py-3 d-flex px-3 bot-line' >
+                <Col className="d-flex align-items-center justify-content-center py-2">
+                  <Row className="album-cover-preview d-flex justify-content-center">
+                    <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
                   </Row>
-                  <Row className="d-flex justify-content-center py-3">
-                    <Col className="d-flex justify-content-center flex-column">
-                      <Row>
-                        <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
-                      </Row>
-                    </Col>
+                </Col>
+                <Col xs={12} sm={12} xl={7}>
+                  <Form onSubmit={handleCreateAlbum}>
+                    <Stack direction="vertical" className="px-3" gap={1}>
+                      <Form.Group controlId="album_name">
+                        <Form.Control className="input-style" type="text" placeholder="Album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
+                      </Form.Group>
+                      <Form.Group controlId="album_description">
+                        <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} />
+                      </Form.Group>
+                      <Form.Group controlId="collaborator_names">
+                        <Form.Label>Collaborators</Form.Label>
+                        <Form.Control className="input-style" type="text" placeholder="Artist names" value={artistNames} onChange={e => setArtistNames(e.target.value)} />
+                      </Form.Group>
+                    </Stack>
+                  </Form>
+                </Col>
+              </Row>
+              <Row className="d-flex justify-content-center py-3">
+                <Col className="d-flex justify-content-center flex-column">
+                    <Row>
+                  <div className="media-dropzone overflow-auto">
+
+                    </div>
+                    <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
                   </Row>
-                </>
-              ) : uploadStep === 1 ? (
-                <div>Page 1 (prevButton, nextButton)</div>
-              ) : uploadStep === 2 ? (
-                <div>Page 2 (prevButton)</div>
-              ) : ''}
+                </Col>
+              </Row> */}
             </Modal.Body>
             <Modal.Footer className="justify-content-between">
-              {mediaFiles.length > 0 ? (
+              {/* {mediaFiles.length > 0 ? (
                 <>
                   {mediaFiles.length == 1 ? (
                     <>
@@ -375,7 +473,7 @@ const ArtistUpload = () => {
                 <>
                   No Songs uploaded
                 </>
-              )}
+              )} */}
               {uploadStep > 0 && (
                 <Button variant="secondary" onClick={handleBack}>
                   Back
@@ -383,9 +481,7 @@ const ArtistUpload = () => {
               )}
               {uploadStep < 2 ? (
                 <>
-                  <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={handleCreateAlbum}>
-                    Create Album
-                  </Button>
+
                 </>
               ) : (
                 <Button variant="secondary" onClick={handleClose}>
@@ -394,8 +490,8 @@ const ArtistUpload = () => {
               )}
             </Modal.Footer>
           </div>
-        </Container>
-      </div>
+        </Container >
+      </div >
       <ToastContainer />
     </>
   );
