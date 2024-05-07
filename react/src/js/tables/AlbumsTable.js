@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Image } from 'react-bootstrap';
 import { useTable } from 'react-table';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import BACKEND_URL from '../../config';
 
@@ -8,7 +9,9 @@ export function AlbumsTable() {
     const [albums, setAlbums] = useState([]);
     const token = localStorage.getItem("jwt_token");
 
-    const fetchUsers = async () => {
+    const navigate = useNavigate();
+
+    const fetchAlbums = async () => {
         try {
             axios.get(`${BACKEND_URL}/api/albums`, {
                 headers: {
@@ -27,7 +30,7 @@ export function AlbumsTable() {
     };
 
     useEffect(() => {
-        fetchUsers();
+        fetchAlbums();
     }, []);
 
     const data = React.useMemo(() => albums, [albums]);
@@ -37,15 +40,17 @@ export function AlbumsTable() {
             {
                 Header: "No.",
                 accessor: (row, index) => index + 1,
+                width: '10%',
             },
             {
-                Header: "Album Cover",
+                Header: "Album",
+                width: '5%',
                 accessor: 'cover_photo_hash',
                 Cell: ({ value }) => <Image src={`${BACKEND_URL}/storage/album_images/${value}`} alt="Album Cover" style={{ width: 50, height: 50 }} />,
             },
             {
-                Header: "Album",
                 accessor: 'album_name',
+                width: '20%',
             },
             {
                 Header: "Description",
@@ -100,9 +105,9 @@ export function AlbumsTable() {
                     {rows.map(row => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()}>
+                            <tr {...row.getRowProps()} onClick={() => navigate(`/studio/album/${row.original.album_id}`)}>
                                 {row.cells.map(cell => (
-                                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                                    <td {...cell.getCellProps()} style={{ width: cell.column.width }}>{cell.render('Cell')}</td>
                                 ))}
                             </tr>
                         );

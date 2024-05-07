@@ -1378,10 +1378,6 @@ h1 span:hover {
 
 
 
-/* CUSTOM TABLE */
-.custom-table {
-  color: #cfcfcf;
-}
 
 
 /* ICONS */
@@ -1559,6 +1555,21 @@ h1 span:hover {
 .duration-row {
   padding: 15px;
   width: 90%;
+}
+
+/* REACT DATATABLE HOVER */
+.custom-table {
+  color: #c7c7c7;
+  /* overflow-x: auto; */
+}
+
+.custom-table th {
+  border-bottom: 1px solid #fff;
+  padding: 15px;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #adadad50 !important;
 }
 
 
