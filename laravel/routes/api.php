@@ -9,6 +9,8 @@ use App\Http\Controllers\ArtistController;
 use App\Http\Controllers\SongController;
 use App\Http\Controllers\PlaylistController;
 use App\Http\Controllers\ListenController;
+use App\Http\Controllers\PodcastController;
+use App\Http\Controllers\VideocastController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +78,22 @@ Route::get('playlist/{id}/songs', [PlaylistController::class, 'getPlaylistSongs'
 Route::post('playlist/{playlist}/{song}/add', [PlaylistController::class, 'addSongToPlaylist']);
 Route::delete('playlist/{playlist}/{song}/remove', [PlaylistController::class, 'removeSongFromPlaylist']);
 Route::delete('playlist/{id}/delete', [PlaylistController::class, 'destroy']);
+
+// PodcastController Routes
+Route::get('podcasts', [PodcastController::class, 'index']);
+Route::get('podcasts/user', [PodcastController::class, 'indexUserPodcasts']);
+Route::get('podcasts/{id}', [PodcastController::class, 'show']);
+Route::post('podcasts', [PodcastController::class, 'store']);
+Route::put('podcasts/{podcast}', [PodcastController::class, 'update']);
+Route::delete('podcasts/{podcast}', [PodcastController::class, 'destroy']);
+
+// VideocastController Routes
+Route::get('videocasts', [VideocastController::class, 'index']);
+Route::get('videocasts/{videocast}', [VideocastController::class, 'show']);
+Route::post('videocasts', [VideocastController::class, 'store']);
+Route::put('videocasts/{videocast}', [VideocastController::class, 'update']);
+Route::delete('videocasts/{videocast}', [VideocastController::class, 'destroy']);
+
 
 Route::group([
 
