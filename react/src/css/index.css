@@ -715,13 +715,11 @@ h1 span:hover {
 .user-sidebar {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
-  /* make scrollbar transparent by default */
   z-index: 0;
 }
 
 .user-sidebar:hover {
   scrollbar-color: #a7a7a7 #272729;
-  /* change scrollbar color on hover */
 }
 
 .user-sidebar .head-div {
@@ -734,20 +732,16 @@ h1 span:hover {
 
 .user-sidebar::-webkit-scrollbar-track {
   background: #272729;
-  /* match Firefox track color */
 }
 
 .user-sidebar::-webkit-scrollbar-thumb {
   background-color: transparent;
-  /* make scrollbar transparent by default */
   border-radius: 20px;
   border: 3px solid transparent;
-  /* creates padding around scroll thumb with the same color as track */
 }
 
 .user-sidebar:hover::-webkit-scrollbar-thumb {
   background-color: #a7a7a7;
-  /* change scrollbar color on hover */
   border: 3px solid #272729;
 }
 
@@ -816,7 +810,7 @@ h1 span:hover {
     linear-gradient(to bottom, rgb(0, 0, 0) 0%, rgb(63, 63, 63) 100%) no-repeat center fixed;
   background-size: cover, cover !important;
   height: 100vh;
-  
+
 }
 
 .search-bar {
@@ -854,6 +848,45 @@ h1 span:hover {
   width: 10px;
   height: 5px;
   border-radius: 10px;
+}
+
+/* Playing View */
+.playing-view {
+  background: #0000009e;
+  border-radius: 10px;
+  padding: 10px;
+  color: #fff;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  z-index: 0;
+}
+
+.playing-view-description {
+  background: #ffffff25;
+}
+
+.playing-view:hover {
+  scrollbar-color: #a7a7a7 #272729;
+  transition: 0.3s;
+}
+
+.playing-view::-webkit-scrollbar {
+  width: 5px;
+}
+
+.playing-view::-webkit-scrollbar-track {
+  background: #272729;
+}
+
+.playing-view::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 20px;
+  border: 3px solid transparent;
+}
+
+.playing-view:hover::-webkit-scrollbar-thumb {
+  background-color: #a7a7a7;
+  border: 3px solid #272729;
 }
 
 /* Track */
@@ -1157,6 +1190,7 @@ h1 span:hover {
   border: 1px solid #a7a7a740 !important;
   color: #efefef !important;
 }
+
 .studio-artist-name {
   font-weight: normal;
   color: #a7a7a7
@@ -1584,9 +1618,22 @@ h1 span:hover {
   background-color: #44444471 !important;
 }
 
-.no-hover:hover, .no-hover:focus {
+.no-hover:hover,
+.no-hover:focus {
   background-color: initial !important;
   color: #fff !important;
+}
+
+.display-7 {
+  font-size: 1.5rem;
+}
+
+.text-truncate-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* DARK THEME */
@@ -1611,8 +1658,13 @@ h1 span:hover {
 }
 
 @keyframes fadeIn {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes bounce {

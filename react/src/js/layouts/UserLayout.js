@@ -1,10 +1,11 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Container, CloseButton, Image, Button } from "react-bootstrap";
 import { useEffect, useState, useContext } from "react";
 import MusicPlayer from "../MusicPlayer";
 import axios from "axios";
 import BACKEND_URL from "../../config";
 import UserSidebar from "../UserSidebar";
+import UserPlayingView from "../UserPlayingView.js";
 
 // Context
 import PlayerContext from "../context/PlayerContext";
@@ -19,7 +20,7 @@ const UserLayout = () => {
 
     const navigate = useNavigate();
 
-    
+
     const { songID } = useContext(PlayerContext);
     const [queue, setQueue] = useState();
 
@@ -59,9 +60,11 @@ const UserLayout = () => {
                 <Container className="g-0 overflow-hidden" fluid>
                     <div className="home-page-content">
                         <Outlet />
-                        <MusicPlayer/>
+                        <MusicPlayer />
                     </div>
                 </Container>
+                {/* PLAYING VIEW */}
+                <UserPlayingView />
             </UserSidebarContext.Provider>
         </div>
     );
