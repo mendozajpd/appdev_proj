@@ -51,7 +51,7 @@ function Basic({ uploadText, uploadTextClass, iconClass, iconSize, activeStyle, 
     }), [iconSize, isDragActive]);
 
     return (
-        <Row {...getRootProps({ className: 'dropzone custom-dropzone vh-20', style: isHovered ? hoveredStyle : style })} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <Row {...getRootProps({ className: 'dropzone custom-dropzone', style: isHovered ? hoveredStyle : style })} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
             <input {...getInputProps()} />
             <Col className='d-flex justify-content-center align-items-center h-100 flex-column'>
                 {

@@ -28,12 +28,12 @@ export const handleCreateAlbum = async ( mediaFiles,) => {
     }
 };
 
-export const getPodcasts = async () => {
+export const getAlbumDetails = async (albumID) => {
     try {
-        const response = await axiosClient.get('/podcasts');
+        const response = await axiosClient.get(`/album/${albumID}/details`);
         return response.data;
     } catch (error) {
-        console.error('Error during getting podcasts:', error);
+        console.error('There was an error!', error);
         throw error;
     }
 }

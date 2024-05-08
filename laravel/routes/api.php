@@ -50,6 +50,7 @@ Route::get('albums', [ArtistController::class, 'getAlbums']);
 Route::get('artists', [ArtistController::class, 'getArtists']);
 Route::get('/artists/{id}', [ArtistController::class, 'getArtist']);
 Route::get('/songs/{id}', [ArtistController::class, 'getArtistSongs']);
+Route::get('/album/{id}/details', [ArtistController::class, 'getAlbumWithSongs']);
 Route::get('/albums/{id}', [ArtistController::class, 'getArtistAlbums']);
 Route::post('upload-song', [ArtistController::class, 'uploadSong']);
 Route::post('create/album', [ArtistController::class, 'createAlbum']);

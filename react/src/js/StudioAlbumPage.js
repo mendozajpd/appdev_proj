@@ -11,20 +11,11 @@ import AlbumCoverDropzone from './components/AlbumCoverDropzone';
 import MediaDropzone from './components/MediaDropzone';
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AlbumItem from './items/AlbumItem';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
 
-// TEMP DATATABLE
-import { AlbumsTable } from './tables/AlbumsTable';
-import { SongsTable } from './tables/SongsTable';
+import { getAlbumDetails } from "./services/StudioServices";
 
 
-// Context
-import StudioContext from "./context/StudioContext";
-
-
-const ArtistUpload = () => {
+const StudioAlbumPage = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [remainingTime, setRemainingTime] = useState(0);
@@ -40,24 +31,18 @@ const ArtistUpload = () => {
   // SONGS
   const [songs, setSongs] = useState([]);
 
-  // ALBUMS
-  const [albums, setAlbums] = useState([]);
-  const [selectedAlbum, setSelectedAlbum] = useState('');
+  // ALBUM
+  const [album, setAlbum] = useState([]);
 
   // MODAL
   const [show, setShow] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
 
+  // FILES
+
   const handleClose = () => {
-    const files = localStorage.getItem('files');
-    localStorage.removeItem('showUpload');
-    setShowUpload(false);
-    if (files) {
-      setShowConfirm(true);
-    } else {
-      setShow(false);
-    }
+    setShow(false);
   };
   const handleShow = () => setShow(true);
 
@@ -113,6 +98,9 @@ const ArtistUpload = () => {
   }
 
   useEffect(() => {
+
+    setAlbumAndSongs();
+
     const showUpload = localStorage.getItem("showUpload");
     if (showUpload === 'true') {
       handleShow();
@@ -143,6 +131,17 @@ const ArtistUpload = () => {
 
   }, [showUpload, id, isVerified]);
 
+  const setAlbumAndSongs = async () => {
+    try {
+      const albumDetails = await getAlbumDetails(id);
+      setAlbum(albumDetails.album);
+      setSongs(albumDetails.songs);
+
+      console.log(albumDetails)
+    } catch (error) {
+      console.error('Failed to fetch album details:', error);
+    }
+  }
 
   const navigate = useNavigate();
 
@@ -199,7 +198,6 @@ const ArtistUpload = () => {
     setAlbumPhoto(null);
     setSongTitle('');
     setSongFile(null);
-    setSelectedAlbum('');
     setSelectedGenres({});
   };
 
@@ -358,7 +356,7 @@ const ArtistUpload = () => {
                       show={showDropdown}
                       onToggle={(isOpen) => setShowDropdown(isOpen)}
                     >
-                      <Dropdown.Toggle className="input-style" id="dropdown-autoclose-outside" style={{width: '100%'}}>
+                      <Dropdown.Toggle className="input-style" id="dropdown-autoclose-outside" style={{ width: '100%' }}>
                         Public
                       </Dropdown.Toggle>
                       <Dropdown.Menu variant="dark" style={{ width: '20rem' }}>
@@ -421,73 +419,8 @@ const ArtistUpload = () => {
                   </>
                 )}
               </Row>
-              {/* <Row className='py-3 d-flex px-3 bot-line' >
-                <Col className="d-flex align-items-center justify-content-center py-2">
-                  <Row className="album-cover-preview d-flex justify-content-center">
-                    <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
-                  </Row>
-                </Col>
-                <Col xs={12} sm={12} xl={7}>
-                  <Form onSubmit={handleCreateAlbum}>
-                    <Stack direction="vertical" className="px-3" gap={1}>
-                      <Form.Group controlId="album_name">
-                        <Form.Control className="input-style" type="text" placeholder="Album title" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
-                      </Form.Group>
-                      <Form.Group controlId="album_description">
-                        <Form.Control className="textarea-style input-style" as="textarea" rows={3} placeholder="Description" value={albumDescription} onChange={e => setAlbumDescription(e.target.value)} />
-                      </Form.Group>
-                      <Form.Group controlId="collaborator_names">
-                        <Form.Label>Collaborators</Form.Label>
-                        <Form.Control className="input-style" type="text" placeholder="Artist names" value={artistNames} onChange={e => setArtistNames(e.target.value)} />
-                      </Form.Group>
-                    </Stack>
-                  </Form>
-                </Col>
-              </Row>
-              <Row className="d-flex justify-content-center py-3">
-                <Col className="d-flex justify-content-center flex-column">
-                    <Row>
-                  <div className="media-dropzone overflow-auto">
-
-                    </div>
-                    <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
-                  </Row>
-                </Col>
-              </Row> */}
             </Modal.Body>
             <Modal.Footer className="justify-content-between">
-              {/* {mediaFiles.length > 0 ? (
-                <>
-                  {mediaFiles.length == 1 ? (
-                    <>
-                      {mediaFiles.length} Song uploaded
-                    </>
-                  ) :
-                    (
-                      <>
-                        {mediaFiles.length} Songs uploaded
-                      </>
-                    )}
-                </>
-              ) : (
-                <>
-                  No Songs uploaded
-                </>
-              )} */}
-              {uploadStep > 0 && (
-                <Button variant="secondary" onClick={handleBack}>
-                  Back
-                </Button>
-              )}
-              {uploadStep < 2 ? (
-                <>
-
-                </>
-              ) : (
-                <Button variant="secondary" onClick={handleClose}>
-                  Ok
-                </Button>
-              )}
             </Modal.Footer>
           </div>
         </Container >
@@ -497,4 +430,4 @@ const ArtistUpload = () => {
   );
 };
 
-export default ArtistUpload;
+export default StudioAlbumPage;
