@@ -11,7 +11,7 @@ import PlayerContext from "./context/PlayerContext";
 
 const UserPlayingView = () => {
 
-    const { queue, currentQueue, setPlayingViewActive, isPlaying } = useContext(PlayerContext);
+    const { queue, currentQueue, setPlayingViewActive, hasVideo } = useContext(PlayerContext);
 
     const [songDetails, setSongDetails] = useState(null);
 
@@ -61,29 +61,29 @@ const UserPlayingView = () => {
                 <CloseButton variant="white" onClick={() => { setPlayingViewActive(false) }} />
             </div>
             {songDetails ? <>
-                {/* <div className="py-5 justify-content-center">
-                    <Image src={`${BACKEND_URL}/storage/album_images/${songDetails.album.cover_photo_hash}`} alt="Album Cover" style={{ width: '100%', height: '100%' }} />
-                    <ReactPlayer url='https://www.youtube.com/watch?v=LXb3EKWsInQ' />
-                </div> */}
-                {/* <div className="my-5">
-                    <Image src="https://via.placeholder.com/400x250" alt="Album Cover" style={{ width: '100%', height: '100%' }} />
-                </div> */}
-                <div className='player-wrapper my-5 d-flex justify-content-end align-items-'>
-                    <ReactPlayer
-                        ref={playerRef}
-                        className='react-player'
-                        url={vid}
-                        width='100%'
-                        height='100%'
-                        controls={isFullscreen}
-                        playing
-                    />
-                </div>
-                <div className="d-flex justify-content-end">
-                    <Button variant="outline-light" onClick={handleFullscreen}>
-                        <i className="fa fa-arrows-alt display-7" />
-                    </Button>
-                </div>
+                {hasVideo ?
+                    <>
+                        <div className='player-wrapper my-5 d-flex justify-content-end align-items-'>
+                            <ReactPlayer
+                                ref={playerRef}
+                                className='react-player'
+                                url={vid}
+                                width='100%'
+                                height='100%'
+                                controls={isFullscreen}
+                            />
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <Button variant="outline-light" onClick={handleFullscreen}>
+                                <i className="fa fa-arrows-alt display-7" />
+                            </Button>
+                        </div>
+                    </>
+                    :
+                    <div className="py-5 justify-content-center">
+                        <Image src={`${BACKEND_URL}/storage/album_images/${songDetails.album.cover_photo_hash}`} alt="Album Cover" style={{ width: '100%', height: '100%' }} />
+                    </div>
+                }
                 <div className="d-flex justify-content-between py-3">
                     <div className="">
                         <div className="display-7 text-truncate" style={{ maxWidth: '15rem' }}>

@@ -34,15 +34,17 @@ import PlayerContext from "./js/context/PlayerContext";
 
 function App() {
 
-  const [isPlaying, setIsPlaying] = useState(true);
   const [currentSongName, setCurrentSongName] = useState(null);
   const [currentSongUrl, setCurrentSongUrl] = useState(null);
   const [currentPlaylist, setCurrentPlaylist] = useState(null);
-  const [playingViewActive, setPlayingViewActive] = useState(false);
+  const [playingViewActive, setPlayingViewActive] = useState(true);
   const [songID, setSongID] = useState(null);
   const [queue, setQueue] = useState([]);
   const [currentQueue, setCurrentQueue] = useState(-1);
-
+  const [hasVideo, setHasVideo] = useState(false);
+  const [timeOnPlay, setTimeOnPlay] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  
   return (
     <Router>
       <ToastContainer />
@@ -60,7 +62,13 @@ function App() {
         currentPlaylist,
         setCurrentPlaylist,
         playingViewActive,
-        setPlayingViewActive
+        setPlayingViewActive,
+        hasVideo,
+        setHasVideo,
+        timeOnPlay,
+        setTimeOnPlay,
+        isPlaying,
+        setIsPlaying
       }}>
         <Routes>
           <Route path="/" element={<UserLayout />}>

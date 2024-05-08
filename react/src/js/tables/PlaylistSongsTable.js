@@ -155,7 +155,7 @@ export function PlaylistSongsTable() {
                             </div>
                             <div className="playlist-song-author d-inline" onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(`/artist/${row.original.user_id}`);
+                                navigate(`/user/${row.original.user_id}`);
                             }}>
                                 {row.original.user.name}
                             </div>

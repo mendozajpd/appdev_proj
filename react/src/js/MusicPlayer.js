@@ -5,13 +5,14 @@ import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import axios from 'axios';
 import BACKEND_URL from '../config';
+import vid from '../temp/Download.mp4';
 
 import PlayerContext from "./context/PlayerContext";
 
 
 const MusicPlayer = () => {
 
-    const { queue, currentQueue, setCurrentQueue, playingViewActive, setPlayingViewActive } = useContext(PlayerContext);
+    const { queue, currentQueue, setCurrentQueue, playingViewActive, setPlayingViewActive, setTimeOnPlay, isPlaying, setIsPlaying} = useContext(PlayerContext);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -82,7 +83,6 @@ const MusicPlayer = () => {
         }
     };
 
-    const [isPlaying, setIsPlaying] = useState(false);
 
     const handlePlay = () => {
         setIsPlaying(true);
@@ -126,6 +126,7 @@ const MusicPlayer = () => {
                         <>
                             <div>
                                 <Image src={`${BACKEND_URL}/storage/album_images/${songDetails.album.cover_photo_hash}`} alt="Album Cover" style={{ width: '50px', height: '50px' }} rounded />
+                                {/* <ReactPlayer light={<img src='https://example.com/thumbnail.png' alt='Thumbnail' />} /> */}
                             </div>
                             <div>
                                 <div className="player-song-title d-flex align-items-center px-2 text-truncate">{songDetails.display_name}</div>
@@ -137,8 +138,9 @@ const MusicPlayer = () => {
                 <Col xs={6}>
                     <AudioPlayer
                         src={currentSong}
-                        onPlay={handlePlay}
-                        onPause={handlePause}
+                        onPlay={(time) => {handlePlay(); setTimeOnPlay(time.target.currentTime);}}
+                        onSeeked={(time) => {setTimeOnPlay(time.target.currentTime)}}
+                        onPause={(time) => {handlePause(); setTimeOnPlay(time.target.currentTime)}}
                         onEnded={handleNextSong}
                         showDownloadProgress={false}
                         showSkipControls={true}
@@ -147,12 +149,13 @@ const MusicPlayer = () => {
                         className='user-player h-100'
                         onClickNext={handleNextSong}
                         onClickPrevious={handlePreviousSong}
-                        listenInterval={5000}
-                        onListen={() => {
+                        listenInterval={1000}
+                        onListen={(time) => {
                             if (isPlaying) {
                                 setSongListenedCount(songListenedCount + 1);
-
-                                if (songListenedCount >= 1) {
+                                // setCurrentTime(time.target.currentTime)
+                                // console.log('Current time:', time.target.currentTime);
+                                if (songListenedCount >= 5) {
                                     handleSongListened();
                                 }
                             }
