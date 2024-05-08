@@ -34,6 +34,7 @@ import PlayerContext from "./js/context/PlayerContext";
 
 function App() {
 
+  const [isPlaying, setIsPlaying] = useState(true);
   const [currentSongName, setCurrentSongName] = useState(null);
   const [currentSongUrl, setCurrentSongUrl] = useState(null);
   const [currentPlaylist, setCurrentPlaylist] = useState(null);

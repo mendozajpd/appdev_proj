@@ -1,19 +1,32 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useRef } from "react";
 import { Container, CloseButton, Image, Button } from "react-bootstrap";
 import axios from "axios";
 import BACKEND_URL from "../config";
+import ReactPlayer from 'react-player'
+import screenfull from 'screenfull';
+import vid from "../temp/Download.mp4"
+import music from "../temp/music.mp3"
 
 import PlayerContext from "./context/PlayerContext";
 
 const UserPlayingView = () => {
 
-    const { queue, currentQueue, setPlayingViewActive } = useContext(PlayerContext);
+    const { queue, currentQueue, setPlayingViewActive, isPlaying } = useContext(PlayerContext);
 
     const [songDetails, setSongDetails] = useState(null);
 
     const handleSongDetails = (song) => {
         setSongDetails(song);
     }
+
+    const playerRef = useRef(null);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    const handleFullscreen = () => {
+        if (screenfull.isEnabled) {
+            screenfull.toggle(playerRef.current.wrapper);
+        }
+    };
 
     useEffect(() => {
         if (queue[currentQueue]) {
@@ -24,6 +37,18 @@ const UserPlayingView = () => {
                     handleSongDetails(response.data);
                     console.log(response.data)
                 })
+        }
+
+        if (screenfull.isEnabled) {
+            const handleScreenfullChange = () => {
+                setIsFullscreen(screenfull.isFullscreen);
+            };
+
+            screenfull.on('change', handleScreenfullChange);
+
+            return () => {
+                screenfull.off('change', handleScreenfullChange);
+            };
         }
     }, [currentQueue]);
 
@@ -36,9 +61,28 @@ const UserPlayingView = () => {
                 <CloseButton variant="white" onClick={() => { setPlayingViewActive(false) }} />
             </div>
             {songDetails ? <>
-                <div className="py-5 justify-content-center">
-                    {/* <Image src="https://via.placeholder.com/400x250" alt="Album Cover" style={{ width: '100%', height: '100%' }} /> */}
+                {/* <div className="py-5 justify-content-center">
                     <Image src={`${BACKEND_URL}/storage/album_images/${songDetails.album.cover_photo_hash}`} alt="Album Cover" style={{ width: '100%', height: '100%' }} />
+                    <ReactPlayer url='https://www.youtube.com/watch?v=LXb3EKWsInQ' />
+                </div> */}
+                {/* <div className="my-5">
+                    <Image src="https://via.placeholder.com/400x250" alt="Album Cover" style={{ width: '100%', height: '100%' }} />
+                </div> */}
+                <div className='player-wrapper my-5 d-flex justify-content-end align-items-'>
+                    <ReactPlayer
+                        ref={playerRef}
+                        className='react-player'
+                        url={vid}
+                        width='100%'
+                        height='100%'
+                        controls={isFullscreen}
+                        playing
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Button variant="outline-light" onClick={handleFullscreen}>
+                        <i className="fa fa-arrows-alt display-7" />
+                    </Button>
                 </div>
                 <div className="d-flex justify-content-between py-3">
                     <div className="">
