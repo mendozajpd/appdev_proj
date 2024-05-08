@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useMemo, useState, useEffect, useRef, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Form, Button, Container, Row, Dropdown, Col, Image, Stack, CloseButton, Card } from "react-bootstrap";
+import { Form, Button, Container, Row, Dropdown, Col, FormControl } from "react-bootstrap";
 import axios from "axios";
 import Modal from 'react-bootstrap/Modal';
 import BACKEND_URL from "../config";
@@ -15,18 +15,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { getAlbumDetails } from "./services/StudioServices";
 
 
+// MEDIADROPZONE
+import { useDropzone } from 'react-dropzone';
+import { v4 as uuidv4 } from 'uuid';
+import Select from 'react-select';
+
+
+
 const StudioAlbumPage = () => {
   const [isVerified, setIsVerified] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(0);
-  const [logoutDisabled, setLogoutDisabled] = useState(false);
 
-  const [artist, setArtist] = useState(null);
   const { id } = useParams();
-
-  // Player
-  const [currentSong, setCurrentSong] = useState(null);
-  const playerRef = useRef();
 
   // SONGS
   const [songs, setSongs] = useState([]);
@@ -41,9 +40,8 @@ const StudioAlbumPage = () => {
 
   // FILES
 
-  const handleClose = () => {
-    setShow(false);
-  };
+  const handleClose = () => setShow(false);
+
   const handleShow = () => setShow(true);
 
   // FILES
@@ -59,43 +57,8 @@ const StudioAlbumPage = () => {
   // CREATE ALBUM BUTTON
   const [isCreateAlbumButtonDisabled, setIsCreateAlbumButtonDisabled] = useState(false);
 
-  // TOASTIFY 
-  const upload_success = (message) => {
-    toast.success(message, {
-      position: "top-center",
-      autoClose: 1000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-      onClose: () => {
-        // window.location.reload();
-      }
-    });
-  }
-
   // Modal Pages
   const [uploadStep, setUploadStep] = useState(0);
-
-  const upload_failed = (message) => {
-    toast.error(message, {
-      position: "top-center",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: false,
-      pauseOnHover: false,
-      draggable: false,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-      onClose: () => {
-        localStorage.setItem('justRegistered', 'false');
-      }
-    });
-  }
 
   useEffect(() => {
 
@@ -231,88 +194,161 @@ const StudioAlbumPage = () => {
     setMediaFiles(newMediaFiles);
   };
 
-  const handleCreateAlbum = async (e) => {
-    e.preventDefault();
-    setIsCreateAlbumButtonDisabled(true);
+  // MEDIA DROPZONE
+  const [files, setFiles] = useState([]);
+  const [editing, setEditing] = useState(null);
+  const [fileName, setFileName] = useState('');
+  const [options, setOptions] = useState([]);
+  // const [selectedGenres, setSelectedGenres] = useState({});
+  const [isNameEmpty, setIsNameEmpty] = useState(false);
+  const [playingFile, setPlayingFile] = useState(null);
+  const playerRefs = useRef({});
 
-    if (!albumTitle) {
-      upload_failed('Album title is missing.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
-    }
-    if (!albumDescription) {
-      upload_failed('Album description is missing.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
-    }
-    if (!albumPhoto) {
-      upload_failed('Album photo is missing.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
-    }
+  const { getRootProps, getInputProps, isDragActive, isDragAccept } = useDropzone({
+    accept: {
+      'audio/mp3': ['.mp3'],
+    },
+    onDrop: acceptedFiles => {
+      const newFiles = [...files, ...acceptedFiles.map(file => Object.assign(file, {
+        id: uuidv4(),
+        preview: URL.createObjectURL(file),
+        formattedSize: (file.size / 1048576).toFixed(2),
+        displayName: file.name.split('.').slice(0, -1).join('.'),
+        genres: []
+      }))];
+      setFiles(newFiles);
+      handleMediaDrop(newFiles);
+      
+      console.log('newfiles', newFiles);
 
-    if (mediaFiles.length === 0) {
-      upload_failed('No songs uploaded. Please upload at least one song.');
-      setIsCreateAlbumButtonDisabled(false);
-      return;
     }
+  });
 
-    for (let file of mediaFiles) {
-      if (!file.displayName) {
-        upload_failed('Song title is missing.');
-        setIsCreateAlbumButtonDisabled(false);
-        return;
+  const handleBlur = () => {
+    setEditing(null);
+  };
+
+  const handleFileNameChange = (e, index) => {
+    const newDisplayName = e.target.value;
+    let newFiles = [...files];
+    newFiles[index].displayName = newDisplayName;
+    setFiles(newFiles);
+  };
+
+  const removeFile = file => (event) => {
+    event.stopPropagation();
+    setFiles(prevFiles => {
+      const newFiles = prevFiles.filter(f => f.id !== file.id);
+      if (newFiles.length === 0) {
+        localStorage.removeItem('files');
+      } else {
+        localStorage.setItem('files', JSON.stringify(newFiles));
       }
-    }
-
-    const formData = new FormData();
-    formData.append('album_name', albumTitle);
-    formData.append('album_description', albumDescription);
-    formData.append('album_photo', albumPhoto);
-    formData.append('is_published', 0);
-    // formData.append('release_date', releaseDate); 
-
-    mediaFiles.forEach((file, index) => {
-      formData.append(`songs[${index}]`, file);
-      formData.append(`displayNames[${index}]`, file.displayName);
-      const genres = selectedGenres[file.path] || [];
-      if (genres.length === 0) {
-        upload_failed(`The song ${file.name} does not have a genre.`);
-        setIsCreateAlbumButtonDisabled(false);
-        return;
-      }
-      genres.forEach((genre, genreIndex) => {
-        formData.append(`genres[${index}][${genreIndex}]`, genre.value);
-      });
+      return newFiles;
     });
 
-    const token = localStorage.getItem("jwt_token");
-
-
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/create/album/upload-songs`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      //console.log(response.data);
-      upload_success(response.data.message);
-      localStorage.removeItem('files');
-      handleClose();
-      resetUpload();
-    } catch (error) {
-      upload_failed(error.response.data.message);
-      setIsCreateAlbumButtonDisabled(false);
-      console.error('There was an error!', error);
-    }
+    handleFileDelete(file);
   };
+
+  const filesView = files.map((file, index) => (
+    <React.Fragment key={file.id} >
+      <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
+        <Col className='d-flex flex-column justify-content-start'>
+          <Row className='d-flex flex-nowrap'>
+            <Col xs={1} className='d-flex justify-content-start mb-2 align-items-center'>
+              {index + 1}
+            </Col>
+            <Col xs={6} className='d-flex align-items-end flex-column'>
+              <Row className='w-100'>
+                <FormControl
+                  value={file.displayName}
+                  onChange={(event) => handleFileNameChange(event, index)}
+                  onBlur={handleBlur}
+                  className='input-style'
+                  placeholder="Song name"
+                />
+                {file.isNameEmpty && <div>Song name can't be empty</div>}
+              </Row>
+              <Row className='w-100'>
+                <AudioPlayer
+                  ref={c => playerRefs.current[file.path] = c}
+                  src={file.preview}
+                  layout="horizontal"
+                  className='player-borderless'
+                  customAdditionalControls={[]}
+                  customVolumeControls={[]}
+                  showJumpControls={false}
+                  onPlay={() => {
+                    // Pause the previously playing audio
+                    if (playingFile && playingFile !== file.path && playerRefs.current[playingFile]) {
+                      playerRefs.current[playingFile].audio.current.pause();
+                    }
+                    // Set the currently playing audio
+                    setPlayingFile(file.path);
+                  }}
+                />
+              </Row>
+            </Col>
+            <Col xs={4} className='d-flex align-items-center' >
+              <Row className='w-100'>
+                <Select
+                  isMulti
+                  styles={selectStyles}
+                  closeMenuOnSelect={false}
+                  options={options}
+                  placeholder='Genre'
+                  value={file.genres}
+                  onChange={handleGenreChange(file)}
+                  maxMenuHeight={125}
+                />
+              </Row>
+            </Col>
+
+            <Col xs={1} className='d-flex justify-content-center align-items-center'>
+              <Button className='fa fa-times p-2 btn-preview-delete' variant='transparent outline-danger' onClick={removeFile(file)} />
+            </Col>
+          </Row>
+          <Row>
+          </Row>
+        </Col>
+      </Row>
+    </React.Fragment>
+  ));
+
+  const filesAddMore = (
+    <Row className="mb-2 files-view" style={{ cursor: 'pointer', color: 'gray' }}>
+      <Col className='d-flex flex-column justify-content-start'>
+        <Row className='d-flex flex-nowrap'>
+          <Col xs={12} className='d-flex justify-content-center align-items-center'>
+            <i className="fa fa-plus-square px-2" aria-hidden="true" />
+            Add more songs here
+          </Col>
+        </Row>
+      </Col>
+    </Row>
+  );
+
+  const activeStyle = {
+    borderColor: '#2196f3'
+  };
+
+  const acceptStyle = {
+    borderColor: '#00e676'
+  };
+
+  const style = useMemo(() => ({
+    ...(isDragActive ? { ...activeStyle, backgroundColor: 'lightgray' } : {}),
+    ...(isDragAccept ? acceptStyle : {}),
+  }), [isDragActive, isDragAccept, activeStyle, acceptStyle]);
+
+  const iconStyle = useMemo(() => ({
+    fontSize: 70,
+    animation: isDragActive ? 'bounce 0.5s infinite' : 'none'
+  }), [isDragActive]);
 
   return (
     <>
       <div className="home-page d-flex vh-100 artist-studio fade-in">
-
         <Container className="home-page-content mt-4" fluid>
           <div className="p-3 text-white">
             <Modal.Header className="py-3">
@@ -321,7 +357,7 @@ const StudioAlbumPage = () => {
                 <Button variant="outline-light" className="no-hover" style={{ border: 'none' }}>
                   UNDO CHANGES
                 </Button>
-                <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={handleCreateAlbum}>
+                <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={() => {}}>
                   SAVE
                 </Button>
               </div>
@@ -333,7 +369,7 @@ const StudioAlbumPage = () => {
                     <AlbumCoverDropzone onDrop={handleAlbumCoverDrop} iconClass='fa fa-picture-o' iconSize={60} uploadText='Drag and drop album cover image here or click to select file' uploadTextClass='custom-dropzone-text' />
                   </div>
                   <div>
-                    <Form onSubmit={handleCreateAlbum}>
+                    <Form onSubmit={''}>
                       <Form.Group controlId="album_name">
                         <Form.Control className="input-style" type="text" placeholder="Album title (Required)" value={albumTitle} onChange={e => setAlbumTitle(e.target.value)} />
                       </Form.Group>
@@ -396,7 +432,29 @@ const StudioAlbumPage = () => {
                   </div>
                 </Col>
                 <Col xs={8} style={{ height: '35rem' }} className="overflow-auto media-dropzone">
-                  <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
+                  {/* <MediaDropzone onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' /> */}
+                  <Container>
+                    <Row {...getRootProps({ className: 'dropzone media-dropzone vh-20', style })}>
+                      <input {...getInputProps()} />
+                      {files.length === 0 ? (
+                        <Col className='d-flex align-items-center justify-content-center p-5 flex-column'>
+                          <Row>
+                            <i className='fa fa-upload' style={iconStyle} aria-hidden="true" />
+                            <Row className='custom-dropzone-text'>
+                              Drag and drop songs here or click to select file/s
+                            </Row>
+                          </Row>
+                        </Col>
+                      ) : (
+                        <Col className='px-3 py-1'>
+                          <Row className='justify-content-center align-items-center d-flex flex-grow-1'>
+                            {filesView}
+                            {filesAddMore}
+                          </Row>
+                        </Col>
+                      )}
+                    </Row>
+                  </Container>
                 </Col>
               </Row>
               <Row className="justify-content-end">
@@ -428,6 +486,70 @@ const StudioAlbumPage = () => {
       <ToastContainer />
     </>
   );
+};
+
+const selectStyles = {
+  valueContainer: (base) => ({
+    ...base,
+    maxHeight: 80,
+    overflowY: "auto",
+    scrollbarWidth: "thin",
+    scrollbarColor: "#888 #333",
+    "::webkit-scrollbar": {
+      width: "8px"
+    },
+    "::webkit-scrollbar-thumb": {
+      background: "#888"
+    },
+    "::webkit-scrollbar-thumb:hover": {
+      background: "#555"
+    }
+  }),
+
+  multiValue: (base, state) => {
+    return state.data.isFixed ? { ...base, backgroundColor: "gray" } : base;
+  },
+  multiValueLabel: (base, state) => {
+    return state.data.isFixed
+      ? { ...base, fontWeight: "bold", color: "white", paddingRight: 6 }
+      : base;
+  },
+  multiValueRemove: (base, state) => {
+    return state.data.isFixed ? { ...base, display: "none" } : base;
+  },
+  control: base => ({
+    ...base,
+    backgroundColor: '#333',
+    color: 'white'
+  }),
+  menu: base => ({
+    ...base,
+    backgroundColor: '#333',
+    color: 'white',
+    scrollbarWidth: "thin",
+    scrollbarColor: "#888 #333",
+    "::webkit-scrollbar": {
+      width: "8px"
+    },
+    "::webkit-scrollbar-thumb": {
+      background: "#888"
+    },
+    "::webkit-scrollbar-thumb:hover": {
+      background: "#555"
+    }
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    color: state.isSelected ? 'black' : 'white',
+    backgroundColor: state.isSelected ? 'gray' : '#333',
+    "&:hover": {
+      backgroundColor: '#555'
+    }
+  }),
+  input: (provided, state) => ({
+    ...provided,
+    color: 'white',
+  }),
 };
 
 export default StudioAlbumPage;
