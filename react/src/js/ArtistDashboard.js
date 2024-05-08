@@ -23,6 +23,9 @@ import { SongsTable } from './tables/SongsTable';
 // Context
 import StudioContext from "./context/StudioContext";
 
+// Services
+import { getPodcasts } from "./services/StudioServices";
+
 
 const ArtistDashboard = () => {
 
@@ -181,7 +184,7 @@ const ArtistDashboard = () => {
     }
   }
 
-  useEffect(() => {
+  useEffect( () => {
     fetchArtistPopulation();
     fetchMostListenedSongOfArtist();
     fetchMostListenedSongRank();
@@ -203,7 +206,7 @@ const ArtistDashboard = () => {
               </Row>
               <Row>
                 <Col xs={4} className="">
-                  <Card bg="dark" className="mb-1 studio-card" style={{minWidth: '10rem'}}>
+                  <Card bg="dark" className="mb-1 studio-card" style={{ minWidth: '10rem' }}>
                     <Card.Body>
                       <Card.Title className="text-truncate">Most Listened Song</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
@@ -254,7 +257,7 @@ const ArtistDashboard = () => {
                       </Card.Text>
                     </Card.Body>
                   </Card>
-                  <Card bg="dark" className="mt-1 studio-card" style={{minWidth: '10rem'}}>
+                  <Card bg="dark" className="mt-1 studio-card" style={{ minWidth: '10rem' }}>
                     <Card.Body>
                       <Card.Title className="text-truncate">Artist Ranking</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
@@ -291,7 +294,7 @@ const ArtistDashboard = () => {
                   </Card>
                 </Col>
                 <Col>
-                  <Card bg='dark' className="studio-card h-100" style={{minWidth: '20rem'}}>
+                  <Card bg='dark' className="studio-card h-100" style={{ minWidth: '20rem' }}>
                     <Card.Body>
                       <Card.Title>Show Data Here</Card.Title>
                       <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>

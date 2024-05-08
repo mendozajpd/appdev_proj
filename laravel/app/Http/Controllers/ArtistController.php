@@ -9,6 +9,7 @@ use App\Models\Album;
 use App\Jobs\CreateAlbumAndUploadSongsJob;
 use App\Jobs\CreateAlbumJob;
 use App\Jobs\UploadSongJob;
+use App\Jobs\UploadSongsToAlbumJob;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 
@@ -202,48 +203,88 @@ class ArtistController extends Controller
         return response()->json($song);
     }
 
+    // public function createAlbumAndUploadSongs(Request $request)
+    // {
+    //     $validatedData = $request->validate([
+    //         'album_name' => 'required',
+    //         'album_description' => 'required',
+    //         'album_photo' => 'required|file|mimes:jpeg,png,jpg,gif',
+    //         'songs' => 'required|array',
+    //         'songs.*' => 'file|mimes:mp3,wav,ogg|max:40000',
+    //         'genres' => 'required|array',
+    //         'genres.*' => 'required|exists:genres,id',
+    //     ]);
+    
+    //     $currentTime = time();
+    //     $hashedTime = hash('sha256', $currentTime);
+    //     $photoExtension = $request->file('album_photo')->getClientOriginalExtension();
+    //     $hashedPhotoName = $hashedTime . '.' . $photoExtension;
+    
+    //     $request->file('album_photo')->storeAs('album_images', $hashedPhotoName, 'public');
+    
+    //     $album = new Album;
+    //     $album->album_name = $validatedData['album_name'];
+    //     $album->album_description = $validatedData['album_description'];
+    //     $album->cover_photo_hash = $hashedPhotoName;
+    //     $album->user_id = auth()->id();
+    //     $album->save();
+    
+    //     $displayNames = $request->input('displayNames');
+
+    //     foreach ($request->file('songs') as $index => $song) {
+    //         $currentTime = time();
+    //         $hashedTime = hash('sha256', $song->getClientOriginalName() . $currentTime);
+    //         $songExtension = $song->getClientOriginalExtension();
+    //         $hashedSongName = $hashedTime . '.' . $songExtension;
+        
+    //         $songPath = $song->storeAs('songs', $hashedSongName, 'public');
+        
+    //         $displayName = $displayNames[$index];
+    //         $genres = $request->input('genres')[$index];
+            
+    //         UploadSongJob::dispatch($songPath, $album->album_id, $displayName, $hashedSongName, $genres);
+    //     }
+    
+    //     return response()->json(['message' => 'Album created and songs uploaded'], 200);
+    // }
+
+    // NEW UPLOAD
     public function createAlbumAndUploadSongs(Request $request)
     {
-        $validatedData = $request->validate([
-            'album_name' => 'required',
-            'album_description' => 'required',
-            'album_photo' => 'required|file|mimes:jpeg,png,jpg,gif',
-            'songs' => 'required|array',
-            'songs.*' => 'file|mimes:mp3,wav,ogg|max:40000',
-            'genres' => 'required|array',
-            'genres.*' => 'required|exists:genres,id',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'songs' => 'required|array',
+                'songs.*' => 'file|mimes:mp3,wav,ogg|max:40000',
+            ]);
     
-        $currentTime = time();
-        $hashedTime = hash('sha256', $currentTime);
-        $photoExtension = $request->file('album_photo')->getClientOriginalExtension();
-        $hashedPhotoName = $hashedTime . '.' . $photoExtension;
-    
-        $request->file('album_photo')->storeAs('album_images', $hashedPhotoName, 'public');
-    
-        $album = new Album;
-        $album->album_name = $validatedData['album_name'];
-        $album->album_description = $validatedData['album_description'];
-        $album->cover_photo_hash = $hashedPhotoName;
-        $album->user_id = auth()->id();
-        $album->save();
-    
-        $displayNames = $request->input('displayNames');
-
-        foreach ($request->file('songs') as $index => $song) {
             $currentTime = time();
-            $hashedTime = hash('sha256', $song->getClientOriginalName() . $currentTime);
-            $songExtension = $song->getClientOriginalExtension();
-            $hashedSongName = $hashedTime . '.' . $songExtension;
-        
-            $songPath = $song->storeAs('songs', $hashedSongName, 'public');
-        
-            $displayName = $displayNames[$index];
-            $genres = $request->input('genres')[$index];
-            
-            UploadSongJob::dispatch($songPath, $album->album_id, $displayName, $hashedSongName, $genres);
-        }
+            $hashedTime = hash('sha256', $currentTime);
     
-        return response()->json(['message' => 'Album created and songs uploaded'], 200);
+            $album = new Album;
+            $userId = auth()->id();
+            $albumCount = Album::where('user_id', $userId)->count();
+            $album->album_name = 'New Album ' . ($albumCount + 1);
+            $album->user_id = $userId;
+            $album->save();
+    
+            $displayNames = $request->input('displayNames');
+    
+            foreach ($request->file('songs') as $index => $song) {
+                $currentTime = time();
+                $hashedTime = hash('sha256', $song->getClientOriginalName() . $currentTime);
+                $songExtension = $song->getClientOriginalExtension();
+                $hashedSongName = $hashedTime . '.' . $songExtension;
+            
+                $songPath = $song->storeAs('songs', $hashedSongName, 'public');
+            
+                $displayName = $displayNames[$index];
+                
+                UploadSongsToAlbumJob::dispatch($songPath, $album->album_id, $displayName, $hashedSongName);
+            }
+    
+            return response()->json(['message' => 'Album created and songs uploaded', 'album_id' => $album->album_id], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
     }
 }

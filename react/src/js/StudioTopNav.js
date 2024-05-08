@@ -7,8 +7,6 @@ import BACKEND_URL from "../config";
 import UserSidebar from "./UserSidebar";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import AlbumCoverDropzone from './components/AlbumCoverDropzone';
-import MediaDropzone from './components/MediaDropzone';
 import { ToastContainer, toast, Bounce, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AlbumItem from './items/AlbumItem';
@@ -17,6 +15,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 // CONTEXT
 import StudioContext from "./context/StudioContext";
+import UploadMusicDropzone from "./components/UploadMusicDropzone";
 
 
 
@@ -78,7 +77,7 @@ const StudioTopNav = () => {
     const handleMediaDrop = (acceptedFiles) => {
         setMediaFiles(acceptedFiles);
         acceptedFiles.forEach(file => {
-            //console.log(file.name);
+            console.log(file);
         });
     };
 
@@ -107,14 +106,13 @@ const StudioTopNav = () => {
                             <Row className="d-flex justify-content-center py-3" >
                                 <Col className="d-flex justify-content-center flex-column">
                                     <Row>
-                                        <MediaDropzone style={{height:}} onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
+                                        <UploadMusicDropzone closeModal={handleClose} onDrop={handleMediaDrop} onFileDelete={handleFileDelete} onGenreChange={handleGenreChange} iconClass='fa fa-upload' iconSize={70} uploadText='Drag and drop songs here or click to select file/s' uploadTextClass='custom-dropzone-text' />
                                     </Row>
                                 </Col>
                             </Row>
                         </>
                     </Modal.Body>
                     <Modal.Footer className="justify-content-between">
-
                     </Modal.Footer>
                 </div>
             </Modal>
