@@ -205,22 +205,18 @@ const StudioAlbumPage = () => {
   const playerRefs = useRef({});
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept } = useDropzone({
-    accept: {
-      'audio/mp3': ['.mp3'],
-    },
+    accept: 'audio/mp3',
     onDrop: acceptedFiles => {
-      const newFiles = [...files, ...acceptedFiles.map(file => Object.assign(file, {
+      const newFiles = [...songs, ...acceptedFiles.map(file => Object.assign(file, {
         id: uuidv4(),
         preview: URL.createObjectURL(file),
         formattedSize: (file.size / 1048576).toFixed(2),
         displayName: file.name.split('.').slice(0, -1).join('.'),
         genres: []
       }))];
-      setFiles(newFiles);
+      setSongs(newFiles);
       handleMediaDrop(newFiles);
-      
       console.log('newfiles', newFiles);
-
     }
   });
 
@@ -250,7 +246,7 @@ const StudioAlbumPage = () => {
     handleFileDelete(file);
   };
 
-  const filesView = files.map((file, index) => (
+  const filesView = songs.map((file, index) => (
     <React.Fragment key={file.id} >
       <Row className="mb-2 files-view" onClick={(e) => e.stopPropagation()}>
         <Col className='d-flex flex-column justify-content-start'>
@@ -261,7 +257,7 @@ const StudioAlbumPage = () => {
             <Col xs={6} className='d-flex align-items-end flex-column'>
               <Row className='w-100'>
                 <FormControl
-                  value={file.displayName}
+                  value={file.display_name}
                   onChange={(event) => handleFileNameChange(event, index)}
                   onBlur={handleBlur}
                   className='input-style'
@@ -279,11 +275,9 @@ const StudioAlbumPage = () => {
                   customVolumeControls={[]}
                   showJumpControls={false}
                   onPlay={() => {
-                    // Pause the previously playing audio
                     if (playingFile && playingFile !== file.path && playerRefs.current[playingFile]) {
                       playerRefs.current[playingFile].audio.current.pause();
                     }
-                    // Set the currently playing audio
                     setPlayingFile(file.path);
                   }}
                 />
@@ -298,12 +292,11 @@ const StudioAlbumPage = () => {
                   options={options}
                   placeholder='Genre'
                   value={file.genres}
-                  onChange={handleGenreChange(file)}
+                  // onChange={handleGenreChange(file)}
                   maxMenuHeight={125}
                 />
               </Row>
             </Col>
-
             <Col xs={1} className='d-flex justify-content-center align-items-center'>
               <Button className='fa fa-times p-2 btn-preview-delete' variant='transparent outline-danger' onClick={removeFile(file)} />
             </Col>
@@ -357,7 +350,7 @@ const StudioAlbumPage = () => {
                 <Button variant="outline-light" className="no-hover" style={{ border: 'none' }}>
                   UNDO CHANGES
                 </Button>
-                <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={() => {}}>
+                <Button variant="danger" disabled={isCreateAlbumButtonDisabled} onClick={() => { }}>
                   SAVE
                 </Button>
               </div>
@@ -436,7 +429,7 @@ const StudioAlbumPage = () => {
                   <Container>
                     <Row {...getRootProps({ className: 'dropzone media-dropzone vh-20', style })}>
                       <input {...getInputProps()} />
-                      {files.length === 0 ? (
+                      {songs.length === 0 ? (
                         <Col className='d-flex align-items-center justify-content-center p-5 flex-column'>
                           <Row>
                             <i className='fa fa-upload' style={iconStyle} aria-hidden="true" />
